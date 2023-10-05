@@ -6,8 +6,8 @@
 
 **Group Members:**
 
-- Cheng, Carl
-- Gandia, Markus | 300303155
-- Montgomery, Sully
-- Naim, Olena
-- Sam, Benjamin
+- Cheng, Carl (300309128)
+- Gandia, Markus (300303155)
+- Montgomery, Sully (300326826)
+- Naim, Olena (300322912)
+- Sam, Benjamin (300298874)
