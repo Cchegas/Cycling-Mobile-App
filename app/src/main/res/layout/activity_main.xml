@@ -13,44 +13,12 @@
         android:padding="16dp">
 
         <TextView
-            android:id="@+id/loginHeader"
+            android:id="@+id/greetingText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="64dp"
-            android:text="@string/login_header"
-            android:textSize="34sp"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/loginUsernameInput"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="16dp"
-            android:ems="10"
-            android:hint="@string/login_username_input_hint"
-            android:inputType="text"
-            android:minHeight="48dp" />
-
-        <EditText
-            android:id="@+id/loginPasswordInput"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="16dp"
-            android:ems="10"
-            android:hint="@string/login_password_input_hint"
-            android:inputType="textPassword"
-            android:minHeight="48dp" />
-
-        <Button
-            android:id="@+id/loginButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/login_button" />
-
+            android:textSize="32sp" />
     </LinearLayout>
 
 </RelativeLayout>
