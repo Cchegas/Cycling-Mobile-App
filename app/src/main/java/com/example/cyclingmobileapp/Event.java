@@ -3,6 +3,7 @@ package com.example.cyclingmobileapp;
 import java.util.Date;
 
 public class Event {
+    // Instance Variables ****************
     private Date startDate;
     private Date endDate;
     private String location;
@@ -11,7 +12,18 @@ public class Event {
     private int participantLimit;
     private int fee;
 
-    // Getters
+    // Constructor ****************
+    public Event(Date start, Date end, String loc, String desc, String dif, int partLimit, int fee){
+        this.startDate = start;
+        this.endDate = end;
+        this.location = loc;
+        this.description = desc;
+        this.difficulty = dif;
+        this.participantLimit = partLimit;
+        this.fee = fee;
+    }
+
+    // Instance Methods ****************
     public Date getEndDate() {
         return endDate;
     }
