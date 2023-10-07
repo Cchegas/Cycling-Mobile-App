@@ -1,4 +1,4 @@
-package com.example.cyclingmobileapp;
+package com.example.cyclingmobileapp.Event;
 
 public class EventType {
     private String eventType;

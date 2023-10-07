@@ -1,4 +1,4 @@
-package com.example.cyclingmobileapp;
+package com.example.cyclingmobileapp.Event;
 
 import java.util.Date;
 
@@ -11,9 +11,10 @@ public class Event {
     private String difficulty;
     private int participantLimit;
     private int fee;
+    private EventType eventType;
 
     // Constructor ****************
-    public Event(Date start, Date end, String loc, String desc, String dif, int partLimit, int fee){
+    public Event(Date start, Date end, String loc, String desc, String dif, int partLimit, int fee, EventType type){
         this.startDate = start;
         this.endDate = end;
         this.location = loc;
@@ -21,6 +22,7 @@ public class Event {
         this.difficulty = dif;
         this.participantLimit = partLimit;
         this.fee = fee;
+        this.eventType = type;
     }
 
     // Instance Methods ****************
@@ -50,6 +52,10 @@ public class Event {
 
     public int getFee() {
         return fee;
+    }
+
+    public EventType getEventType() {
+        return eventType;
     }
 
     public void setEndDate(Date endDate) {
