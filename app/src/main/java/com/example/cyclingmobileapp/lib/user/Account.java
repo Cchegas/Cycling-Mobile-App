@@ -8,8 +8,8 @@ package com.example.cyclingmobileapp.lib.user;
  * Consider proper access modifiers (ex: private, package, etc.) and getters/setters?
  */
 // line 4 "model.ump"
-// line 62 "model.ump"
-public class Account {
+// line 86 "model.ump"
+public abstract class Account {
 
     //------------------------
     // MEMBER VARIABLES
@@ -25,9 +25,6 @@ public class Account {
     // CONSTRUCTOR
     //------------------------
 
-    public Account(){
-
-    }
     public Account(String aUsername, String aEmail, String aPassword, String aRole) {
         username = aUsername;
         email = aEmail;
@@ -89,6 +86,13 @@ public class Account {
     public void delete() {
     }
 
+    // line 12 "model.ump"
+    public String greetingMessage() {
+        return "Welcome " + username + ". You are loggged in as \"" + role + "\".";
+    }
+
+    public abstract void update();
+
 
     public String toString() {
         return super.toString() + "[" +
@@ -98,6 +102,3 @@ public class Account {
                 "role" + ":" + getRole() + "]";
     }
 }
-
-
-
