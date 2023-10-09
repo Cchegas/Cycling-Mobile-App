@@ -29,7 +29,7 @@
             android:layout_gravity="center"
             android:layout_marginBottom="16dp"
             android:ems="10"
-            android:hint="@string/login_username_input_hint"
+            android:hint="@string/username_input_hint"
             android:inputType="text"
             android:minHeight="48dp" />
 
@@ -40,7 +40,7 @@
             android:layout_gravity="center"
             android:layout_marginBottom="16dp"
             android:ems="10"
-            android:hint="@string/login_password_input_hint"
+            android:hint="@string/password_input_hint"
             android:inputType="textPassword"
             android:minHeight="48dp" />
 
@@ -51,6 +51,14 @@
             android:layout_gravity="center"
             android:onClick="onLoginButtonClick"
             android:text="@string/login_button" />
+
+        <Button
+            android:id="@+id/loginSignupRedirectionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:onClick="onSignupButtonClick"
+            android:text="@string/login_signup_redirect_button" />
 
     </LinearLayout>
 

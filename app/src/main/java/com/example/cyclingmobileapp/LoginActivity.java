@@ -58,6 +58,12 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    public void onSignupButtonClick(View view){
+        Intent signupActivityIntent = new Intent(getApplicationContext(), SignupActivity.class);
+        startActivity(signupActivityIntent);
+        finish();
+    }
+
     private boolean validateLogin(String username, String password) {
         // Possibly use regex to validate the fields for login
         // For now, just ensure that the username field doesn't have a space

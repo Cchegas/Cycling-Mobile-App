@@ -4,9 +4,20 @@
     <!--    Globals-->
     <string name="brand_name">GCC Cycling</string>
 
-    <!--    Main Activity-->
+    <!--    Form Inputs-->
+    <string name="email_input_hint">Email</string>
+    <string name="username_input_hint">Username</string>
+    <string name="password_input_hint">Password</string>
+
+    <!--    Login Activity-->
     <string name="login_header">Sign In</string>
-    <string name="login_username_input_hint">Username</string>
-    <string name="login_password_input_hint">Password</string>
     <string name="login_button">Log in</string>
+    <string name="login_signup_redirect_button">Create new account</string>
+
+    <!--    Signup Activity-->
+    <string name="signup_header">Create an account</string>
+    <string name="signup_account_type_participant">Personal Account</string>
+    <string name="signup_account_type_club">Club Account</string>
+    <string name="signup_button">Sign up</string>
+    <string name="signup_login_redirect_button">Go back</string>
 </resources>
