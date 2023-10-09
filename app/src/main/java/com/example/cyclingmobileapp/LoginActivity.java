@@ -40,11 +40,19 @@ public class LoginActivity extends AppCompatActivity {
                         QuerySnapshot queryDocumentSnapshots = task.getResult();
                         List<DocumentSnapshot> documentSnapshots = queryDocumentSnapshots.getDocuments();
                         if (documentSnapshots.size() == 1) {
-                            String username = documentSnapshots.get(0).get("username").toString();
+                            String name;
                             String role = documentSnapshots.get(0).get("role").toString();
 
+                            if (role.equals("participant")){
+                                name = documentSnapshots.get(0).get("firstName").toString();
+                            } else if (role.equals("club")) {
+                                name  = documentSnapshots.get(0).get("name").toString();
+                            } else {
+                                name = "admin";
+                            }
+
                             Intent mainActivityIntent = new Intent(getApplicationContext(), MainActivity.class);
-                            mainActivityIntent.putExtra("username", username);
+                            mainActivityIntent.putExtra("name", name);
                             mainActivityIntent.putExtra("role", role);
                             startActivity(mainActivityIntent);
                             finish();

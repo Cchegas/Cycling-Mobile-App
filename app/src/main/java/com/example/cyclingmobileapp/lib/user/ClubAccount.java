@@ -34,8 +34,8 @@ public class ClubAccount extends Account {
     // INTERFACE
     //------------------------
 
-    public ClubAccount(String aUsername, String aEmail, String aPassword, String aRole, String aName) {
-        super(aUsername, aEmail, aPassword, aRole);
+    public ClubAccount(String aUsername, String aEmail, String aPassword, String aName) {
+        super(aUsername, aEmail, aPassword);
         name = aName;
         events = new ArrayList<Event>();
     }
@@ -159,6 +159,10 @@ public class ClubAccount extends Account {
     // line 57 "model.ump"
     public void update() {
 
+    }
+
+    public String getRole(){
+        return role;
     }
     //------------------------
     // DEVELOPER CODE - PROVIDED AS-IS

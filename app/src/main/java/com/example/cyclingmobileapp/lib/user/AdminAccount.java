@@ -23,8 +23,8 @@ public class AdminAccount extends Account {
     // INTERFACE
     //------------------------
 
-    public AdminAccount(String aUsername, String aEmail, String aPassword, String aRole) {
-        super(aUsername, aEmail, aPassword, aRole);
+    public AdminAccount(String aUsername, String aEmail, String aPassword) {
+        super(aUsername, aEmail, aPassword);
     }
 
     public void delete() {
@@ -48,6 +48,10 @@ public class AdminAccount extends Account {
     // line 47 "model.ump"
     public void update() {
 
+    }
+
+    public String getRole(){
+        return role;
     }
 
 

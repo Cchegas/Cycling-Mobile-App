@@ -33,8 +33,8 @@ public class ParticipantAccount extends Account {
     // INTERFACE
     //------------------------
 
-    public ParticipantAccount(String aUsername, String aEmail, String aPassword, String aRole, String aFirstName, String aLastName) {
-        super(aUsername, aEmail, aPassword, aRole);
+    public ParticipantAccount(String aUsername, String aEmail, String aPassword, String aFirstName, String aLastName) {
+        super(aUsername, aEmail, aPassword);
         firstName = aFirstName;
         lastName = aLastName;
         registeredEvents = new ArrayList<Event>();
@@ -184,6 +184,10 @@ public class ParticipantAccount extends Account {
     // line 29 "model.ump"
     public void update() {
 
+    }
+
+    public String getRole(){
+        return role;
     }
     //------------------------
     // DEVELOPER CODE - PROVIDED AS-IS

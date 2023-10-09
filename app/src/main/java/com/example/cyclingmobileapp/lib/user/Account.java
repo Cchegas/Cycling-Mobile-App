@@ -25,11 +25,10 @@ public abstract class Account {
     // CONSTRUCTOR
     //------------------------
 
-    public Account(String aUsername, String aEmail, String aPassword, String aRole) {
+    public Account(String aUsername, String aEmail, String aPassword) {
         username = aUsername;
         email = aEmail;
         password = aPassword;
-        role = aRole;
     }
 
     //------------------------
