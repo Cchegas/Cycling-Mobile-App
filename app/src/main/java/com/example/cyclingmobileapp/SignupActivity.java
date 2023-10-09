@@ -2,7 +2,6 @@ package com.example.cyclingmobileapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -41,21 +40,21 @@ public class SignupActivity extends AppCompatActivity {
         String username = ((EditText) findViewById(R.id.signupUsernameInput)).getText().toString();
         String password = ((EditText) findViewById(R.id.signupPasswordInput)).getText().toString();
 
-        if (checkedButtonId == R.id.signupAccountTypeParticipantRadio){
+        if (checkedButtonId == R.id.signupAccountTypeParticipantRadio) {
             String fName = ((EditText) findViewById(R.id.signup_first_name_input)).getText().toString();
             String lName = ((EditText) findViewById(R.id.signup_last_name_input)).getText().toString();
 
-            if (!validateSignupInfo(fName, lName, username, email, password)){
+            if (!validateSignupInfo(fName, lName, username, email, password)) {
                 makeToast("Invalid info! Try again.");
                 return;
             }
 
             ParticipantAccount participantAccount = new ParticipantAccount(username, email, password, fName, lName);
             addAccount(participantAccount);
-        } else if (checkedButtonId == R.id.signupAccountTypeClubRadio){
+        } else if (checkedButtonId == R.id.signupAccountTypeClubRadio) {
             String clubName = ((EditText) findViewById(R.id.signup_club_name_input)).getText().toString();
 
-            if (!validateSignupInfo(clubName, username, email, password)){
+            if (!validateSignupInfo(clubName, username, email, password)) {
                 makeToast("Invalid info! Try again.");
                 return;
             }
@@ -64,7 +63,7 @@ public class SignupActivity extends AppCompatActivity {
         }
     }
 
-    private void addAccount(Account account){
+    private void addAccount(Account account) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("users").whereEqualTo("username", account.getUsername()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -72,30 +71,30 @@ public class SignupActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     QuerySnapshot queryDocumentSnapshots = task.getResult();
                     List<DocumentSnapshot> documentSnapshots = queryDocumentSnapshots.getDocuments();
-                    if (documentSnapshots.size() != 0){
+                    if (documentSnapshots.size() != 0) {
                         makeToast("This username is already taken!");
                         return;
                     }
                     db.collection("users").add(account).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentReference> task) {
-                            if (task.isSuccessful()){
+                            if (task.isSuccessful()) {
                                 makeToast("Success!");
                                 Intent mainActivityIntent = new Intent(getApplicationContext(), MainActivity.class);
-                                mainActivityIntent.putExtra("username", account.getUsername());
-                                mainActivityIntent.putExtra("role", account.getRole());
                                 String name;
-                                if (account.getRole().equals("participant")){
+                                if (account.getRole().equals("participant")) {
                                     ParticipantAccount participantAccount = (ParticipantAccount) account;
                                     name = participantAccount.getFirstName();
                                 } else if (account.getRole().equals("club")) {
                                     ClubAccount clubAccount = (ClubAccount) account;
                                     name = clubAccount.getName();
-                                }else {
+                                } else {
                                     makeToast("Something unexpected occurred. Try again.");
                                     return;
                                 }
+                                mainActivityIntent.putExtra("username", account.getUsername());
                                 mainActivityIntent.putExtra("name", name);
+                                mainActivityIntent.putExtra("role", account.getRole());
                                 startActivity(mainActivityIntent);
                                 finish();
                                 return;
@@ -114,11 +113,11 @@ public class SignupActivity extends AppCompatActivity {
         Toast.makeText(this, toastText, Toast.LENGTH_SHORT).show();
     }
 
-    private boolean validateSignupInfo(String fName, String lName, String username, String email, String password){
+    private boolean validateSignupInfo(String fName, String lName, String username, String email, String password) {
         return username.indexOf(" ") == -1;
     }
 
-    private boolean validateSignupInfo(String clubName, String username, String email, String password){
+    private boolean validateSignupInfo(String clubName, String username, String email, String password) {
         return username.indexOf(" ") == -1;
     }
 
