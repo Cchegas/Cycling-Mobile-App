@@ -9,7 +9,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.cyclingmobileapp.lib.user.Account;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -41,10 +40,12 @@ public class LoginActivity extends AppCompatActivity {
                         QuerySnapshot queryDocumentSnapshots = task.getResult();
                         List<DocumentSnapshot> documentSnapshots = queryDocumentSnapshots.getDocuments();
                         if (documentSnapshots.size() == 1) {
-                            Account account = documentSnapshots.get(0).toObject(Account.class);
+                            String username = documentSnapshots.get(0).get("username").toString();
+                            String role = documentSnapshots.get(0).get("role").toString();
+
                             Intent mainActivityIntent = new Intent(getApplicationContext(), MainActivity.class);
-                            mainActivityIntent.putExtra("username", account.getUsername());
-                            mainActivityIntent.putExtra("role", account.getRole());
+                            mainActivityIntent.putExtra("username", username);
+                            mainActivityIntent.putExtra("role", role);
                             startActivity(mainActivityIntent);
                             finish();
                             return;
@@ -58,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    public void onSignupButtonClick(View view){
+    public void onSignupButtonClick(View view) {
         Intent signupActivityIntent = new Intent(getApplicationContext(), SignupActivity.class);
         startActivity(signupActivityIntent);
         finish();
