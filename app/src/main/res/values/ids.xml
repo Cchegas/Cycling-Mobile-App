@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--    Signup Activity-->
+    <item name="signup_first_name_input" type="id" />
+    <item name="signup_last_name_input" type="id" />
+    <item name="signup_club_name_input" type="id" />
+</resources>
