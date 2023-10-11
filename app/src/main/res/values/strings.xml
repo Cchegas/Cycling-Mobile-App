@@ -20,4 +20,7 @@
     <string name="signup_account_type_club">Club Account</string>
     <string name="signup_button">Sign up</string>
     <string name="signup_login_redirect_button">Go back</string>
+
+    <!-- MainActivity -->
+    <string name="btnSignOut">Sign Out</string>
 </resources>
