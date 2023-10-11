@@ -77,9 +77,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private boolean validateLogin(String username, String password) {
-        // Possibly use regex to validate the fields for login
-        // For now, just ensure that the username field doesn't have a space
-        return username.indexOf(" ") == -1;
+        if (username.isEmpty() || username.contains(" ") || !username.matches("^[a-z0-9]*$")) {
+            return false;
+        }
+        return password.length() >= 4 && !password.isEmpty();
     }
 
     private void makeToast(String toastText) {
