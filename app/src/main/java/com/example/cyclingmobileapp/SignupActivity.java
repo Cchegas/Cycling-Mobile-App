@@ -135,7 +135,7 @@ public class SignupActivity extends AppCompatActivity {
       if(email.isEmpty() || email.contains(" ") || !email.contains("@")|| !email.contains(".")||!email.matches("^[a-zA-Z0-9@.]*$")){
           return false;
         }
-      if (password.length() < 4){
+      if (password.length() < 4 || password.isEmpty()){
           return false;
       } else{
           return true;
@@ -143,7 +143,20 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     private boolean validateSignupInfo(String clubName, String username, String email, String password) {
-        return username.indexOf(" ") == -1;
+        if(clubName.isEmpty() || clubName.contains(" ") || !clubName.matches("^[a-zA-Z]*$")){
+            return false;
+        }
+        if(username.isEmpty() || username.contains(" ") || !username.matches("^[a-zA-Z0-9]*$")){
+            return false;
+        }
+        if(email.isEmpty() || email.contains(" ") || !email.contains("@")|| !email.contains(".")||!email.matches("^[a-zA-Z0-9@.]*$")){
+            return false;
+        }
+        if (password.length() < 4 || password.isEmpty()){
+            return false;
+        } else{
+            return true;
+        }
     }
 
     public void onLoginButtonClick(View view) {
