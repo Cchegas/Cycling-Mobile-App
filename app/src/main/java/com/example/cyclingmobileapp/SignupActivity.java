@@ -18,7 +18,6 @@ import com.example.cyclingmobileapp.lib.user.ClubAccount;
 import com.example.cyclingmobileapp.lib.user.ParticipantAccount;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -35,12 +34,12 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     public void onSignupButtonClick(View view) {
-        RadioGroup radioGroup = (RadioGroup) findViewById(R.id.signupAccountTypeRadioGroup);
+        RadioGroup radioGroup = findViewById(R.id.signupAccountTypeRadioGroup);
         int checkedButtonId = radioGroup.getCheckedRadioButtonId();
         String email = ((EditText) findViewById(R.id.signupEmailInput)).getText().toString();
         String username = ((EditText) findViewById(R.id.signupUsernameInput)).getText().toString();
         String password = ((EditText) findViewById(R.id.signupPasswordInput)).getText().toString();
-        Button signupButton = (Button) findViewById(R.id.signupButton);
+        Button signupButton = findViewById(R.id.signupButton);
 
         if (checkedButtonId == R.id.signupAccountTypeParticipantRadio) {
             String fName = ((EditText) findViewById(R.id.signup_first_name_input)).getText().toString();
@@ -121,42 +120,34 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     private boolean validateSignupInfo(String fName, String lName, String username, String email, String password) {
-      if(fName.isEmpty() || fName.contains(" ") || !fName.matches("^[a-zA-Z]*$")){
-          return false;
-      }
-
-      if(lName.isEmpty() || lName.contains(" ") || !lName.matches("^[a-zA-Z]*$")){
-          return false;
-      }
-
-      if(username.isEmpty() || username.contains(" ") || !username.matches("^[a-z0-9]*$")){
-          return false;
-      }
-      if(email.isEmpty() || email.contains(" ") || !email.contains("@")|| !email.contains(".")||!email.matches("^[a-zA-Z0-9@.]*$")){
-          return false;
+        if (fName.isEmpty() || fName.contains(" ") || !fName.matches("^[a-zA-Z]*$")) {
+            return false;
         }
-      if (password.length() < 4 || password.isEmpty()){
-          return false;
-      } else{
-          return true;
-      }
+
+        if (lName.isEmpty() || lName.contains(" ") || !lName.matches("^[a-zA-Z]*$")) {
+            return false;
+        }
+
+        if (username.isEmpty() || username.contains(" ") || !username.matches("^[a-z0-9]*$")) {
+            return false;
+        }
+        if (email.isEmpty() || email.contains(" ") || !email.contains("@") || !email.contains(".") || !email.matches("^[a-zA-Z0-9@.]*$")) {
+            return false;
+        }
+        return password.length() >= 4 && !password.isEmpty();
     }
 
     private boolean validateSignupInfo(String clubName, String username, String email, String password) {
-        if(clubName.isEmpty() || clubName.contains(" ") || !clubName.matches("^[a-zA-Z]*$")){
+        if (clubName.isEmpty() || clubName.contains(" ") || !clubName.matches("^[a-zA-Z]*$")) {
             return false;
         }
-        if(username.isEmpty() || username.contains(" ") || !username.matches("^[a-z0-9]*$")){
+        if (username.isEmpty() || username.contains(" ") || !username.matches("^[a-z0-9]*$")) {
             return false;
         }
-        if(email.isEmpty() || email.contains(" ") || !email.contains("@")|| !email.contains(".")||!email.matches("^[a-zA-Z0-9@.]*$")){
+        if (email.isEmpty() || email.contains(" ") || !email.contains("@") || !email.contains(".") || !email.matches("^[a-zA-Z0-9@.]*$")) {
             return false;
         }
-        if (password.length() < 4 || password.isEmpty()){
-            return false;
-        } else{
-            return true;
-        }
+        return password.length() >= 4 && !password.isEmpty();
     }
 
     public void onLoginButtonClick(View view) {
@@ -166,7 +157,7 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     public void inflateParticipantAccountInputViews(View view) {
-        LinearLayout layout = (LinearLayout) findViewById(R.id.signupVariableInputLayout);
+        LinearLayout layout = findViewById(R.id.signupVariableInputLayout);
         layout.removeAllViews();
 
         EditText fNameInput = createEditTextInput("First name", R.id.signup_first_name_input);
@@ -177,7 +168,7 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     public void inflateClubAccountInputViews(View view) {
-        LinearLayout layout = (LinearLayout) findViewById(R.id.signupVariableInputLayout);
+        LinearLayout layout = findViewById(R.id.signupVariableInputLayout);
         layout.removeAllViews();
 
         EditText clubNameInput = createEditTextInput("Club name", R.id.signup_club_name_input);

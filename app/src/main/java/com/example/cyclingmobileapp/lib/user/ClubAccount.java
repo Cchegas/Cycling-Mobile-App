@@ -4,6 +4,8 @@ package com.example.cyclingmobileapp.lib.user;
 /*This code was generated using the UMPLE 1.32.1.6535.66c005ced modeling language!*/
 
 
+import androidx.annotation.NonNull;
+
 import com.example.cyclingmobileapp.lib.event.Event;
 import com.example.cyclingmobileapp.lib.event.EventType;
 
@@ -58,28 +60,23 @@ public class ClubAccount extends Account {
 
     /* Code from template association_GetMany */
     public Event getEvent(int index) {
-        Event aEvent = events.get(index);
-        return aEvent;
+        return events.get(index);
     }
 
     public List<Event> getEvents() {
-        List<Event> newEvents = Collections.unmodifiableList(events);
-        return newEvents;
+        return Collections.unmodifiableList(events);
     }
 
     public int numberOfEvents() {
-        int number = events.size();
-        return number;
+        return events.size();
     }
 
     public boolean hasEvents() {
-        boolean has = events.size() > 0;
-        return has;
+        return events.size() > 0;
     }
 
     public int indexOfEvent(Event aEvent) {
-        int index = events.indexOf(aEvent);
-        return index;
+        return events.indexOf(aEvent);
     }
 
     /* Code from template association_AddManyToOne */
@@ -161,13 +158,14 @@ public class ClubAccount extends Account {
 
     }
 
-    public String getRole(){
+    public String getRole() {
         return role;
     }
     //------------------------
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
 
+    @NonNull
     public String toString() {
         return super.toString() + "[" +
                 "name" + ":" + getName() + "]";

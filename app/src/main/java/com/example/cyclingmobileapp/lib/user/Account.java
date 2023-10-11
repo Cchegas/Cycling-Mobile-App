@@ -4,6 +4,8 @@ package com.example.cyclingmobileapp.lib.user;
 /*This code was generated using the UMPLE 1.32.1.6535.66c005ced modeling language!*/
 
 
+import androidx.annotation.NonNull;
+
 /**
  * Consider proper access modifiers (ex: private, package, etc.) and getters/setters?
  */
@@ -87,12 +89,13 @@ public abstract class Account {
 
     // line 12 "model.ump"
     public String greetingMessage() {
-        return "Welcome " + username + ". You are loggged in as \"" + role + "\".";
+        return "Welcome " + username + ". You are logged in as \"" + role + "\".";
     }
 
     public abstract void update();
 
 
+    @NonNull
     public String toString() {
         return super.toString() + "[" +
                 "username" + ":" + getUsername() + "," +
