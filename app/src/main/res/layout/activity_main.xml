@@ -18,7 +18,8 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/btn_login"
+                android:id="@+id/btnSignOut"
+                android:onClick="SignOut"
                 android:layout_width="100dp"
                 android:layout_height="80dp"
                 android:layout_gravity="center"
@@ -28,7 +29,7 @@
                 android:fontFamily="sans-serif-black"
                 android:padding="24dp"
                 android:paddingStart="24dp"
-                android:text="Login"
+                android:text="@string/btnSignOut"
                 android:textSize="20sp" />
 
         </LinearLayout>

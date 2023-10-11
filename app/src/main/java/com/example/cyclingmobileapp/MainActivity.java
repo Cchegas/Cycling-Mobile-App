@@ -2,6 +2,9 @@ package com.example.cyclingmobileapp;
 
 import android.os.Bundle;
 import android.widget.TextView;
+import android.content.Intent ;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -22,5 +25,8 @@ public class MainActivity extends AppCompatActivity {
 
         TextView usernameText = (TextView) findViewById(R.id.usernameText);
         usernameText.setText("Username: " + username);
+    }
+    public void SignOut(View view) {
+           startActivity(new Intent(MainActivity.this, LoginActivity.class)) ;
     }
 }
