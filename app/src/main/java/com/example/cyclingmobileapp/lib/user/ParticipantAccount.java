@@ -4,6 +4,8 @@ package com.example.cyclingmobileapp.lib.user;
 /*This code was generated using the UMPLE 1.32.1.6535.66c005ced modeling language!*/
 
 
+import androidx.annotation.NonNull;
+
 import com.example.cyclingmobileapp.lib.event.Event;
 
 import java.util.ArrayList;
@@ -69,28 +71,23 @@ public class ParticipantAccount extends Account {
 
     /* Code from template association_GetMany */
     public Event getRegisteredEvent(int index) {
-        Event aRegisteredEvent = registeredEvents.get(index);
-        return aRegisteredEvent;
+        return registeredEvents.get(index);
     }
 
     public List<Event> getRegisteredEvents() {
-        List<Event> newRegisteredEvents = Collections.unmodifiableList(registeredEvents);
-        return newRegisteredEvents;
+        return Collections.unmodifiableList(registeredEvents);
     }
 
     public int numberOfRegisteredEvents() {
-        int number = registeredEvents.size();
-        return number;
+        return registeredEvents.size();
     }
 
     public boolean hasRegisteredEvents() {
-        boolean has = registeredEvents.size() > 0;
-        return has;
+        return registeredEvents.size() > 0;
     }
 
     public int indexOfRegisteredEvent(Event aRegisteredEvent) {
-        int index = registeredEvents.indexOf(aRegisteredEvent);
-        return index;
+        return registeredEvents.indexOf(aRegisteredEvent);
     }
 
     /* Code from template association_AddManyToManyMethod */
@@ -178,7 +175,7 @@ public class ParticipantAccount extends Account {
     @Override
     // line 27 "model.ump"
     public String greetingMessage() {
-        return "Welcome " + firstName + ". You are loggged in as \"" + role + "\".";
+        return "Welcome " + firstName + ". You are logged in as \"" + role + "\".";
     }
 
     // line 29 "model.ump"
@@ -193,6 +190,7 @@ public class ParticipantAccount extends Account {
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
 
+    @NonNull
     public String toString() {
         return super.toString() + "[" +
                 "firstName" + ":" + getFirstName() + "," +
