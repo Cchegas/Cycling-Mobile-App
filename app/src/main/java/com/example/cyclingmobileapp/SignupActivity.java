@@ -121,11 +121,11 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     private boolean validateSignupInfo(String fName, String lName, String username, String email, String password) {
-      if(fName.isEmpty() || fName.contains(" ") || !fName.matches("^[a-zA-Z0-9]*$")){
+      if(fName.isEmpty() || fName.contains(" ") || !fName.matches("^[a-zA-Z]*$")){
           return false;
       }
 
-      if(lName.isEmpty() || lName.contains(" ") || !lName.matches("^[a-zA-Z0-9]*$")){
+      if(lName.isEmpty() || lName.contains(" ") || !lName.matches("^[a-zA-Z]*$")){
           return false;
       }
 
