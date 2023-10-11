@@ -23,4 +23,7 @@ public class MainActivity extends AppCompatActivity {
         TextView usernameText = (TextView) findViewById(R.id.usernameText);
         usernameText.setText("Username: " + username);
     }
+    public void SignOut(View view) {
+           startActivity(new Intent(MainActivity.this, LoginActivity.class)) ;
+    }
 }
