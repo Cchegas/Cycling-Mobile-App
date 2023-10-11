@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
@@ -39,6 +40,7 @@ public class SignupActivity extends AppCompatActivity {
         String email = ((EditText) findViewById(R.id.signupEmailInput)).getText().toString();
         String username = ((EditText) findViewById(R.id.signupUsernameInput)).getText().toString();
         String password = ((EditText) findViewById(R.id.signupPasswordInput)).getText().toString();
+        Button signupButton = (Button) findViewById(R.id.signupButton);
 
         if (checkedButtonId == R.id.signupAccountTypeParticipantRadio) {
             String fName = ((EditText) findViewById(R.id.signup_first_name_input)).getText().toString();
@@ -50,7 +52,7 @@ public class SignupActivity extends AppCompatActivity {
             }
 
             ParticipantAccount participantAccount = new ParticipantAccount(username, email, password, fName, lName);
-            addAccount(participantAccount);
+            addAccount(participantAccount, signupButton);
         } else if (checkedButtonId == R.id.signupAccountTypeClubRadio) {
             String clubName = ((EditText) findViewById(R.id.signup_club_name_input)).getText().toString();
 
@@ -59,12 +61,13 @@ public class SignupActivity extends AppCompatActivity {
                 return;
             }
             ClubAccount clubAccount = new ClubAccount(username, email, password, clubName);
-            addAccount(clubAccount);
+            addAccount(clubAccount, signupButton);
         }
     }
 
-    private void addAccount(Account account) {
+    private void addAccount(Account account, Button activateButton) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+        activateButton.setEnabled(false);
         db.collection("users").whereEqualTo("username", account.getUsername()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -73,13 +76,13 @@ public class SignupActivity extends AppCompatActivity {
                     List<DocumentSnapshot> documentSnapshots = queryDocumentSnapshots.getDocuments();
                     if (documentSnapshots.size() != 0) {
                         makeToast("This username is already taken!");
+                        activateButton.setEnabled(true);
                         return;
                     }
-                    db.collection("users").add(account).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                    db.collection("users").document(account.getUsername()).set(account).addOnCompleteListener(new OnCompleteListener() {
                         @Override
-                        public void onComplete(@NonNull Task<DocumentReference> task) {
+                        public void onComplete(@NonNull Task task) {
                             if (task.isSuccessful()) {
-                                makeToast("Success!");
                                 Intent mainActivityIntent = new Intent(getApplicationContext(), MainActivity.class);
                                 String name;
                                 if (account.getRole().equals("participant")) {
@@ -90,8 +93,10 @@ public class SignupActivity extends AppCompatActivity {
                                     name = clubAccount.getName();
                                 } else {
                                     makeToast("Something unexpected occurred. Try again.");
+                                    activateButton.setEnabled(true);
                                     return;
                                 }
+                                makeToast("Success!");
                                 mainActivityIntent.putExtra("username", account.getUsername());
                                 mainActivityIntent.putExtra("name", name);
                                 mainActivityIntent.putExtra("role", account.getRole());
@@ -100,11 +105,13 @@ public class SignupActivity extends AppCompatActivity {
                                 return;
                             }
                             makeToast("Something went wrong adding your account. Try again.");
+                            activateButton.setEnabled(true);
                         }
                     });
                     return;
                 }
                 makeToast("Something went wrong. Try again.");
+                activateButton.setEnabled(true);
             }
         });
     }
