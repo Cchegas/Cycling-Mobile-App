@@ -1,5 +1,7 @@
 package com.example.cyclingmobileapp.Event;
 
+import com.example.cyclingmobileapp.User.*;
+
 import java.util.Date;
 
 public class Event {
@@ -12,9 +14,13 @@ public class Event {
     private int participantLimit;
     private int fee;
     private EventType eventType;
+    private Club organizer;
+    private Participant[] participants;
+
 
     // Constructor ****************
-    public Event(Date start, Date end, String loc, String desc, String dif, int partLimit, int fee, EventType type){
+    public Event(Date start, Date end, String loc, String desc, String dif,
+                 int partLimit, int fee, EventType type, Club org){
         this.startDate = start;
         this.endDate = end;
         this.location = loc;
@@ -23,6 +29,8 @@ public class Event {
         this.participantLimit = partLimit;
         this.fee = fee;
         this.eventType = type;
+        this.participants = new Participant[this.participantLimit];
+        this.organizer = org;
     }
 
     // Instance Methods ****************
@@ -58,6 +66,22 @@ public class Event {
         return eventType;
     }
 
+    public Club getOrganizer() {
+        return organizer;
+    }
+
+    public Participant[] getParticipants() {
+        return participants;
+    }
+
+    public int getNumParticipants() {
+        return participants.length;
+    }
+
+
+
+
+
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
@@ -85,4 +109,14 @@ public class Event {
     public void setFee(int fee) {
         this.fee = fee;
     }
+
+
+
+//    public void addParticipant(Participant p) {
+//        this.participants[this.getNumParticipants()] = p;
+//    }
+
+//    public void removeParticipants(Participant p) {
+//
+//    }
 }
