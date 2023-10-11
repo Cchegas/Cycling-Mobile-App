@@ -186,7 +186,7 @@ public class ParticipantAccount extends Account {
 
     }
 
-    public String getRole(){
+    public String getRole() {
         return role;
     }
     //------------------------

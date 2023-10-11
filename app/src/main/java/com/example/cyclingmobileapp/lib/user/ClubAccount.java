@@ -161,7 +161,7 @@ public class ClubAccount extends Account {
 
     }
 
-    public String getRole(){
+    public String getRole() {
         return role;
     }
     //------------------------
