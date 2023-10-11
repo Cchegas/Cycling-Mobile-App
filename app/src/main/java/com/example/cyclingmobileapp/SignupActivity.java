@@ -129,7 +129,7 @@ public class SignupActivity extends AppCompatActivity {
           return false;
       }
 
-      if(username.isEmpty() || username.contains(" ") || !username.matches("^[a-zA-Z0-9]*$")){
+      if(username.isEmpty() || username.contains(" ") || !username.matches("^[a-z0-9]*$")){
           return false;
       }
       if(email.isEmpty() || email.contains(" ") || !email.contains("@")|| !email.contains(".")||!email.matches("^[a-zA-Z0-9@.]*$")){
@@ -146,7 +146,7 @@ public class SignupActivity extends AppCompatActivity {
         if(clubName.isEmpty() || clubName.contains(" ") || !clubName.matches("^[a-zA-Z]*$")){
             return false;
         }
-        if(username.isEmpty() || username.contains(" ") || !username.matches("^[a-zA-Z0-9]*$")){
+        if(username.isEmpty() || username.contains(" ") || !username.matches("^[a-z0-9]*$")){
             return false;
         }
         if(email.isEmpty() || email.contains(" ") || !email.contains("@")|| !email.contains(".")||!email.matches("^[a-zA-Z0-9@.]*$")){
