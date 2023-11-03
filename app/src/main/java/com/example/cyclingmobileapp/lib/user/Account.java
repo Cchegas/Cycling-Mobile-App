@@ -3,12 +3,6 @@ package com.example.cyclingmobileapp.lib.user;
 /*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.32.1.6535.66c005ced modeling language!*/
 
-
-import androidx.annotation.NonNull;
-
-/**
- * Consider proper access modifiers (ex: private, package, etc.) and getters/setters?
- */
 // line 4 "model.ump"
 // line 86 "model.ump"
 public abstract class Account {
@@ -21,16 +15,17 @@ public abstract class Account {
     private String username;
     private String email;
     private String password;
-    private String role;
+    private final String role;
 
     //------------------------
     // CONSTRUCTOR
     //------------------------
 
-    public Account(String aUsername, String aEmail, String aPassword) {
+    public Account(String aUsername, String aEmail, String aPassword, String aRole) {
         username = aUsername;
         email = aEmail;
         password = aPassword;
+        role = aRole;
     }
 
     //------------------------
@@ -58,13 +53,6 @@ public abstract class Account {
         return wasSet;
     }
 
-    public boolean setRole(String aRole) {
-        boolean wasSet = false;
-        role = aRole;
-        wasSet = true;
-        return wasSet;
-    }
-
     public String getUsername() {
         return username;
     }
@@ -87,15 +75,7 @@ public abstract class Account {
     public void delete() {
     }
 
-    // line 12 "model.ump"
-    public String greetingMessage() {
-        return "Welcome " + username + ". You are logged in as \"" + role + "\".";
-    }
 
-    public abstract void update();
-
-
-    @NonNull
     public String toString() {
         return super.toString() + "[" +
                 "username" + ":" + getUsername() + "," +

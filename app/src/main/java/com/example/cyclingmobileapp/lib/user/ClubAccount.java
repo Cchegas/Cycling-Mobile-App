@@ -4,43 +4,38 @@ package com.example.cyclingmobileapp.lib.user;
 /*This code was generated using the UMPLE 1.32.1.6535.66c005ced modeling language!*/
 
 
-import androidx.annotation.NonNull;
-
 import com.example.cyclingmobileapp.lib.event.Event;
 import com.example.cyclingmobileapp.lib.event.EventType;
 
-import java.time.Instant;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-// line 50 "model.ump"
-// line 102 "model.ump"
 public class ClubAccount extends Account {
 
     //------------------------
     // MEMBER VARIABLES
     //------------------------
-
-    // line 54 "model.ump"
-    final String role = "club";
-    //------------------------
-    // CONSTRUCTOR
-    //------------------------
+    private static final String ROLE = "club";
     //ClubAccount Associations
     private final List<Event> events;
     //ClubAccount Attributes
     private String name;
 
     //------------------------
-    // INTERFACE
+    // CONSTRUCTOR
     //------------------------
 
     public ClubAccount(String aUsername, String aEmail, String aPassword, String aName) {
-        super(aUsername, aEmail, aPassword);
+        super(aUsername, aEmail, aPassword, ROLE);
         name = aName;
         events = new ArrayList<Event>();
     }
+
+    //------------------------
+    // INTERFACE
+    //------------------------
 
     /* Code from template association_MinimumNumberOfMethod */
     public static int minimumNumberOfEvents() {
@@ -60,28 +55,33 @@ public class ClubAccount extends Account {
 
     /* Code from template association_GetMany */
     public Event getEvent(int index) {
-        return events.get(index);
+        Event aEvent = events.get(index);
+        return aEvent;
     }
 
     public List<Event> getEvents() {
-        return Collections.unmodifiableList(events);
+        List<Event> newEvents = Collections.unmodifiableList(events);
+        return newEvents;
     }
 
     public int numberOfEvents() {
-        return events.size();
+        int number = events.size();
+        return number;
     }
 
     public boolean hasEvents() {
-        return events.size() > 0;
+        boolean has = events.size() > 0;
+        return has;
     }
 
     public int indexOfEvent(Event aEvent) {
-        return events.indexOf(aEvent);
+        int index = events.indexOf(aEvent);
+        return index;
     }
 
     /* Code from template association_AddManyToOne */
-    public Event addEvent(Instant aStartDate, Instant aEndDate, String aLocation, String aDescription, String aDifficulty, int aParticipantLimit, int aFee, EventType aEventType) {
-        return new Event(aStartDate, aEndDate, aLocation, aDescription, aDifficulty, aParticipantLimit, aFee, this, aEventType);
+    public Event addEvent(String aTitle, ZonedDateTime aStartDate, ZonedDateTime aEndDate, String aLocation, String aDescription, String aDifficulty, int aParticipantLimit, int aFee, EventType aEventType) {
+        return new Event(aTitle, aStartDate, aEndDate, aLocation, aDescription, aDifficulty, aParticipantLimit, aFee, this, aEventType);
     }
 
     public boolean addEvent(Event aEvent) {
@@ -153,24 +153,9 @@ public class ClubAccount extends Account {
         super.delete();
     }
 
-    // line 57 "model.ump"
-    public void update() {
 
-    }
-
-    public String getRole() {
-        return role;
-    }
-    //------------------------
-    // DEVELOPER CODE - PROVIDED AS-IS
-    //------------------------
-
-    @NonNull
     public String toString() {
         return super.toString() + "[" +
                 "name" + ":" + getName() + "]";
     }
-
-
 }
-

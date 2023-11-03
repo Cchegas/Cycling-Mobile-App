@@ -4,8 +4,6 @@ package com.example.cyclingmobileapp.lib.user;
 /*This code was generated using the UMPLE 1.32.1.6535.66c005ced modeling language!*/
 
 
-import androidx.annotation.NonNull;
-
 import com.example.cyclingmobileapp.lib.event.Event;
 
 import java.util.ArrayList;
@@ -19,28 +17,28 @@ public class ParticipantAccount extends Account {
     //------------------------
     // MEMBER VARIABLES
     //------------------------
-
-    // line 23 "model.ump"
-    final String role = "participant";
-    //------------------------
-    // CONSTRUCTOR
-    //------------------------
-    //ParticipantAccount Associations
-    private final List<Event> registeredEvents;
+    private static final String ROLE = "participant";
     //ParticipantAccount Attributes
     private String firstName;
     private String lastName;
 
+    //ParticipantAccount Associations
+    private final List<Event> registeredEvents;
+
     //------------------------
-    // INTERFACE
+    // CONSTRUCTOR
     //------------------------
 
     public ParticipantAccount(String aUsername, String aEmail, String aPassword, String aFirstName, String aLastName) {
-        super(aUsername, aEmail, aPassword);
+        super(aUsername, aEmail, aPassword, ROLE);
         firstName = aFirstName;
         lastName = aLastName;
         registeredEvents = new ArrayList<Event>();
     }
+
+    //------------------------
+    // INTERFACE
+    //------------------------
 
     /* Code from template association_MinimumNumberOfMethod */
     public static int minimumNumberOfRegisteredEvents() {
@@ -71,23 +69,28 @@ public class ParticipantAccount extends Account {
 
     /* Code from template association_GetMany */
     public Event getRegisteredEvent(int index) {
-        return registeredEvents.get(index);
+        Event aRegisteredEvent = registeredEvents.get(index);
+        return aRegisteredEvent;
     }
 
     public List<Event> getRegisteredEvents() {
-        return Collections.unmodifiableList(registeredEvents);
+        List<Event> newRegisteredEvents = Collections.unmodifiableList(registeredEvents);
+        return newRegisteredEvents;
     }
 
     public int numberOfRegisteredEvents() {
-        return registeredEvents.size();
+        int number = registeredEvents.size();
+        return number;
     }
 
     public boolean hasRegisteredEvents() {
-        return registeredEvents.size() > 0;
+        boolean has = registeredEvents.size() > 0;
+        return has;
     }
 
     public int indexOfRegisteredEvent(Event aRegisteredEvent) {
-        return registeredEvents.indexOf(aRegisteredEvent);
+        int index = registeredEvents.indexOf(aRegisteredEvent);
+        return index;
     }
 
     /* Code from template association_AddManyToManyMethod */
@@ -172,33 +175,10 @@ public class ParticipantAccount extends Account {
         super.delete();
     }
 
-    @Override
-    // line 27 "model.ump"
-    public String greetingMessage() {
-        return "Welcome " + firstName + ". You are logged in as \"" + role + "\".";
-    }
 
-    // line 29 "model.ump"
-    public void update() {
-
-    }
-
-    public String getRole() {
-        return role;
-    }
-    //------------------------
-    // DEVELOPER CODE - PROVIDED AS-IS
-    //------------------------
-
-    @NonNull
     public String toString() {
         return super.toString() + "[" +
                 "firstName" + ":" + getFirstName() + "," +
                 "lastName" + ":" + getLastName() + "]";
     }
-
-
 }
-
-
-
