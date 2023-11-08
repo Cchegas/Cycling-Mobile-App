@@ -14,6 +14,8 @@ import java.util.List;
 // line 100 "model.ump"
 public class EventType {
 
+    public static final String COLLECTION_NAME = "EventTypes";
+
     //------------------------
     // MEMBER VARIABLES
     //------------------------

@@ -25,4 +25,12 @@
     <string name="sign_out_btn">Sign Out</string>
     <string name="open_drawer_desc">Open Menu</string>
     <string name="close_drawer_desc">Close Menu</string>
+
+    <!--    Event Type Fragment-->
+    <string name="event_type_fragment_title">Active Event Types</string>
+    <string name="event_type_add_btn">Add Event Type</string>
+
+    <!--    Common-->
+    <string name="cancel_btn">Cancel</string>
+    <string name="done_btn">Done</string>
 </resources>

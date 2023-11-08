@@ -60,19 +60,19 @@ public class MainActivity extends AppCompatActivity {
         DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navView = findViewById(R.id.navigation_view);
         navView.setNavigationItemSelectedListener(menuItem -> {
-            Fragment frag = null;
+            Fragment fragment = null;
             int itemId = menuItem.getItemId();
             if (itemId == R.id.first) {
-                frag = new FirstFragment();
+                fragment = new FirstFragment();
             } else if (itemId == R.id.second) {
-                frag = new SecondFragment();
+                fragment = new SecondFragment();
             } else if (itemId == R.id.third) {
-                frag = new ThirdFragment();
+                fragment = new ThirdFragment();
             } else if (itemId == R.id.signout) {
                 signOut();
             }
-            if (frag != null) {
-                selectFragment(frag);
+            if (fragment != null) {
+                selectFragment(fragment);
                 drawerLayout.closeDrawers();
                 return true;
             }
