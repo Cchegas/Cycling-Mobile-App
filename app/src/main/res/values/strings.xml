@@ -27,8 +27,8 @@
     <string name="close_drawer_desc">Close Menu</string>
 
     <!--    Event Type Fragment-->
-    <string name="event_type_fragment_title">Active Event Types</string>
-    <string name="event_type_add_btn">Add Event Type</string>
+    <string name="event_type_fragment_title">Event Types</string>
+    <string name="event_type_add_btn">Add an event type</string>
 
     <!--    Common-->
     <string name="cancel_btn">Cancel</string>
