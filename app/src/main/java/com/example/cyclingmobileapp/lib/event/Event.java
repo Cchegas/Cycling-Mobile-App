@@ -3,17 +3,17 @@ package com.example.cyclingmobileapp.lib.event;
 /*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.32.1.6535.66c005ced modeling language!*/
 
-
 import com.example.cyclingmobileapp.lib.user.ClubAccount;
 import com.example.cyclingmobileapp.lib.user.ParticipantAccount;
 
-import java.time.Instant;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-// line 66 "model.ump"
-// line 113 "model.ump"
+
+// line 44 "model.ump"
+// line 92 "model.ump"
 public class Event {
 
     //------------------------
@@ -22,8 +22,9 @@ public class Event {
 
     private final List<ParticipantAccount> participantAccounts;
     //Event Attributes
-    private Instant startDate;
-    private Instant endDate;
+    private String title;
+    private ZonedDateTime startDate;
+    private ZonedDateTime endDate;
     private String location;
     private String description;
     private String difficulty;
@@ -37,7 +38,8 @@ public class Event {
     // CONSTRUCTOR
     //------------------------
 
-    public Event(Instant aStartDate, Instant aEndDate, String aLocation, String aDescription, String aDifficulty, int aParticipantLimit, int aFee, ClubAccount aOrganizer, EventType aEventType) {
+    public Event(String aTitle, ZonedDateTime aStartDate, ZonedDateTime aEndDate, String aLocation, String aDescription, String aDifficulty, int aParticipantLimit, int aFee, ClubAccount aOrganizer, EventType aEventType) {
+        title = aTitle;
         startDate = aStartDate;
         endDate = aEndDate;
         location = aLocation;
@@ -65,14 +67,21 @@ public class Event {
         return 0;
     }
 
-    public boolean setStartDate(Instant aStartDate) {
+    public boolean setTitle(String aTitle) {
+        boolean wasSet = false;
+        title = aTitle;
+        wasSet = true;
+        return wasSet;
+    }
+
+    public boolean setStartDate(ZonedDateTime aStartDate) {
         boolean wasSet = false;
         startDate = aStartDate;
         wasSet = true;
         return wasSet;
     }
 
-    public boolean setEndDate(Instant aEndDate) {
+    public boolean setEndDate(ZonedDateTime aEndDate) {
         boolean wasSet = false;
         endDate = aEndDate;
         wasSet = true;
@@ -114,11 +123,15 @@ public class Event {
         return wasSet;
     }
 
-    public Instant getStartDate() {
+    public String getTitle() {
+        return title;
+    }
+
+    public ZonedDateTime getStartDate() {
         return startDate;
     }
 
-    public Instant getEndDate() {
+    public ZonedDateTime getEndDate() {
         return endDate;
     }
 
@@ -309,14 +322,15 @@ public class Event {
         }
     }
 
-    // line 77 "model.ump"
+    // line 52 "model.ump"
     public boolean isComplete() {
-        return Instant.now().isAfter(endDate);
+        throw new UnsupportedOperationException();
     }
 
 
     public String toString() {
         return super.toString() + "[" +
+                "title" + ":" + getTitle() + "," +
                 "location" + ":" + getLocation() + "," +
                 "description" + ":" + getDescription() + "," +
                 "difficulty" + ":" + getDifficulty() + "," +
@@ -328,7 +342,3 @@ public class Event {
                 "  " + "eventType = " + (getEventType() != null ? Integer.toHexString(System.identityHashCode(getEventType())) : "null");
     }
 }
-
-
-
-

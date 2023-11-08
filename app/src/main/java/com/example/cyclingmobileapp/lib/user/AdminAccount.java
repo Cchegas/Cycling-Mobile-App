@@ -11,48 +11,34 @@ public class AdminAccount extends Account {
     //------------------------
     // MEMBER VARIABLES
     //------------------------
-
+    private static final String ROLE = "admin";
     //------------------------
     // CONSTRUCTOR
     //------------------------
 
-    // line 38 "model.ump"
-    final String role = "admin";
+    public AdminAccount(String aUsername, String aEmail, String aPassword) {
+        super(aUsername, aEmail, aPassword, ROLE);
+    }
 
     //------------------------
     // INTERFACE
     //------------------------
 
-    public AdminAccount(String aUsername, String aEmail, String aPassword) {
-        super(aUsername, aEmail, aPassword);
-    }
-
     public void delete() {
         super.delete();
     }
 
-    // line 41 "model.ump"
+    // line 22 "model.ump"
     public void deleteAccount(String username) {
 
     }
 
-    // line 44 "model.ump"
+    // line 24 "model.ump"
     public AdminAccount createAdminAccount(String username, String email, String password) {
-        return null;
+        throw new UnsupportedOperationException();
     }
-
-    //------------------------
-    // DEVELOPER CODE - PROVIDED AS-IS
-    //------------------------
-
-    // line 47 "model.ump"
-    public void update() {
-
-    }
-
-    public String getRole() {
-        return role;
-    }
-
 
 }
+  
+  
+  
