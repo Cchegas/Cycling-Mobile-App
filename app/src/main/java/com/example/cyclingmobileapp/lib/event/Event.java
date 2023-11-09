@@ -68,59 +68,43 @@ public class Event {
     }
 
     public boolean setTitle(String aTitle) {
-        boolean wasSet = false;
         title = aTitle;
-        wasSet = true;
-        return wasSet;
+        return true;
     }
 
     public boolean setStartDate(ZonedDateTime aStartDate) {
-        boolean wasSet = false;
         startDate = aStartDate;
-        wasSet = true;
-        return wasSet;
+        return true;
     }
 
     public boolean setEndDate(ZonedDateTime aEndDate) {
-        boolean wasSet = false;
         endDate = aEndDate;
-        wasSet = true;
-        return wasSet;
+        return true;
     }
 
     public boolean setLocation(String aLocation) {
-        boolean wasSet = false;
         location = aLocation;
-        wasSet = true;
-        return wasSet;
+        return true;
     }
 
     public boolean setDescription(String aDescription) {
-        boolean wasSet = false;
         description = aDescription;
-        wasSet = true;
-        return wasSet;
+        return true;
     }
 
     public boolean setDifficulty(String aDifficulty) {
-        boolean wasSet = false;
         difficulty = aDifficulty;
-        wasSet = true;
-        return wasSet;
+        return true;
     }
 
     public boolean setParticipantLimit(int aParticipantLimit) {
-        boolean wasSet = false;
         participantLimit = aParticipantLimit;
-        wasSet = true;
-        return wasSet;
+        return true;
     }
 
     public boolean setFee(int aFee) {
-        boolean wasSet = false;
         fee = aFee;
-        wasSet = true;
-        return wasSet;
+        return true;
     }
 
     public String getTitle() {
@@ -168,28 +152,23 @@ public class Event {
 
     /* Code from template association_GetMany */
     public ParticipantAccount getParticipantAccount(int index) {
-        ParticipantAccount aParticipantAccount = participantAccounts.get(index);
-        return aParticipantAccount;
+        return participantAccounts.get(index);
     }
 
     public List<ParticipantAccount> getParticipantAccounts() {
-        List<ParticipantAccount> newParticipantAccounts = Collections.unmodifiableList(participantAccounts);
-        return newParticipantAccounts;
+        return Collections.unmodifiableList(participantAccounts);
     }
 
     public int numberOfParticipantAccounts() {
-        int number = participantAccounts.size();
-        return number;
+        return participantAccounts.size();
     }
 
     public boolean hasParticipantAccounts() {
-        boolean has = participantAccounts.size() > 0;
-        return has;
+        return participantAccounts.size() > 0;
     }
 
     public int indexOfParticipantAccount(ParticipantAccount aParticipantAccount) {
-        int index = participantAccounts.indexOf(aParticipantAccount);
-        return index;
+        return participantAccounts.indexOf(aParticipantAccount);
     }
 
     /* Code from template association_GetOne */
@@ -199,9 +178,8 @@ public class Event {
 
     /* Code from template association_SetOneToMany */
     public boolean setOrganizer(ClubAccount aOrganizer) {
-        boolean wasSet = false;
         if (aOrganizer == null) {
-            return wasSet;
+            return false;
         }
 
         ClubAccount existingOrganizer = organizer;
@@ -210,8 +188,7 @@ public class Event {
             existingOrganizer.removeEvent(this);
         }
         organizer.addEvent(this);
-        wasSet = true;
-        return wasSet;
+        return true;
     }
 
     /* Code from template association_AddManyToManyMethod */
@@ -236,7 +213,7 @@ public class Event {
     public boolean removeParticipantAccount(ParticipantAccount aParticipantAccount) {
         boolean wasRemoved = false;
         if (!participantAccounts.contains(aParticipantAccount)) {
-            return wasRemoved;
+            return false;
         }
 
         int oldIndex = participantAccounts.indexOf(aParticipantAccount);
@@ -289,9 +266,8 @@ public class Event {
 
     /* Code from template association_SetOneToMany */
     public boolean setEventType(EventType aEventType) {
-        boolean wasSet = false;
         if (aEventType == null) {
-            return wasSet;
+            return false;
         }
 
         EventType existingEventType = eventType;
@@ -300,8 +276,7 @@ public class Event {
             existingEventType.removeEvent(this);
         }
         eventType.addEvent(this);
-        wasSet = true;
-        return wasSet;
+        return true;
     }
 
     public void delete() {
