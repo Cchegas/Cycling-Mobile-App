@@ -26,7 +26,7 @@ import java.util.List;
 public class EventTypeFragment extends Fragment {
 
 
-    List<EventType> eventTypes;
+    private List<EventType> eventTypes;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

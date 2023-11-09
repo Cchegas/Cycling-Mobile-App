@@ -15,6 +15,12 @@
         android:layout_marginBottom="16dp"
         android:textSize="34sp" />
 
+    <Button
+        android:id="@+id/eventTypeAddFieldButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/event_type_add_field_btn" />
+
     <ListView
         android:id="@+id/eventTypeList"
         android:layout_width="match_parent"

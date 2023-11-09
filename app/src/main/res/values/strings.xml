@@ -30,6 +30,9 @@
     <string name="event_type_fragment_title">Event Types</string>
     <string name="event_type_add_btn">Add an event type</string>
 
+<!--    Event Type Activity-->
+    <string name="event_type_add_field_btn">Add required field</string>
+
     <!--    Menu-->
     <string name="menu_event_type_title">Event Types</string>
 
