@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         navUsername.setText(username);
 
         // Manually select the first item in the navigation menu, and, correspondingly, show the first fragment
-        navigationView.setCheckedItem(R.id.first);
+        navigationView.setCheckedItem(R.id.eventTypeFragmentMenuItem);
         selectFragment(new FirstFragment());
     }
 
@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         navView.setNavigationItemSelectedListener(menuItem -> {
             Fragment fragment = null;
             int itemId = menuItem.getItemId();
-            if (itemId == R.id.first) {
+            if (itemId == R.id.eventTypeFragmentMenuItem) {
                 fragment = new FirstFragment();
             } else if (itemId == R.id.second) {
                 fragment = new SecondFragment();

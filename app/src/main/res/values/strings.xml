@@ -30,6 +30,9 @@
     <string name="event_type_fragment_title">Event Types</string>
     <string name="event_type_add_btn">Add an event type</string>
 
+    <!--    Menu-->
+    <string name="menu_event_type_title">Event Types</string>
+
     <!--    Common-->
     <string name="cancel_btn">Cancel</string>
     <string name="done_btn">Done</string>
