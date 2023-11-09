@@ -30,13 +30,18 @@
     <string name="event_type_fragment_title">Event Types</string>
     <string name="event_type_add_btn">Add an event type</string>
 
-<!--    Event Type Activity-->
-    <string name="event_type_add_field_btn">Add required field</string>
+    <!--    Event Type Activity-->
+    <string name="event_type_required_fields_header">Required Fields</string>
+    <string name="event_type_label_input">Event type name</string>
+    <string name="event_type_add_field_btn">+ Add</string>
+    <string name="event_type_required_field_name">Name</string>
 
     <!--    Menu-->
     <string name="menu_event_type_title">Event Types</string>
 
     <!--    Common-->
     <string name="cancel_btn">Cancel</string>
+    <string name="delete_btn">Delete</string>
+    <string name="update_btn">Update</string>
     <string name="done_btn">Done</string>
 </resources>
