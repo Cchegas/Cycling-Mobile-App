@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Manually select the first item in the navigation menu, and, correspondingly, show the first fragment
         navigationView.setCheckedItem(R.id.eventTypeFragmentMenuItem);
-        selectFragment(new FirstFragment());
+        selectFragment(new EventTypeFragment());
     }
 
     public void signOut() {
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
             Fragment fragment = null;
             int itemId = menuItem.getItemId();
             if (itemId == R.id.eventTypeFragmentMenuItem) {
-                fragment = new FirstFragment();
+                fragment = new EventTypeFragment();
             } else if (itemId == R.id.second) {
                 fragment = new SecondFragment();
             } else if (itemId == R.id.third) {
