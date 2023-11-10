@@ -46,7 +46,7 @@ public class EventTypeActivity extends AppCompatActivity {
 
         TextView eventTypeHeader = (TextView) findViewById(R.id.eventTypeHeader);
         Button addFieldButton = (Button) findViewById(R.id.eventTypeAddFieldButton);
-        Button deleteButton = (Button) findViewById(R.id.eventTypeDeleteButton);
+        Button disableButton = (Button) findViewById(R.id.eventTypeDisableButton);
         Button doneButton = (Button) findViewById(R.id.eventTypeDoneButton);
         requiredFieldListView = (ListView) findViewById(R.id.requiredFieldListView);
 
@@ -85,16 +85,17 @@ public class EventTypeActivity extends AppCompatActivity {
             });
             EditText eventTypeLabelInput = (EditText) findViewById(R.id.eventTypeLabel);
             eventTypeLabelInput.setText(eventTypeLabel);
-            deleteButton.setOnClickListener(view -> {
-                eventType.deleteFromDB();
+            disableButton.setOnClickListener(view -> {
+                eventType.setEnabled(false);
+                eventType.upload();
                 finish();
             });
         } else {
             eventTypeHeader.setText("Add an event type");
             eventType = new EventType("", true);
-            // The delete button will function as a cancel button
-            deleteButton.setText(R.string.cancel_btn);
-            deleteButton.setOnClickListener(view -> {
+            // The disable button will function as a cancel button
+            disableButton.setText(R.string.cancel_btn);
+            disableButton.setOnClickListener(view -> {
                 finish();
             });
         }
