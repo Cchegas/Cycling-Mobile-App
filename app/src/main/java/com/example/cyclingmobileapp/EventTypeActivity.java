@@ -1,7 +1,6 @@
 package com.example.cyclingmobileapp;
 
 import android.app.AlertDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,7 +46,7 @@ public class EventTypeActivity extends AppCompatActivity {
 
         TextView eventTypeHeader = (TextView) findViewById(R.id.eventTypeHeader);
         Button addFieldButton = (Button) findViewById(R.id.eventTypeAddFieldButton);
-        Button cancelButton = (Button) findViewById(R.id.eventTypeCancelButton);
+        Button deleteButton = (Button) findViewById(R.id.eventTypeDeleteButton);
         Button doneButton = (Button) findViewById(R.id.eventTypeDoneButton);
         requiredFieldListView = (ListView) findViewById(R.id.requiredFieldListView);
 
@@ -57,9 +56,6 @@ public class EventTypeActivity extends AppCompatActivity {
         });
         addFieldButton.setOnClickListener(view -> {
             showRequiredFieldDialog(-1);
-        });
-        cancelButton.setOnClickListener(view -> {
-            finish();
         });
         doneButton.setOnClickListener(view -> {
             onDone();
@@ -89,9 +85,18 @@ public class EventTypeActivity extends AppCompatActivity {
             });
             EditText eventTypeLabelInput = (EditText) findViewById(R.id.eventTypeLabel);
             eventTypeLabelInput.setText(eventTypeLabel);
+            deleteButton.setOnClickListener(view -> {
+                eventType.deleteFromDB();
+                finish();
+            });
         } else {
             eventTypeHeader.setText("Add an event type");
             eventType = new EventType("", true);
+            // The delete button will function as a cancel button
+            deleteButton.setText(R.string.cancel_btn);
+            deleteButton.setOnClickListener(view -> {
+                finish();
+            });
         }
         updateRequiredFieldListView();
     }

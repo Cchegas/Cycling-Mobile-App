@@ -311,4 +311,9 @@ public class EventType {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(COLLECTION_NAME).document(this.label).set(eventTypeData);
     }
+
+    public void deleteFromDB(){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(COLLECTION_NAME).document(this.label).delete();
+    }
 }
