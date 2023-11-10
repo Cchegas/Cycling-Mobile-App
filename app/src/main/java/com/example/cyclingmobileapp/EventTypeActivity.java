@@ -196,29 +196,30 @@ public class EventTypeActivity extends AppCompatActivity {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(EventType.COLLECTION_NAME).whereEqualTo("label", eventTypeLabel).whereEqualTo("enabled", true).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()){
-                if (task.getResult().getDocuments().size() > 0){
+                List<DocumentSnapshot> documents = task.getResult().getDocuments();
+                if (documents.size() > 0 && !documents.get(0).getId().equals(documentId)){
                     makeToast("An enabled event type already exists with the same name!");
-                } else {
-                    // No event type with the same name already exists, so it can be added in or updated
-                    String oldLabel = eventType.getLabel();
-                    eventType.setLabel(eventTypeLabel);
-                    int size = eventType.getRequiredFields().size();
-                    // Clear any required fields for the event type, then add the ones from requiredFields
-                    for (int i = 0; i < size; i++) {
-                        eventType.removeRequiredField(eventType.getRequiredField(0));
-                    }
-                    for (int i = 0; i < requiredFields.size(); i++) {
-                        eventType.addRequiredField(requiredFields.get(i));
-                    }
-                    if (oldLabel.equals("") || documentId == null){
-                        // If the event type is new, insert it as a new document
-                        eventType.upload();
-                    } else {
-                        // Otherwise, replace the data of the document at documentID
-                        eventType.upload(documentId);
-                    }
-                    finish();
+                    return;
                 }
+                // No event type with the same name already exists, so it can be added in or updated
+                String oldLabel = eventType.getLabel();
+                eventType.setLabel(eventTypeLabel);
+                int size = eventType.getRequiredFields().size();
+                // Clear any required fields for the event type, then add the ones from requiredFields
+                for (int i = 0; i < size; i++) {
+                    eventType.removeRequiredField(eventType.getRequiredField(0));
+                }
+                for (int i = 0; i < requiredFields.size(); i++) {
+                    eventType.addRequiredField(requiredFields.get(i));
+                }
+                if (oldLabel.equals("") || documentId == null){
+                    // If the event type is new, insert it as a new document
+                    eventType.upload();
+                } else {
+                    // Otherwise, replace the data of the document at documentID
+                    eventType.upload(documentId);
+                }
+                finish();
             }
             else {
                 makeToast("Something went wrong!");
