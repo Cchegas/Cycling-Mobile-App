@@ -8,6 +8,10 @@ package com.example.cyclingmobileapp.lib.event;
 // line 108 "model.ump"
 public class RequiredField {
 
+    public static final String STRING_TYPE = "String";
+    public static final String INT_TYPE = "int";
+    public static final String FLOAT_TYPE = "float";
+
     //------------------------
     // MEMBER VARIABLES
     //------------------------

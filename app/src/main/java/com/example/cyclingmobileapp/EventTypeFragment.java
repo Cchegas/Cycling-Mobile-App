@@ -61,6 +61,7 @@ public class EventTypeFragment extends Fragment {
         });
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+        // Display the event types in a ListView
         db.collection(EventType.COLLECTION_NAME).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {

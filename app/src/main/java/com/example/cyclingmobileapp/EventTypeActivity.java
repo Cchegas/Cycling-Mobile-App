@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,6 +23,7 @@ import java.util.List;
 
 public class EventTypeActivity extends AppCompatActivity {
 
+    private static final String[] requiredFieldTypes = new String[]{RequiredField.STRING_TYPE, RequiredField.INT_TYPE, RequiredField.FLOAT_TYPE};
     private EventType eventType;
     private List<RequiredField> requiredFields;
     private ListView requiredFieldListView;
@@ -69,15 +69,13 @@ public class EventTypeActivity extends AppCompatActivity {
     }
 
     private void showRequiredFieldDialog(int index) {
-        if (index >= requiredFields.size()){
+        if (index >= requiredFields.size()) {
             return;
         }
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.layout_required_field_dialog, null);
         dialogBuilder.setView(dialogView);
-
-        String[] requiredFieldTypes = new String[]{"1", "2", "3"};
 
         EditText requiredFieldNameInput = (EditText) dialogView.findViewById(R.id.requiredFieldNameInput);
         Spinner requiredFieldTypeInput = (Spinner) dialogView.findViewById(R.id.requiredFieldTypeInput);
@@ -160,7 +158,7 @@ public class EventTypeActivity extends AppCompatActivity {
         finish();
     }
 
-    private void updateRequiredFieldListView(){
+    private void updateRequiredFieldListView() {
         RequiredFieldList requiredFieldListAdapter = new RequiredFieldList(this, requiredFields);
         requiredFieldListView.setAdapter(requiredFieldListAdapter);
     }
