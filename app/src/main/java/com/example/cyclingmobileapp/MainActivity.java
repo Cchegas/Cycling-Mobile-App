@@ -65,8 +65,8 @@ public class MainActivity extends AppCompatActivity {
             int itemId = menuItem.getItemId();
             if (itemId == R.id.eventTypeFragmentMenuItem) {
                 fragment = new EventTypeFragment();
-            } else if (itemId == R.id.second) {
-                fragment = new SecondFragment();
+            } else if (itemId == R.id.accountOverviewFragmentMenuItem) {
+                fragment = new AccountOverviewFragment();
             } else if (itemId == R.id.third) {
                 fragment = new ThirdFragment();
             } else if (itemId == R.id.signout) {

@@ -9,6 +9,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.cyclingmobileapp.lib.user.Account;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -33,7 +34,7 @@ public class LoginActivity extends AppCompatActivity {
         String password = ((EditText) findViewById(R.id.loginPasswordInput)).getText().toString();
 
         if (validateLogin(username, password)) {
-            db.collection("users").whereEqualTo("username", username).whereEqualTo("password", password).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            db.collection(Account.COLLECTION_NAME).whereEqualTo("username", username).whereEqualTo("password", password).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                     if (task.isSuccessful()) {

@@ -7,6 +7,8 @@ package com.example.cyclingmobileapp.lib.user;
 // line 86 "model.ump"
 public abstract class Account {
 
+    public static final String COLLECTION_NAME = "Accounts";
+
     //------------------------
     // MEMBER VARIABLES
     //------------------------

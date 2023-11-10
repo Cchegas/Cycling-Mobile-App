@@ -32,8 +32,7 @@ public class EventTypeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         eventTypes = new ArrayList<EventType>();
         // Inflate the layout for this fragment
-        View eventTypeFragment = inflater.inflate(R.layout.fragment_event_type, container, false);
-        return eventTypeFragment;
+        return inflater.inflate(R.layout.fragment_event_type, container, false);
     }
 
     @Override
@@ -62,22 +61,19 @@ public class EventTypeFragment extends Fragment {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         // Display the event types in a ListView
-        db.collection(EventType.COLLECTION_NAME).addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                eventTypes.clear();
+        db.collection(EventType.COLLECTION_NAME).addSnapshotListener((value, error) -> {
+            eventTypes.clear();
 
-                for (QueryDocumentSnapshot doc : value) {
-                    EventType eventType = new EventType(doc.get("label").toString(), (boolean) doc.get("enabled"));
-                    // Don't display non-enabled events, for simplicity
-                    if (eventType.getEnabled()) {
-                        eventTypes.add(eventType);
-                    }
+            for (QueryDocumentSnapshot doc : value) {
+                EventType eventType = new EventType(doc.get("label").toString(), (boolean) doc.get("enabled"));
+                // Don't display non-enabled events, for simplicity
+                if (eventType.getEnabled()) {
+                    eventTypes.add(eventType);
                 }
-
-                EventTypeList eventTypeList = new EventTypeList(activity, eventTypes);
-                listViewEventTypes.setAdapter(eventTypeList);
             }
+
+            EventTypeList eventTypeList = new EventTypeList(activity, eventTypes);
+            listViewEventTypes.setAdapter(eventTypeList);
         });
     }
 }

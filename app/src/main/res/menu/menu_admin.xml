@@ -5,8 +5,8 @@
             android:id="@+id/eventTypeFragmentMenuItem"
             android:title="@string/menu_event_type_title" />
         <item
-            android:id="@+id/second"
-            android:title="Second Menu" />
+            android:id="@+id/accountOverviewFragmentMenuItem"
+            android:title="@string/menu_account_overview_title" />
         <item
             android:id="@+id/third"
             android:title="Third Menu" />
