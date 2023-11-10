@@ -30,6 +30,9 @@
     <string name="event_type_fragment_title">Event Types</string>
     <string name="event_type_add_btn">Add an event type</string>
 
+    <!--    Account Overview Fragment-->
+    <string name="account_overview_fragment_title">Active Accounts</string>
+
     <!--    Event Type Activity-->
     <string name="event_type_required_fields_header">Required Fields</string>
     <string name="event_type_label_input">Event type name</string>
@@ -38,9 +41,11 @@
 
     <!--    Menu-->
     <string name="menu_event_type_title">Event Types</string>
+    <string name="menu_account_overview_title">Clubs and Participants</string>
 
     <!--    Common-->
     <string name="cancel_btn">Cancel</string>
+    <string name="delete_confirmation_header">Confirm Deletion</string>
     <string name="delete_btn">Delete</string>
     <string name="update_btn">Update</string>
     <string name="done_btn">Done</string>

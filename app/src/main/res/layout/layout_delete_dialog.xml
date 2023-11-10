@@ -5,22 +5,21 @@
     android:orientation="vertical"
     android:padding="32dp">
 
-    <EditText
-        android:id="@+id/requiredFieldNameInput"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/deleteDialogHeader"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:ems="10"
-        android:hint="@string/event_type_required_field_name"
-        android:inputType="text"
-        android:minHeight="48dp" />
+        android:layout_gravity="center"
+        android:layout_marginBottom="16dp"
+        android:text="@string/delete_confirmation_header"
+        android:textSize="24sp" />
 
-    <Spinner
-        android:id="@+id/requiredFieldTypeInput"
+    <TextView
+        android:id="@+id/deleteDialogContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:minHeight="48dp" />
+        android:layout_marginBottom="16dp"
+        android:text="@string/delete_confirmation_header" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,16 +27,17 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/requiredFieldDeleteButton"
+            android:id="@+id/deleteDialogDeleteButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="@string/delete_btn" />
 
         <Button
-            android:id="@+id/requiredFieldUpdateButton"
+            android:id="@+id/deleteDialogCancelButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/update_btn" />
+            android:layout_weight="1"
+            android:text="@string/cancel_btn" />
     </LinearLayout>
-
 </LinearLayout>

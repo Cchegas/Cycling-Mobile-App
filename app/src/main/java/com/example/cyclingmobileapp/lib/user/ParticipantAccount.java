@@ -17,7 +17,7 @@ public class ParticipantAccount extends Account {
     //------------------------
     // MEMBER VARIABLES
     //------------------------
-    private static final String ROLE = "participant";
+    public static final String ROLE = "participant";
     //ParticipantAccount Attributes
     private String firstName;
     private String lastName;

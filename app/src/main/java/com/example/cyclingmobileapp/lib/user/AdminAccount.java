@@ -11,7 +11,7 @@ public class AdminAccount extends Account {
     //------------------------
     // MEMBER VARIABLES
     //------------------------
-    private static final String ROLE = "admin";
+    public static final String ROLE = "admin";
     //------------------------
     // CONSTRUCTOR
     //------------------------

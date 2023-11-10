@@ -17,7 +17,7 @@ public class ClubAccount extends Account {
     //------------------------
     // MEMBER VARIABLES
     //------------------------
-    private static final String ROLE = "club";
+    public static final String ROLE = "club";
     //ClubAccount Associations
     private final List<Event> events;
     //ClubAccount Attributes
