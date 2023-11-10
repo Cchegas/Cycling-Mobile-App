@@ -69,7 +69,10 @@ public class EventTypeFragment extends Fragment {
 
                 for (QueryDocumentSnapshot doc : value) {
                     EventType eventType = new EventType(doc.get("label").toString(), (boolean) doc.get("enabled"));
-                    eventTypes.add(eventType);
+                    // Don't display non-enabled events, for simplicity
+                    if (eventType.getEnabled()) {
+                        eventTypes.add(eventType);
+                    }
                 }
 
                 EventTypeList eventTypeList = new EventTypeList(activity, eventTypes);
