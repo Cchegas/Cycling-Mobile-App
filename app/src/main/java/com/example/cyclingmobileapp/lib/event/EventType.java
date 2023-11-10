@@ -14,6 +14,8 @@ import java.util.List;
 // line 100 "model.ump"
 public class EventType {
 
+    public static final String COLLECTION_NAME = "EventTypes";
+
     //------------------------
     // MEMBER VARIABLES
     //------------------------
@@ -50,10 +52,8 @@ public class EventType {
     }
 
     public boolean setLabel(String aLabel) {
-        boolean wasSet = false;
         label = aLabel;
-        wasSet = true;
-        return wasSet;
+        return true;
     }
 
     public String getLabel() {
@@ -62,54 +62,44 @@ public class EventType {
 
     /* Code from template association_GetMany */
     public Event getEvent(int index) {
-        Event aEvent = events.get(index);
-        return aEvent;
+        return events.get(index);
     }
 
     public List<Event> getEvents() {
-        List<Event> newEvents = Collections.unmodifiableList(events);
-        return newEvents;
+        return Collections.unmodifiableList(events);
     }
 
     public int numberOfEvents() {
-        int number = events.size();
-        return number;
+        return events.size();
     }
 
     public boolean hasEvents() {
-        boolean has = events.size() > 0;
-        return has;
+        return events.size() > 0;
     }
 
     public int indexOfEvent(Event aEvent) {
-        int index = events.indexOf(aEvent);
-        return index;
+        return events.indexOf(aEvent);
     }
 
     /* Code from template association_GetMany */
     public RequiredField getRequiredField(int index) {
-        RequiredField aRequiredField = requiredFields.get(index);
-        return aRequiredField;
+        return requiredFields.get(index);
     }
 
     public List<RequiredField> getRequiredFields() {
-        List<RequiredField> newRequiredFields = Collections.unmodifiableList(requiredFields);
-        return newRequiredFields;
+        return Collections.unmodifiableList(requiredFields);
     }
 
     public int numberOfRequiredFields() {
-        int number = requiredFields.size();
-        return number;
+        return requiredFields.size();
     }
 
     public boolean hasRequiredFields() {
-        boolean has = requiredFields.size() > 0;
-        return has;
+        return requiredFields.size() > 0;
     }
 
     public int indexOfRequiredField(RequiredField aRequiredField) {
-        int index = requiredFields.indexOf(aRequiredField);
-        return index;
+        return requiredFields.indexOf(aRequiredField);
     }
 
     /* Code from template association_AddManyToOne */
@@ -118,7 +108,6 @@ public class EventType {
     }
 
     public boolean addEvent(Event aEvent) {
-        boolean wasAdded = false;
         if (events.contains(aEvent)) {
             return false;
         }
@@ -129,8 +118,7 @@ public class EventType {
         } else {
             events.add(aEvent);
         }
-        wasAdded = true;
-        return wasAdded;
+        return true;
     }
 
     public boolean removeEvent(Event aEvent) {
@@ -180,14 +168,12 @@ public class EventType {
 
     /* Code from template association_IsNumberOfValidMethod */
     public boolean isNumberOfRequiredFieldsValid() {
-        boolean isValid = numberOfRequiredFields() >= minimumNumberOfRequiredFields();
-        return isValid;
+        return numberOfRequiredFields() >= minimumNumberOfRequiredFields();
     }
 
     /* Code from template association_AddMandatoryManyToOne */
     public RequiredField addRequiredField(String aName, String aType) {
-        RequiredField aNewRequiredField = new RequiredField(aName, aType, this);
-        return aNewRequiredField;
+        return new RequiredField(aName, aType, this);
     }
 
     public boolean addRequiredField(RequiredField aRequiredField) {
@@ -211,20 +197,18 @@ public class EventType {
     }
 
     public boolean removeRequiredField(RequiredField aRequiredField) {
-        boolean wasRemoved = false;
         //Unable to remove aRequiredField, as it must always have a eventType
         if (this.equals(aRequiredField.getEventType())) {
-            return wasRemoved;
+            return false;
         }
 
         //eventType already at minimum (1)
         if (numberOfRequiredFields() <= minimumNumberOfRequiredFields()) {
-            return wasRemoved;
+            return false;
         }
 
         requiredFields.remove(aRequiredField);
-        wasRemoved = true;
-        return wasRemoved;
+        return true;
     }
 
     /* Code from template association_AddIndexControlFunctions */

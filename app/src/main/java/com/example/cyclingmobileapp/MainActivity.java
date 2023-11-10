@@ -48,8 +48,8 @@ public class MainActivity extends AppCompatActivity {
         navUsername.setText(username);
 
         // Manually select the first item in the navigation menu, and, correspondingly, show the first fragment
-        navigationView.setCheckedItem(R.id.first);
-        selectFragment(new FirstFragment());
+        navigationView.setCheckedItem(R.id.eventTypeFragmentMenuItem);
+        selectFragment(new EventTypeFragment());
     }
 
     public void signOut() {
@@ -60,19 +60,19 @@ public class MainActivity extends AppCompatActivity {
         DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navView = findViewById(R.id.navigation_view);
         navView.setNavigationItemSelectedListener(menuItem -> {
-            Fragment frag = null;
+            Fragment fragment = null;
             int itemId = menuItem.getItemId();
-            if (itemId == R.id.first) {
-                frag = new FirstFragment();
+            if (itemId == R.id.eventTypeFragmentMenuItem) {
+                fragment = new EventTypeFragment();
             } else if (itemId == R.id.second) {
-                frag = new SecondFragment();
+                fragment = new SecondFragment();
             } else if (itemId == R.id.third) {
-                frag = new ThirdFragment();
+                fragment = new ThirdFragment();
             } else if (itemId == R.id.signout) {
                 signOut();
             }
-            if (frag != null) {
-                selectFragment(frag);
+            if (fragment != null) {
+                selectFragment(fragment);
                 drawerLayout.closeDrawers();
                 return true;
             }

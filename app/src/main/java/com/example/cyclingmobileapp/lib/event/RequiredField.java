@@ -37,17 +37,13 @@ public class RequiredField {
     //------------------------
 
     public boolean setName(String aName) {
-        boolean wasSet = false;
         name = aName;
-        wasSet = true;
-        return wasSet;
+        return true;
     }
 
     public boolean setType(String aType) {
-        boolean wasSet = false;
         type = aType;
-        wasSet = true;
-        return wasSet;
+        return true;
     }
 
     public String getName() {
@@ -65,14 +61,13 @@ public class RequiredField {
 
     /* Code from template association_SetOneToMandatoryMany */
     public boolean setEventType(EventType aEventType) {
-        boolean wasSet = false;
         //Must provide eventType to requiredField
         if (aEventType == null) {
-            return wasSet;
+            return false;
         }
 
         if (eventType != null && eventType.numberOfRequiredFields() <= EventType.minimumNumberOfRequiredFields()) {
-            return wasSet;
+            return false;
         }
 
         EventType existingEventType = eventType;
@@ -81,12 +76,11 @@ public class RequiredField {
             boolean didRemove = existingEventType.removeRequiredField(this);
             if (!didRemove) {
                 eventType = existingEventType;
-                return wasSet;
+                return false;
             }
         }
         eventType.addRequiredField(this);
-        wasSet = true;
-        return wasSet;
+        return true;
     }
 
     public void delete() {
