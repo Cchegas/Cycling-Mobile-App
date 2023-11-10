@@ -298,10 +298,12 @@ public class EventType {
     }
 
     public void upload() {
-        upload(this.label);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String id = db.collection(COLLECTION_NAME).document().getId();
+        upload(id);
     }
 
-    public void upload(String documentKey) {
+    public void upload(String documentId) {
         HashMap<String, Object> requiredFieldData = new HashMap<String, Object>();
         for (int i = 0; i < this.requiredFields.size(); i++) {
             requiredFieldData.put(this.requiredFields.get(i).getName(), this.requiredFields.get(i).getType());
@@ -313,11 +315,6 @@ public class EventType {
         eventTypeData.put("requiredFields", requiredFieldData);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        // Delete any document that this could be replacing (since Firestore document keys can't seem to be changed)
-        if (!documentKey.equals(this.label) && !documentKey.trim().equals("")) {
-            db.collection(COLLECTION_NAME).document(documentKey).delete();
-        }
-        db.collection(COLLECTION_NAME).document(this.label).set(eventTypeData);
+        db.collection(COLLECTION_NAME).document(documentId).set(eventTypeData);
     }
 }
