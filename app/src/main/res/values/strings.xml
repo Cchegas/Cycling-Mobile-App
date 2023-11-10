@@ -25,4 +25,10 @@
     <string name="sign_out_btn">Sign Out</string>
     <string name="open_drawer_desc">Open Menu</string>
     <string name="close_drawer_desc">Close Menu</string>
+
+    <!-- CreateEventTypeActivity -->
+    <string name="creation_header">Create an event type</string>
+    <string name="event_type_name">Name</string>
+    <string name="event_type_participants">Solo</string>
+    <string name="event_type_description">Description</string>
 </resources>
