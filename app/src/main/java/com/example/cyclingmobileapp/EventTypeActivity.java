@@ -12,13 +12,17 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.cyclingmobileapp.lib.event.EventType;
 import com.example.cyclingmobileapp.lib.event.RequiredField;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,6 +34,7 @@ public class EventTypeActivity extends AppCompatActivity {
     private EventType eventType;
     private List<RequiredField> requiredFields;
     private ListView requiredFieldListView;
+    private String documentId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,9 +72,18 @@ public class EventTypeActivity extends AppCompatActivity {
 
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             // Retrieve the EventType data
-            db.collection(EventType.COLLECTION_NAME).whereEqualTo("label", eventTypeLabel).get().addOnCompleteListener(task -> {
+            db.collection(EventType.COLLECTION_NAME).whereEqualTo("label", eventTypeLabel).whereEqualTo("enabled", true).get().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     DocumentSnapshot documentSnapshot = task.getResult().getDocuments().get(0);
+
+                    // Store the document's Id to update it's values later
+                    documentId = documentSnapshot.getId();
+                    disableButton.setOnClickListener(view -> {
+                        eventType.setEnabled(false);
+                        eventType.upload(documentId);
+                        finish();
+                    });
+
                     eventType = new EventType(documentSnapshot.get("label").toString(), (boolean) documentSnapshot.get("enabled"));
                     HashMap<String, Object> requiredFieldData = (HashMap<String, Object>) documentSnapshot.get("requiredFields");
                     for (String requiredFieldName : requiredFieldData.keySet()) {
@@ -85,11 +99,6 @@ public class EventTypeActivity extends AppCompatActivity {
             });
             EditText eventTypeLabelInput = (EditText) findViewById(R.id.eventTypeLabel);
             eventTypeLabelInput.setText(eventTypeLabel);
-            disableButton.setOnClickListener(view -> {
-                eventType.setEnabled(false);
-                eventType.upload();
-                finish();
-            });
         } else {
             eventTypeHeader.setText("Add an event type");
             eventType = new EventType("", true);
@@ -183,18 +192,39 @@ public class EventTypeActivity extends AppCompatActivity {
             return;
         }
 
-        String oldLabel = eventType.getLabel();
-        eventType.setLabel(eventTypeLabel);
-        int size = eventType.getRequiredFields().size();
-        // Clear any required fields for the event type, then add the ones from requiredFields
-        for (int i = 0; i < size; i++) {
-            eventType.removeRequiredField(eventType.getRequiredField(0));
-        }
-        for (int i = 0; i < requiredFields.size(); i++) {
-            eventType.addRequiredField(requiredFields.get(i));
-        }
-        eventType.upload(oldLabel);
-        finish();
+        // Make sure that the event type label doesn't already exist on an enabled event type
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(EventType.COLLECTION_NAME).whereEqualTo("label", eventTypeLabel).whereEqualTo("enabled", true).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                if (task.getResult().getDocuments().size() > 0){
+                    makeToast("An enabled event type already exists with the same name!");
+                } else {
+                    // No event type with the same name already exists, so it can be added in or updated
+                    String oldLabel = eventType.getLabel();
+                    eventType.setLabel(eventTypeLabel);
+                    int size = eventType.getRequiredFields().size();
+                    // Clear any required fields for the event type, then add the ones from requiredFields
+                    for (int i = 0; i < size; i++) {
+                        eventType.removeRequiredField(eventType.getRequiredField(0));
+                    }
+                    for (int i = 0; i < requiredFields.size(); i++) {
+                        eventType.addRequiredField(requiredFields.get(i));
+                    }
+                    if (oldLabel.equals("") || documentId == null){
+                        // If the event type is new, insert it as a new document
+                        eventType.upload();
+                    } else {
+                        // Otherwise, replace the data of the document at documentID
+                        eventType.upload(documentId);
+                    }
+                    finish();
+                }
+            }
+            else {
+                makeToast("Something went wrong!");
+                finish();
+            }
+        });
     }
 
     private void updateRequiredFieldListView() {
@@ -207,7 +237,6 @@ public class EventTypeActivity extends AppCompatActivity {
         finish();
         return true;
     }
-
     private void makeToast(String text) {
         Toast.makeText(this, text, Toast.LENGTH_LONG).show();
     }
