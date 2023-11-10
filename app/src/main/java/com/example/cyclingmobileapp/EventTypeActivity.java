@@ -17,8 +17,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.cyclingmobileapp.lib.event.EventType;
 import com.example.cyclingmobileapp.lib.event.RequiredField;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class EventTypeActivity extends AppCompatActivity {
@@ -58,7 +61,41 @@ public class EventTypeActivity extends AppCompatActivity {
         String eventTypeLabel = getIntent().getExtras() != null ? getIntent().getExtras().getString("label") : null;
         if (eventTypeLabel != null) {
             eventTypeHeader.setText("Modify event type");
-            eventType = new EventType(eventTypeLabel, true);
+
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            // Retrieve the EventType data
+            db.collection(EventType.COLLECTION_NAME).whereEqualTo("label", eventTypeLabel).get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot documentSnapshot = task.getResult().getDocuments().get(0);
+                    eventType = new EventType(documentSnapshot.get("label").toString(), (boolean) documentSnapshot.get("enabled"));
+                    HashMap<String, Object> requiredFieldData = (HashMap<String, Object>) documentSnapshot.get("requiredFields");
+                    for (String requiredFieldName : requiredFieldData.keySet()){
+                        RequiredField requiredField = new RequiredField(requiredFieldName, (String) requiredFieldData.get(requiredFieldName), eventType);
+                        eventType.addRequiredField(requiredField);
+                        requiredFields.add(requiredField);
+                    }
+                    updateRequiredFieldListView();
+                } else {
+                    makeToast("Something went wrong.");
+                    finishActivity();
+                }
+            });
+            // Retrieve the RequiredField data
+            db.collection(RequiredField.COLLECTION_NAME).whereEqualTo("eventType", eventTypeLabel).get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    List<DocumentSnapshot> documentSnapshots = task.getResult().getDocuments();
+                    for (int i = 0; i < documentSnapshots.size(); i++) {
+                        DocumentSnapshot documentSnapshot = documentSnapshots.get(i);
+                        RequiredField requiredField = new RequiredField(documentSnapshot.get("name").toString(), documentSnapshot.get("type").toString(), eventType);
+                        requiredFields.add(requiredField);
+                    }
+                    updateRequiredFieldListView();
+                } else {
+                    makeToast("Something went wrong.");
+                    finishActivity();
+                }
+            });
+
             EditText eventTypeLabelInput = (EditText) findViewById(R.id.eventTypeLabel);
             eventTypeLabelInput.setText(eventTypeLabel);
         } else {
@@ -150,6 +187,17 @@ public class EventTypeActivity extends AppCompatActivity {
         }
 
         eventType.setLabel(eventTypeLabel);
+        int size = eventType.getRequiredFields().size();
+        // Clear any required fields for the event type, then add the ones from requiredFields
+        for (int i = 0; i < size; i++) {
+            eventType.removeRequiredField(eventType.getRequiredField(0));
+        }
+        for (int i = 0; i < requiredFields.size(); i++) {
+            eventType.addRequiredField(requiredFields.get(i));
+        }
+
+        eventType.upload();
+        finishActivity();
     }
 
     private void finishActivity() {

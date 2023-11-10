@@ -4,11 +4,14 @@ package com.example.cyclingmobileapp.lib.event;
 /*This code was generated using the UMPLE 1.32.1.6535.66c005ced modeling language!*/
 
 import com.example.cyclingmobileapp.lib.user.ClubAccount;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 // line 37 "model.ump"
 // line 100 "model.ump"
@@ -293,5 +296,20 @@ public class EventType {
         return super.toString() + "[" +
                 "label" + ":" + getLabel() + "," +
                 "enabled" + ":" + getEnabled() + "]";
+    }
+
+    public void upload(){
+        HashMap<String, Object> requiredFieldData = new HashMap<String, Object>();
+        for (int i = 0; i < this.requiredFields.size(); i++){
+            requiredFieldData.put(this.requiredFields.get(i).getName(), this.requiredFields.get(i).getType());
+        }
+
+        HashMap<String, Object> eventTypeData = new HashMap<String, Object>();
+        eventTypeData.put("label", this.label);
+        eventTypeData.put("enabled", this.enabled);
+        eventTypeData.put("requiredFields", requiredFieldData);
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(COLLECTION_NAME).document(this.label).set(eventTypeData);
     }
 }
