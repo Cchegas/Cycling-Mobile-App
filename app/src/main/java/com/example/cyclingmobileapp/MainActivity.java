@@ -40,13 +40,14 @@ public class MainActivity extends AppCompatActivity {
         // Setup a listener to the navigation menu's items
         setNavigationDrawer();
 
-        // Set the username as the header for the navigation menu
-        String username = Objects.requireNonNull(getIntent().getExtras()).getString("username");
         NavigationView navigationView = findViewById(R.id.navigation_view);
-        View headerView = navigationView.getHeaderView(0);
-        TextView navUsername = headerView.findViewById(R.id.nav_header_username);
-        navUsername.setText(username);
-
+        // Set the username as the header for the navigation menu
+        if (getIntent().getExtras() != null){
+            String username = getIntent().getExtras().getString("username");
+            View headerView = navigationView.getHeaderView(0);
+            TextView navUsername = headerView.findViewById(R.id.nav_header_username);
+            navUsername.setText(username);
+        }
         // Manually select the first item in the navigation menu, and, correspondingly, show the first fragment
         navigationView.setCheckedItem(R.id.eventTypeFragmentMenuItem);
         selectFragment(new EventTypeFragment());
