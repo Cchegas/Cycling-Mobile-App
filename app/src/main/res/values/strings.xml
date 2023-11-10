@@ -45,6 +45,7 @@
 
     <!--    Common-->
     <string name="cancel_btn">Cancel</string>
+    <string name="delete_confirmation_header">Confirm Deletion</string>
     <string name="delete_btn">Delete</string>
     <string name="update_btn">Update</string>
     <string name="done_btn">Done</string>
