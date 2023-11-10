@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.cyclingmobileapp.lib.event.EventType;
 import com.example.cyclingmobileapp.lib.event.RequiredField;
@@ -36,6 +37,12 @@ public class EventTypeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_type);
 
+        // Setup toolbar
+        Toolbar toolbar = (Toolbar) findViewById(R.id.eventTypeToolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         requiredFields = new ArrayList<RequiredField>();
 
         TextView eventTypeHeader = (TextView) findViewById(R.id.eventTypeHeader);
@@ -52,7 +59,7 @@ public class EventTypeActivity extends AppCompatActivity {
             showRequiredFieldDialog(-1);
         });
         cancelButton.setOnClickListener(view -> {
-            finishActivity();
+            finish();
         });
         doneButton.setOnClickListener(view -> {
             onDone();
@@ -77,7 +84,7 @@ public class EventTypeActivity extends AppCompatActivity {
                     updateRequiredFieldListView();
                 } else {
                     makeToast("Something went wrong.");
-                    finishActivity();
+                    finish();
                 }
             });
             EditText eventTypeLabelInput = (EditText) findViewById(R.id.eventTypeLabel);
@@ -181,18 +188,18 @@ public class EventTypeActivity extends AppCompatActivity {
         }
 
         eventType.upload();
-        finishActivity();
-    }
-
-    private void finishActivity() {
-        Intent mainActivityIntent = new Intent(this, MainActivity.class);
-        startActivity(mainActivityIntent);
         finish();
     }
 
     private void updateRequiredFieldListView() {
         RequiredFieldList requiredFieldListAdapter = new RequiredFieldList(this, requiredFields);
         requiredFieldListView.setAdapter(requiredFieldListAdapter);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
     }
 
     private void makeToast(String text) {
