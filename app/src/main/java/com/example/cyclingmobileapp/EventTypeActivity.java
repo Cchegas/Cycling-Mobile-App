@@ -183,6 +183,7 @@ public class EventTypeActivity extends AppCompatActivity {
             return;
         }
 
+        String oldLabel = eventType.getLabel();
         eventType.setLabel(eventTypeLabel);
         int size = eventType.getRequiredFields().size();
         // Clear any required fields for the event type, then add the ones from requiredFields
@@ -192,8 +193,7 @@ public class EventTypeActivity extends AppCompatActivity {
         for (int i = 0; i < requiredFields.size(); i++) {
             eventType.addRequiredField(requiredFields.get(i));
         }
-
-        eventType.upload();
+        eventType.upload(oldLabel);
         finish();
     }
 
