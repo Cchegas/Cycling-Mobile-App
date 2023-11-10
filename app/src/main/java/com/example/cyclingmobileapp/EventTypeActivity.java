@@ -80,22 +80,6 @@ public class EventTypeActivity extends AppCompatActivity {
                     finishActivity();
                 }
             });
-            // Retrieve the RequiredField data
-            db.collection(RequiredField.COLLECTION_NAME).whereEqualTo("eventType", eventTypeLabel).get().addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    List<DocumentSnapshot> documentSnapshots = task.getResult().getDocuments();
-                    for (int i = 0; i < documentSnapshots.size(); i++) {
-                        DocumentSnapshot documentSnapshot = documentSnapshots.get(i);
-                        RequiredField requiredField = new RequiredField(documentSnapshot.get("name").toString(), documentSnapshot.get("type").toString(), eventType);
-                        requiredFields.add(requiredField);
-                    }
-                    updateRequiredFieldListView();
-                } else {
-                    makeToast("Something went wrong.");
-                    finishActivity();
-                }
-            });
-
             EditText eventTypeLabelInput = (EditText) findViewById(R.id.eventTypeLabel);
             eventTypeLabelInput.setText(eventTypeLabel);
         } else {
