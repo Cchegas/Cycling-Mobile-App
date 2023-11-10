@@ -58,12 +58,12 @@ public class EventTypeActivity extends AppCompatActivity {
         String eventTypeLabel = getIntent().getExtras() != null ? getIntent().getExtras().getString("label") : null;
         if (eventTypeLabel != null) {
             eventTypeHeader.setText("Modify event type");
-            eventType = new EventType(eventTypeLabel);
+            eventType = new EventType(eventTypeLabel, true);
             EditText eventTypeLabelInput = (EditText) findViewById(R.id.eventTypeLabel);
             eventTypeLabelInput.setText(eventTypeLabel);
         } else {
             eventTypeHeader.setText("Add an event type");
-            eventType = new EventType("");
+            eventType = new EventType("", true);
         }
         updateRequiredFieldListView();
     }

@@ -22,6 +22,7 @@ public class EventType {
 
     //EventType Attributes
     private String label;
+    private boolean enabled;
 
     //EventType Associations
     private final List<Event> events;
@@ -31,8 +32,9 @@ public class EventType {
     // CONSTRUCTOR
     //------------------------
 
-    public EventType(String aLabel) {
+    public EventType(String aLabel, boolean aEnabled) {
         label = aLabel;
+        enabled = aEnabled;
         events = new ArrayList<Event>();
         requiredFields = new ArrayList<RequiredField>();
     }
@@ -52,54 +54,77 @@ public class EventType {
     }
 
     public boolean setLabel(String aLabel) {
+        boolean wasSet = false;
         label = aLabel;
-        return true;
+        wasSet = true;
+        return wasSet;
+    }
+
+    public boolean setEnabled(boolean aEnabled) {
+        boolean wasSet = false;
+        enabled = aEnabled;
+        wasSet = true;
+        return wasSet;
     }
 
     public String getLabel() {
         return label;
     }
 
+    public boolean getEnabled() {
+        return enabled;
+    }
+
     /* Code from template association_GetMany */
     public Event getEvent(int index) {
-        return events.get(index);
+        Event aEvent = events.get(index);
+        return aEvent;
     }
 
     public List<Event> getEvents() {
-        return Collections.unmodifiableList(events);
+        List<Event> newEvents = Collections.unmodifiableList(events);
+        return newEvents;
     }
 
     public int numberOfEvents() {
-        return events.size();
+        int number = events.size();
+        return number;
     }
 
     public boolean hasEvents() {
-        return events.size() > 0;
+        boolean has = events.size() > 0;
+        return has;
     }
 
     public int indexOfEvent(Event aEvent) {
-        return events.indexOf(aEvent);
+        int index = events.indexOf(aEvent);
+        return index;
     }
 
     /* Code from template association_GetMany */
     public RequiredField getRequiredField(int index) {
-        return requiredFields.get(index);
+        RequiredField aRequiredField = requiredFields.get(index);
+        return aRequiredField;
     }
 
     public List<RequiredField> getRequiredFields() {
-        return Collections.unmodifiableList(requiredFields);
+        List<RequiredField> newRequiredFields = Collections.unmodifiableList(requiredFields);
+        return newRequiredFields;
     }
 
     public int numberOfRequiredFields() {
-        return requiredFields.size();
+        int number = requiredFields.size();
+        return number;
     }
 
     public boolean hasRequiredFields() {
-        return requiredFields.size() > 0;
+        boolean has = requiredFields.size() > 0;
+        return has;
     }
 
     public int indexOfRequiredField(RequiredField aRequiredField) {
-        return requiredFields.indexOf(aRequiredField);
+        int index = requiredFields.indexOf(aRequiredField);
+        return index;
     }
 
     /* Code from template association_AddManyToOne */
@@ -108,6 +133,7 @@ public class EventType {
     }
 
     public boolean addEvent(Event aEvent) {
+        boolean wasAdded = false;
         if (events.contains(aEvent)) {
             return false;
         }
@@ -118,7 +144,8 @@ public class EventType {
         } else {
             events.add(aEvent);
         }
-        return true;
+        wasAdded = true;
+        return wasAdded;
     }
 
     public boolean removeEvent(Event aEvent) {
@@ -168,12 +195,14 @@ public class EventType {
 
     /* Code from template association_IsNumberOfValidMethod */
     public boolean isNumberOfRequiredFieldsValid() {
-        return numberOfRequiredFields() >= minimumNumberOfRequiredFields();
+        boolean isValid = numberOfRequiredFields() >= minimumNumberOfRequiredFields();
+        return isValid;
     }
 
     /* Code from template association_AddMandatoryManyToOne */
     public RequiredField addRequiredField(String aName, String aType) {
-        return new RequiredField(aName, aType, this);
+        RequiredField aNewRequiredField = new RequiredField(aName, aType, this);
+        return aNewRequiredField;
     }
 
     public boolean addRequiredField(RequiredField aRequiredField) {
@@ -197,18 +226,20 @@ public class EventType {
     }
 
     public boolean removeRequiredField(RequiredField aRequiredField) {
+        boolean wasRemoved = false;
         //Unable to remove aRequiredField, as it must always have a eventType
         if (this.equals(aRequiredField.getEventType())) {
-            return false;
+            return wasRemoved;
         }
 
         //eventType already at minimum (1)
         if (numberOfRequiredFields() <= minimumNumberOfRequiredFields()) {
-            return false;
+            return wasRemoved;
         }
 
         requiredFields.remove(aRequiredField);
-        return true;
+        wasRemoved = true;
+        return wasRemoved;
     }
 
     /* Code from template association_AddIndexControlFunctions */
@@ -260,6 +291,7 @@ public class EventType {
 
     public String toString() {
         return super.toString() + "[" +
-                "label" + ":" + getLabel() + "]";
+                "label" + ":" + getLabel() + "," +
+                "enabled" + ":" + getEnabled() + "]";
     }
 }
