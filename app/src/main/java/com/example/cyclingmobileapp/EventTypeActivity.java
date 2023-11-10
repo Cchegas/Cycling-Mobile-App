@@ -69,7 +69,7 @@ public class EventTypeActivity extends AppCompatActivity {
                     DocumentSnapshot documentSnapshot = task.getResult().getDocuments().get(0);
                     eventType = new EventType(documentSnapshot.get("label").toString(), (boolean) documentSnapshot.get("enabled"));
                     HashMap<String, Object> requiredFieldData = (HashMap<String, Object>) documentSnapshot.get("requiredFields");
-                    for (String requiredFieldName : requiredFieldData.keySet()){
+                    for (String requiredFieldName : requiredFieldData.keySet()) {
                         RequiredField requiredField = new RequiredField(requiredFieldName, (String) requiredFieldData.get(requiredFieldName), eventType);
                         eventType.addRequiredField(requiredField);
                         requiredFields.add(requiredField);

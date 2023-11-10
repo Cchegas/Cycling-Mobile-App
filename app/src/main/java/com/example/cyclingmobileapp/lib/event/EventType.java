@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
 // line 37 "model.ump"
 // line 100 "model.ump"
@@ -298,9 +297,9 @@ public class EventType {
                 "enabled" + ":" + getEnabled() + "]";
     }
 
-    public void upload(){
+    public void upload() {
         HashMap<String, Object> requiredFieldData = new HashMap<String, Object>();
-        for (int i = 0; i < this.requiredFields.size(); i++){
+        for (int i = 0; i < this.requiredFields.size(); i++) {
             requiredFieldData.put(this.requiredFields.get(i).getName(), this.requiredFields.get(i).getType());
         }
 

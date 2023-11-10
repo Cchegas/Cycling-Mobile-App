@@ -14,7 +14,8 @@ import java.util.List;
 public class RequiredFieldList extends ArrayAdapter<RequiredField> {
     List<RequiredField> requiredFields;
     private final Activity context;
-    public RequiredFieldList(Activity context, List<RequiredField> requiredFields){
+
+    public RequiredFieldList(Activity context, List<RequiredField> requiredFields) {
         super(context, R.layout.layout_event_type_list, requiredFields);
         this.context = context;
         this.requiredFields = requiredFields;

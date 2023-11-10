@@ -50,7 +50,7 @@ public class EventTypeFragment extends Fragment {
             }
         });
 
-        listViewEventTypes.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+        listViewEventTypes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 EventType eventType = eventTypes.get(i);

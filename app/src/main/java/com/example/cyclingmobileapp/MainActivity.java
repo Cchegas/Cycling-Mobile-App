@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
         NavigationView navigationView = findViewById(R.id.navigation_view);
         // Set the username as the header for the navigation menu
-        if (getIntent().getExtras() != null){
+        if (getIntent().getExtras() != null) {
             String username = getIntent().getExtras().getString("username");
             View headerView = navigationView.getHeaderView(0);
             TextView navUsername = headerView.findViewById(R.id.nav_header_username);

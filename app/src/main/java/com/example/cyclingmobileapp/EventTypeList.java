@@ -14,7 +14,8 @@ import java.util.List;
 public class EventTypeList extends ArrayAdapter<EventType> {
     List<EventType> eventTypes;
     private final Activity context;
-    public EventTypeList(Activity context, List<EventType> eventTypes){
+
+    public EventTypeList(Activity context, List<EventType> eventTypes) {
         super(context, R.layout.layout_event_type_list, eventTypes);
         this.context = context;
         this.eventTypes = eventTypes;
