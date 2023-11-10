@@ -297,7 +297,7 @@ public class EventType {
                 "enabled" + ":" + getEnabled() + "]";
     }
 
-    public void upload(){
+    public void upload() {
         upload(this.label);
     }
 
@@ -315,7 +315,7 @@ public class EventType {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         // Delete any document that this could be replacing (since Firestore document keys can't seem to be changed)
-        if (!documentKey.equals(this.label) && !documentKey.trim().equals("")){
+        if (!documentKey.equals(this.label) && !documentKey.trim().equals("")) {
             db.collection(COLLECTION_NAME).document(documentKey).delete();
         }
         db.collection(COLLECTION_NAME).document(this.label).set(eventTypeData);

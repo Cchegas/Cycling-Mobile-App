@@ -5,27 +5,18 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
-import com.example.cyclingmobileapp.lib.event.EventType;
 import com.example.cyclingmobileapp.lib.user.Account;
 import com.example.cyclingmobileapp.lib.user.ClubAccount;
 import com.example.cyclingmobileapp.lib.user.ParticipantAccount;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +25,7 @@ public class AccountOverviewFragment extends Fragment {
 
     private List<Account> accounts;
     private int selectedDeletionIndex;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         accounts = new ArrayList<Account>();
@@ -61,7 +53,7 @@ public class AccountOverviewFragment extends Fragment {
         deleteDialogCancelButton.setOnClickListener(view1 -> deletionDialog.dismiss());
         // Remove the account at the last selected index by the user
         deleteDialogDeleteButton.setOnClickListener(view13 -> {
-            if (selectedDeletionIndex >= 0){
+            if (selectedDeletionIndex >= 0) {
                 Account account = accounts.get(selectedDeletionIndex);
                 accounts.remove(selectedDeletionIndex);
 
@@ -78,14 +70,14 @@ public class AccountOverviewFragment extends Fragment {
             deletionDialog.show();
             // Update the selected index based on which account was clicked (in order)
             selectedDeletionIndex = i;
-            return  true;
+            return true;
         });
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(Account.COLLECTION_NAME).addSnapshotListener((value, error) -> {
             accounts.clear();
 
-            for (QueryDocumentSnapshot doc : value){
+            for (QueryDocumentSnapshot doc : value) {
                 String role = (String) doc.get("role");
                 Account account = null;
 
@@ -94,13 +86,13 @@ public class AccountOverviewFragment extends Fragment {
                 String password = (String) doc.get("password");
 
                 // Only participant and club accounts are shown
-                if (role.equals(ParticipantAccount.ROLE)){
+                if (role.equals(ParticipantAccount.ROLE)) {
                     String firstName = (String) doc.get("firstName");
                     String lastName = (String) doc.get("lastName");
-                    account = new ParticipantAccount(username,email,password,firstName,lastName);
-                } else if (role.equals(ClubAccount.ROLE)){
+                    account = new ParticipantAccount(username, email, password, firstName, lastName);
+                } else if (role.equals(ClubAccount.ROLE)) {
                     String name = (String) doc.get("name");
-                    account = new ClubAccount(username,email,password,name);
+                    account = new ClubAccount(username, email, password, name);
                 } else {
                     continue;
                 }
