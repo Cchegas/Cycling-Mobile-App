@@ -12,18 +12,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.cyclingmobileapp.lib.event.EventType;
 import com.example.cyclingmobileapp.lib.event.RequiredField;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.example.cyclingmobileapp.lib.utils.ValidationUtil;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,18 +39,18 @@ public class EventTypeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_event_type);
 
         // Setup toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.eventTypeToolbar);
+        Toolbar toolbar = findViewById(R.id.eventTypeToolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         requiredFields = new ArrayList<RequiredField>();
 
-        TextView eventTypeHeader = (TextView) findViewById(R.id.eventTypeHeader);
-        Button addFieldButton = (Button) findViewById(R.id.eventTypeAddFieldButton);
-        Button disableButton = (Button) findViewById(R.id.eventTypeDisableButton);
-        Button doneButton = (Button) findViewById(R.id.eventTypeDoneButton);
-        requiredFieldListView = (ListView) findViewById(R.id.requiredFieldListView);
+        TextView eventTypeHeader = findViewById(R.id.eventTypeHeader);
+        Button addFieldButton = findViewById(R.id.eventTypeAddFieldButton);
+        Button disableButton = findViewById(R.id.eventTypeDisableButton);
+        Button doneButton = findViewById(R.id.eventTypeDoneButton);
+        requiredFieldListView = findViewById(R.id.requiredFieldListView);
 
         requiredFieldListView.setOnItemClickListener((adapterView, view, i, l) -> {
             RequiredField requiredField = requiredFields.get(i);
@@ -85,7 +81,7 @@ public class EventTypeActivity extends AppCompatActivity {
                         finish();
                     });
 
-                    eventType = new EventType(documentSnapshot.get("label").toString(), (boolean) documentSnapshot.get("enabled"));
+                    eventType = new EventType((String) documentSnapshot.get("label"), (boolean) documentSnapshot.get("enabled"));
                     HashMap<String, Object> requiredFieldData = (HashMap<String, Object>) documentSnapshot.get("requiredFields");
                     for (String requiredFieldName : requiredFieldData.keySet()) {
                         RequiredField requiredField = new RequiredField(requiredFieldName, (String) requiredFieldData.get(requiredFieldName), eventType);
@@ -98,7 +94,7 @@ public class EventTypeActivity extends AppCompatActivity {
                     finish();
                 }
             });
-            EditText eventTypeLabelInput = (EditText) findViewById(R.id.eventTypeLabel);
+            EditText eventTypeLabelInput = findViewById(R.id.eventTypeLabel);
             eventTypeLabelInput.setText(eventTypeLabel);
         } else {
             eventTypeHeader.setText("Add an event type");
@@ -121,16 +117,16 @@ public class EventTypeActivity extends AppCompatActivity {
         View dialogView = inflater.inflate(R.layout.layout_required_field_dialog, null);
         dialogBuilder.setView(dialogView);
 
-        EditText requiredFieldNameInput = (EditText) dialogView.findViewById(R.id.requiredFieldNameInput);
-        Spinner requiredFieldTypeInput = (Spinner) dialogView.findViewById(R.id.requiredFieldTypeInput);
+        EditText requiredFieldNameInput = dialogView.findViewById(R.id.requiredFieldNameInput);
+        Spinner requiredFieldTypeInput = dialogView.findViewById(R.id.requiredFieldTypeInput);
         ArrayAdapter<String> requiredFieldTypeAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, requiredFieldTypes);
         requiredFieldTypeInput.setAdapter(requiredFieldTypeAdapter);
 
         AlertDialog dialog = dialogBuilder.create();
         dialog.show();
 
-        Button requiredFieldDeleteButton = (Button) dialogView.findViewById(R.id.requiredFieldDeleteButton);
-        Button requiredFieldUpdateButton = (Button) dialogView.findViewById(R.id.requiredFieldUpdateButton);
+        Button requiredFieldDeleteButton = dialogView.findViewById(R.id.requiredFieldDeleteButton);
+        Button requiredFieldUpdateButton = dialogView.findViewById(R.id.requiredFieldUpdateButton);
 
         if (index < 0) {
             // If the dialog is being opened to add a new view, the delete button should act as a cancel button for the dialog instead
@@ -144,8 +140,7 @@ public class EventTypeActivity extends AppCompatActivity {
                 // Add the required field to requiredFields
                 String newName = requiredFieldNameInput.getText().toString().trim();
                 String newType = requiredFieldTypeInput.getSelectedItem().toString();
-                ValidationUtil validation = new ValidationUtil();
-                if(!validation.validateRegex(this, newName, "event type label", ".*[a-zA-Z].*", "one letter")){
+                if (!ValidationUtil.validateRegex(this, newName, "required field name", ".*[a-zA-Z].*", "at least one letter")) {
                     return;
                 }
 
@@ -170,8 +165,7 @@ public class EventTypeActivity extends AppCompatActivity {
                 // Add the required field to requiredFields
                 String newName = requiredFieldNameInput.getText().toString().trim();
                 String newType = requiredFieldTypeInput.getSelectedItem().toString();
-                ValidationUtil validate = new ValidationUtil();
-                if(!validate.validateRegex(this, newName, "event type label", ".*[a-zA-Z].*", "one letter")){
+                if (!ValidationUtil.validateRegex(this, newName, "required field name", ".*[a-zA-Z].*", "at least one letter")) {
                     return;
                 }
                 requiredField.setName(newName);
@@ -185,8 +179,7 @@ public class EventTypeActivity extends AppCompatActivity {
 
     private void onDone() {
         String eventTypeLabel = ((EditText) findViewById(R.id.eventTypeLabel)).getText().toString().trim();
-        ValidationUtil validate = new ValidationUtil();
-        if(!validate.validateRegex(this, eventTypeLabel, "event type label", ".*[a-zA-Z].*", "one letter")){
+        if (!ValidationUtil.validateRegex(this, eventTypeLabel, "event type label", ".*[a-zA-Z].*", "at least one letter")) {
             return;
         }
 
@@ -198,9 +191,9 @@ public class EventTypeActivity extends AppCompatActivity {
         // Make sure that the event type label doesn't already exist on an enabled event type
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(EventType.COLLECTION_NAME).whereEqualTo("label", eventTypeLabel).whereEqualTo("enabled", true).get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()){
+            if (task.isSuccessful()) {
                 List<DocumentSnapshot> documents = task.getResult().getDocuments();
-                if (documents.size() > 0 && !documents.get(0).getId().equals(documentId)){
+                if (documents.size() > 0 && !documents.get(0).getId().equals(documentId)) {
                     makeToast("An enabled event type already exists with the same name!");
                     return;
                 }
@@ -215,7 +208,7 @@ public class EventTypeActivity extends AppCompatActivity {
                 for (int i = 0; i < requiredFields.size(); i++) {
                     eventType.addRequiredField(requiredFields.get(i));
                 }
-                if (oldLabel.equals("") || documentId == null){
+                if (oldLabel.equals("") || documentId == null) {
                     // If the event type is new, insert it as a new document
                     eventType.upload();
                 } else {
@@ -223,8 +216,7 @@ public class EventTypeActivity extends AppCompatActivity {
                     eventType.upload(documentId);
                 }
                 finish();
-            }
-            else {
+            } else {
                 makeToast("Something went wrong!");
                 finish();
             }
@@ -241,6 +233,7 @@ public class EventTypeActivity extends AppCompatActivity {
         finish();
         return true;
     }
+
     private void makeToast(String text) {
         Toast.makeText(this, text, Toast.LENGTH_LONG).show();
     }
