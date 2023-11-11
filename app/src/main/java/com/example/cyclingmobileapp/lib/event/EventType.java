@@ -229,15 +229,6 @@ public class EventType {
 
     public boolean removeRequiredField(RequiredField aRequiredField) {
         boolean wasRemoved = false;
-        //Unable to remove aRequiredField, as it must always have a eventType
-        if (this.equals(aRequiredField.getEventType())) {
-            return wasRemoved;
-        }
-
-        //eventType already at minimum (1)
-        if (numberOfRequiredFields() <= minimumNumberOfRequiredFields()) {
-            return wasRemoved;
-        }
 
         requiredFields.remove(aRequiredField);
         wasRemoved = true;
