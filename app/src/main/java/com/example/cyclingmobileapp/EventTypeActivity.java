@@ -18,6 +18,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.cyclingmobileapp.lib.event.EventType;
 import com.example.cyclingmobileapp.lib.event.RequiredField;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -143,10 +144,11 @@ public class EventTypeActivity extends AppCompatActivity {
                 // Add the required field to requiredFields
                 String newName = requiredFieldNameInput.getText().toString().trim();
                 String newType = requiredFieldTypeInput.getSelectedItem().toString();
-                if (newName.equals("")) {
-                    makeToast("The required field's name must not be empty!");
+                ValidationUtil validation = new ValidationUtil();
+                if(!validation.validateRegex(this, newName, "event type label", ".*[a-zA-Z].*", "one letter")){
                     return;
                 }
+
                 requiredFields.add(new RequiredField(newName, newType, eventType));
                 updateRequiredFieldListView();
                 dialog.dismiss();
@@ -168,8 +170,8 @@ public class EventTypeActivity extends AppCompatActivity {
                 // Add the required field to requiredFields
                 String newName = requiredFieldNameInput.getText().toString().trim();
                 String newType = requiredFieldTypeInput.getSelectedItem().toString();
-                if (newName.equals("")) {
-                    makeToast("The required field's name must not be empty!");
+                ValidationUtil validate = new ValidationUtil();
+                if(!validate.validateRegex(this, newName, "event type label", ".*[a-zA-Z].*", "one letter")){
                     return;
                 }
                 requiredField.setName(newName);
@@ -183,10 +185,11 @@ public class EventTypeActivity extends AppCompatActivity {
 
     private void onDone() {
         String eventTypeLabel = ((EditText) findViewById(R.id.eventTypeLabel)).getText().toString().trim();
-        if (eventTypeLabel.equals("")) {
-            makeToast("The event type label must be non-empty.");
+        ValidationUtil validate = new ValidationUtil();
+        if(!validate.validateRegex(this, eventTypeLabel, "event type label", ".*[a-zA-Z].*", "one letter")){
             return;
         }
+
         if (requiredFields.size() == 0) {
             makeToast("Each event type must have at least 1 required field.");
             return;
