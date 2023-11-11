@@ -21,14 +21,12 @@ public class EventType {
     //------------------------
     // MEMBER VARIABLES
     //------------------------
-
-    //EventType Attributes
-    private String label;
-    private boolean enabled;
-
     //EventType Associations
     private final List<Event> events;
     private final List<RequiredField> requiredFields;
+    //EventType Attributes
+    private String label;
+    private boolean enabled;
 
     //------------------------
     // CONSTRUCTOR
@@ -295,6 +293,22 @@ public class EventType {
         return super.toString() + "[" +
                 "label" + ":" + getLabel() + "," +
                 "enabled" + ":" + getEnabled() + "]";
+    }
+
+    public boolean setRequiredFields(List<RequiredField> requiredFields) {
+        if (requiredFields == null || requiredFields.size() < minimumNumberOfRequiredFields()) {
+            return false;
+        }
+        for (RequiredField requiredField : requiredFields) {
+            if (!this.equals(requiredField.getEventType())) {
+                return false;
+            }
+        }
+        this.requiredFields.clear();
+        for (RequiredField requiredField : requiredFields) {
+            this.requiredFields.add(requiredField);
+        }
+        return true;
     }
 
     public void upload() {
