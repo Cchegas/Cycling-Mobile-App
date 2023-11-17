@@ -67,7 +67,7 @@ public class SignupActivity extends AppCompatActivity {
     private void addAccount(Account account, Button activateButton) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         activateButton.setEnabled(false);
-        db.collection("users").whereEqualTo("username", account.getUsername()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collection("Accounts").whereEqualTo("username", account.getUsername()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -78,7 +78,7 @@ public class SignupActivity extends AppCompatActivity {
                         activateButton.setEnabled(true);
                         return;
                     }
-                    db.collection("users").document(account.getUsername()).set(account).addOnCompleteListener(new OnCompleteListener() {
+                    db.collection("Accounts").document(account.getUsername()).set(account).addOnCompleteListener(new OnCompleteListener() {
                         @Override
                         public void onComplete(@NonNull Task task) {
                             if (task.isSuccessful()) {
