@@ -30,6 +30,10 @@
     <string name="event_type_fragment_title">Event Types</string>
     <string name="event_type_add_btn">Add an event type</string>
 
+    <!--    Event Type Fragment-->
+    <string name="events_fragment_title">Events</string>
+    <string name="events_add_btn">Add an event</string>
+
     <!--    Account Overview Fragment-->
     <string name="account_overview_fragment_title">Active Accounts</string>
 
