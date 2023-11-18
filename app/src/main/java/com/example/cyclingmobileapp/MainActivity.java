@@ -14,8 +14,16 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.cyclingmobileapp.lib.user.Account;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.List;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
@@ -60,8 +68,10 @@ public class MainActivity extends AppCompatActivity {
     private void setNavigationDrawer() {
         DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navView = findViewById(R.id.navigation_view);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
         navView.setNavigationItemSelectedListener(menuItem -> {
-            Fragment fragment = null;
+            Fragment fragment;
             int itemId = menuItem.getItemId();
             if (itemId == R.id.eventTypeFragmentMenuItem) {
                 fragment = new EventTypeFragment();
@@ -69,8 +79,25 @@ public class MainActivity extends AppCompatActivity {
                 fragment = new AccountOverviewFragment();
             } else if (itemId == R.id.eventFragmentMenuItem) {
                 fragment = new EventsFragment();
+
+                if (getIntent().getExtras() != null && Objects.equals(getIntent().getExtras().getString("role"), "club")) {
+                    DocumentReference docRef = db.collection(Account.COLLECTION_NAME).document(Objects.requireNonNull(getIntent().getExtras().getString("username")));
+                    docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                ((EventsFragment) fragment).setClubAccount(document.getData());
+                            }
+                        }
+                    });
+                }
+
             } else if (itemId == R.id.signout) {
+                fragment = null;
                 signOut();
+            } else {
+                fragment = null;
             }
             if (fragment != null) {
                 selectFragment(fragment);

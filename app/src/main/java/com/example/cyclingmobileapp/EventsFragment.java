@@ -13,21 +13,24 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.example.cyclingmobileapp.lib.event.Event;
 import com.example.cyclingmobileapp.lib.user.ClubAccount;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class EventsFragment extends Fragment {
 
     private List<Event> events;
-    private ClubAccount clubAccount;
+    private Map<String, Object> clubAccount;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         events = new ArrayList<Event>();
-
-
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_events, container, false);
 
@@ -47,7 +50,16 @@ public class EventsFragment extends Fragment {
         });
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+//        if (clubAccount != null) {
+//
+//        }
+        events.clear();
 
+        EventList eventList = new EventList(activity, events);
+        listViewEventTypes.setAdapter(eventList);
+    }
 
+    public void setClubAccount(Map<String, Object> clubAccount) {
+        this.clubAccount = clubAccount;
     }
 }
