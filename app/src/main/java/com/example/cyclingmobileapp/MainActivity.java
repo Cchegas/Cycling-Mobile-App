@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
                 fragment = new EventTypeFragment();
             } else if (itemId == R.id.accountOverviewFragmentMenuItem) {
                 fragment = new AccountOverviewFragment();
-            } else if (itemId == R.id.third) {
+            } else if (itemId == R.id.eventFragmentMenuItem) {
                 fragment = new EventsFragment();
             } else if (itemId == R.id.signout) {
                 signOut();

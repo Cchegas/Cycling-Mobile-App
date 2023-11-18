@@ -8,8 +8,8 @@
             android:id="@+id/accountOverviewFragmentMenuItem"
             android:title="@string/menu_account_overview_title" />
         <item
-            android:id="@+id/third"
-            android:title="Third Menu" />
+            android:id="@+id/eventFragmentMenuItem"
+            android:title="@string/menu_events_title" />
     </group>
 
 

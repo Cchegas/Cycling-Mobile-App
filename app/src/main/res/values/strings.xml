@@ -30,7 +30,7 @@
     <string name="event_type_fragment_title">Event Types</string>
     <string name="event_type_add_btn">Add an event type</string>
 
-    <!--    Event Type Fragment-->
+    <!--    Events Fragment-->
     <string name="events_fragment_title">Events</string>
     <string name="events_add_btn">Add an event</string>
 
@@ -46,6 +46,7 @@
     <!--    Menu-->
     <string name="menu_event_type_title">Event Types</string>
     <string name="menu_account_overview_title">Clubs and Participants</string>
+    <string name="menu_events_title">Events</string>
 
     <!--    Common-->
     <string name="cancel_btn">Cancel</string>
