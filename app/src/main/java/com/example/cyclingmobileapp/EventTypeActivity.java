@@ -183,8 +183,8 @@ public class EventTypeActivity extends AppCompatActivity {
             return;
         }
 
-        if (requiredFields.size() == 0) {
-            makeToast("Each event type must have at least 1 required field.");
+        if (requiredFields.size() < EventType.minimumNumberOfRequiredFields()) {
+            makeToast("Each event type must have at least " + EventType.minimumNumberOfRequiredFields() + " required field(s).");
             return;
         }
 
@@ -200,14 +200,8 @@ public class EventTypeActivity extends AppCompatActivity {
                 // No event type with the same name already exists, so it can be added in or updated
                 String oldLabel = eventType.getLabel();
                 eventType.setLabel(eventTypeLabel);
-                int size = eventType.getRequiredFields().size();
-                // Clear any required fields for the event type, then add the ones from requiredFields
-                for (int i = 0; i < size; i++) {
-                    eventType.removeRequiredField(eventType.getRequiredField(0));
-                }
-                for (int i = 0; i < requiredFields.size(); i++) {
-                    eventType.addRequiredField(requiredFields.get(i));
-                }
+                // Replace the requiredFields for the event type
+                eventType.setRequiredFields(requiredFields);
                 if (oldLabel.equals("") || documentId == null) {
                     // If the event type is new, insert it as a new document
                     eventType.upload();
