@@ -81,16 +81,9 @@ public class MainActivity extends AppCompatActivity {
                 fragment = new EventsFragment();
 
                 if (getIntent().getExtras() != null && Objects.equals(getIntent().getExtras().getString("role"), "club")) {
-                    DocumentReference docRef = db.collection(Account.COLLECTION_NAME).document(Objects.requireNonNull(getIntent().getExtras().getString("username")));
-                    docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            if (task.isSuccessful()) {
-                                DocumentSnapshot document = task.getResult();
-                                ((EventsFragment) fragment).setClubAccount(document.getData());
-                            }
-                        }
-                    });
+                    Bundle bundle = new Bundle();
+                    bundle.putString("username", getIntent().getExtras().getString("username"));
+                    fragment.setArguments(bundle);
                 }
 
             } else if (itemId == R.id.signout) {

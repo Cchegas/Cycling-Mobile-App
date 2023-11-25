@@ -12,9 +12,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.cyclingmobileapp.lib.event.Event;
+import com.example.cyclingmobileapp.lib.user.Account;
 import com.example.cyclingmobileapp.lib.user.ClubAccount;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -26,20 +28,20 @@ import java.util.Map;
 public class EventsFragment extends Fragment {
 
     private List<Event> events;
-    private Map<String, Object> clubAccount;
+    private String clubAccountUsername;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         events = new ArrayList<Event>();
         // Inflate the layout for this fragment
+        clubAccountUsername = getArguments().getString("username");
         return inflater.inflate(R.layout.fragment_events, container, false);
-
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         FragmentActivity activity = getActivity();
-        ListView listViewEventTypes = (ListView) getView().findViewById(R.id.eventsListView);
+        ListView listViewEvents = (ListView) getView().findViewById(R.id.eventsListView);
         Button addEventButton = (Button) getView().findViewById(R.id.addEventButton);
 
         addEventButton.setOnClickListener(new View.OnClickListener() {
@@ -50,16 +52,14 @@ public class EventsFragment extends Fragment {
         });
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        if (clubAccount != null) {
-//
-//        }
-        events.clear();
+        // Display the events in a ListView
+        db.collection(Account.COLLECTION_NAME).whereEqualTo("username", clubAccountUsername).addSnapshotListener((value, error) -> {
+            events.clear();
 
-        EventList eventList = new EventList(activity, events);
-        listViewEventTypes.setAdapter(eventList);
-    }
+            events = (ArrayList<Event>) value.getDocuments().get(0).get("events");
 
-    public void setClubAccount(Map<String, Object> clubAccount) {
-        this.clubAccount = clubAccount;
+            EventList eventList = new EventList(activity, events);
+            listViewEvents.setAdapter(eventList);
+        });
     }
 }
