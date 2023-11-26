@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="Event Edit"
+        android:icon="@drawable/baseline_eventactivity_icon"
+        android:id="@+id/event_edit"/>
+    <item
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="Send Notifs"
+        android:icon="@drawable/baseline_assign_winner_24"
+        android:id="@+id/Send_Notifs"/>
+    <item
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="Requests"
+        android:icon="@drawable/baseline_invitation_accept_deny_24"
+        android:id="@+id/Requests"/>
+</menu>
