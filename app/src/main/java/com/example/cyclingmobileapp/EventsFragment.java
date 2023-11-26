@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.cyclingmobileapp.lib.event.Event;
+import com.example.cyclingmobileapp.lib.event.EventType;
 import com.example.cyclingmobileapp.lib.user.Account;
 import com.example.cyclingmobileapp.lib.user.ClubAccount;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -53,11 +54,20 @@ public class EventsFragment extends Fragment {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         // Display the events in a ListView
-        db.collection(Account.COLLECTION_NAME).whereEqualTo("username", clubAccountUsername).addSnapshotListener((value, error) -> {
+        db.collection(Event.COLLECTION_NAME).addSnapshotListener((value, error) -> {
             events.clear();
-
-            events = (ArrayList<Event>) value.getDocuments().get(0).get("events");
-
+            if (value != null) {
+                for (QueryDocumentSnapshot doc : value) {
+                    if (doc != null) {
+                        if (doc.get("organizer") != null && doc.get("title") != null) {
+                            if (doc.get("organizer").toString().equals(clubAccountUsername)) {
+                                Event event = new Event(doc.get("title").toString());
+                                events.add(event);
+                            }
+                        }
+                    }
+                }
+            }
             EventList eventList = new EventList(activity, events);
             listViewEvents.setAdapter(eventList);
         });
