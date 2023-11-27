@@ -55,10 +55,32 @@ public class MainActivity extends AppCompatActivity {
             View headerView = navigationView.getHeaderView(0);
             TextView navUsername = headerView.findViewById(R.id.nav_header_username);
             navUsername.setText(username);
+            String role = getIntent().getExtras().getString("role");
+            navigationView.getMenu().clear();
+            if (role != null && role.equals("admin")){
+                navigationView.inflateMenu(R.menu.menu_admin);
+            } else if (role != null && role.equals("club")) {
+                navigationView.inflateMenu(R.menu.menu_club);
+            } else {
+                navigationView.inflateMenu(R.menu.menu_participant);
+            }
+
         }
         // Manually select the first item in the navigation menu, and, correspondingly, show the first fragment
-        navigationView.setCheckedItem(R.id.eventTypeFragmentMenuItem);
-        selectFragment(new EventTypeFragment());
+        if (getIntent().getExtras() != null && Objects.equals(getIntent().getExtras().getString("role"), "club")) {
+            navigationView.setCheckedItem(R.id.eventFragmentMenuItem);
+            Bundle bundle = new Bundle();
+            bundle.putString("username", getIntent().getExtras().getString("username"));
+            Fragment fragment = new EventsFragment();
+            fragment.setArguments(bundle);
+            selectFragment(fragment);
+        } else if (getIntent().getExtras() != null && Objects.equals(getIntent().getExtras().getString("role"), "admin")) {
+            navigationView.setCheckedItem(R.id.eventTypeFragmentMenuItem);
+            selectFragment(new EventTypeFragment());
+        } else {
+            navigationView.setCheckedItem(R.id.accountOverviewFragmentMenuItem);
+            selectFragment(new AccountOverviewFragment());
+        }
     }
 
     public void signOut() {

@@ -48,7 +48,8 @@ public class EventsFragment extends Fragment {
         addEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Add Add Event Activity
+                // ****************** Add Event Button functionality goes here *******************
+
             }
         });
 
