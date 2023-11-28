@@ -16,6 +16,9 @@ import java.util.List;
 // line 92 "model.ump"
 public class Event {
 
+
+    public static final String COLLECTION_NAME = "Events";
+
     //------------------------
     // MEMBER VARIABLES
     //------------------------
@@ -56,6 +59,11 @@ public class Event {
         if (!didAddEventType) {
             throw new RuntimeException("Unable to create event due to eventType. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
         }
+    }
+
+    public Event(String aTitle) {
+        title = aTitle;
+        participantAccounts = new ArrayList<ParticipantAccount>();
     }
 
     //------------------------
