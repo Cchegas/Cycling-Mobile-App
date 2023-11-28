@@ -42,6 +42,10 @@
     <!--    Menu-->
     <string name="menu_event_type_title">Event Types</string>
     <string name="menu_account_overview_title">Clubs and Participants</string>
+    <string name = "menu_profile">Profile</string>
+
+    <!--  Profile  -->
+    <string name="profile_event">See event types</string>
 
     <!--    Common-->
     <string name="cancel_btn">Cancel</string>

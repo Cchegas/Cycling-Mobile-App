@@ -22,4 +22,9 @@
             </group>
         </menu>
     </item>
+    <item
+        android:id="@+id/profileFragmentMenuItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="@string/menu_profile" />
 </menu>

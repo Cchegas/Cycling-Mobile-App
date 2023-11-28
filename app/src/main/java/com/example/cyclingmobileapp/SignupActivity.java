@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.cyclingmobileapp.lib.user.Account;
 import com.example.cyclingmobileapp.lib.user.ClubAccount;
 import com.example.cyclingmobileapp.lib.user.ParticipantAccount;
+import com.example.cyclingmobileapp.lib.user.Profile ;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -61,6 +62,8 @@ public class SignupActivity extends AppCompatActivity {
             }
             ClubAccount clubAccount = new ClubAccount(username, email, password, clubName);
             addAccount(clubAccount, signupButton);
+
+            Profile profile = new Profile(clubAccount) ;
         }
     }
 
