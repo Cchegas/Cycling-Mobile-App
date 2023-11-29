@@ -12,11 +12,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
 
 import com.example.cyclingmobileapp.lib.event.Event;
 import com.example.cyclingmobileapp.lib.event.EventType;
-import com.example.cyclingmobileapp.lib.user.ClubAccount;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -36,7 +34,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class EventCreationActivity extends AppCompatActivity {
     private EditText eventNameEditText;

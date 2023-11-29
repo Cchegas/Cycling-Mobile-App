@@ -26,8 +26,8 @@ public class AccountList extends ArrayAdapter<Account> {
         LayoutInflater inflater = context.getLayoutInflater();
         View listViewItem = inflater.inflate(R.layout.layout_account_list, null, true);
 
-        TextView accountUsername = (TextView) listViewItem.findViewById(R.id.accountUsername);
-        TextView accountRole = (TextView) listViewItem.findViewById(R.id.accountRole);
+        TextView accountUsername = listViewItem.findViewById(R.id.accountUsername);
+        TextView accountRole = listViewItem.findViewById(R.id.accountRole);
 
         Account account = accounts.get(position);
         accountUsername.setText(account.getUsername());

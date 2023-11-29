@@ -14,16 +14,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.cyclingmobileapp.lib.user.Account;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.List;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
@@ -57,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
             navUsername.setText(username);
             String role = getIntent().getExtras().getString("role");
             navigationView.getMenu().clear();
-            if (role != null && role.equals("admin")){
+            if (role != null && role.equals("admin")) {
                 navigationView.inflateMenu(R.menu.menu_admin);
             } else if (role != null && role.equals("club")) {
                 navigationView.inflateMenu(R.menu.menu_club);
@@ -105,8 +98,7 @@ public class MainActivity extends AppCompatActivity {
                     bundle.putString("username", getIntent().getExtras().getString("username"));
                     fragment = new EventsFragment();
                     fragment.setArguments(bundle);
-                }
-                else {
+                } else {
                     fragment = null;
                 }
 

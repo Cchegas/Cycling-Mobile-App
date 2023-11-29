@@ -8,7 +8,6 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.cyclingmobileapp.lib.event.Event;
-import com.example.cyclingmobileapp.lib.event.EventType;
 
 import java.util.List;
 
@@ -28,7 +27,7 @@ public class EventList extends ArrayAdapter<Event> {
         LayoutInflater inflater = context.getLayoutInflater();
         View listViewItem = inflater.inflate(R.layout.layout_event_list, null, true);
 
-        TextView eventLabel = (TextView) listViewItem.findViewById(R.id.eventLabel);
+        TextView eventLabel = listViewItem.findViewById(R.id.eventLabel);
 
         Event event = events.get(position);
         eventLabel.setText(event.getTitle());
