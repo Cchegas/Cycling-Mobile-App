@@ -100,7 +100,6 @@ public class MainActivity extends AppCompatActivity {
             } else if (itemId == R.id.accountOverviewFragmentMenuItem) {
                 fragment = new AccountOverviewFragment();
             } else if (itemId == R.id.eventFragmentMenuItem) {
-
                 if (getIntent().getExtras() != null && Objects.equals(getIntent().getExtras().getString("role"), "club")) {
                     Bundle bundle = new Bundle();
                     bundle.putString("username", getIntent().getExtras().getString("username"));

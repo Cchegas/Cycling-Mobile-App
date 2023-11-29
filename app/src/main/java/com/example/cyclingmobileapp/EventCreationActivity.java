@@ -1,7 +1,6 @@
 package com.example.cyclingmobileapp;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -10,42 +9,29 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.OffsetDateTime;
-import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.concurrent.CompletableFuture;
-import java.util.regex.*;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.cyclingmobileapp.lib.event.Event;
-
 import com.example.cyclingmobileapp.lib.event.EventType;
-import com.example.cyclingmobileapp.lib.user.ClubAccount;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.common.reflect.TypeToken;
-import com.google.firebase.Timestamp;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.gson.Gson;
 
-import java.lang.reflect.Type;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -60,7 +46,7 @@ public class EventCreationActivity extends AppCompatActivity {
     private EditText startTimeEditText;
     private EditText endTimeEditText;
 
-    private Button createEventButton,updateEventButton,deleteEventButton,getInfoButton;
+    private Button createEventButton, updateEventButton, deleteEventButton, getInfoButton;
     private EditText descriptionEditText;
 
     private FirebaseFirestore db;
@@ -69,7 +55,13 @@ public class EventCreationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_creation);
-        //
+
+        // Setup toolbar
+        Toolbar toolbar = findViewById(R.id.eventCreationToolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         //
         fetchEventTypes();
 
@@ -120,9 +112,8 @@ public class EventCreationActivity extends AppCompatActivity {
         });
 
 
-
-
     }
+
     private String getSelectedDifficulty(int selectedId) {
         if (selectedId == R.id.easyRadioButton) {
             return "Easy";
@@ -194,7 +185,6 @@ public class EventCreationActivity extends AppCompatActivity {
     }
 
 
-
     public void onCreateAButtonClick(View view) {
         if (areFieldsEmpty()) {
             makeToast("Fill in all the fields!");
@@ -213,10 +203,10 @@ public class EventCreationActivity extends AppCompatActivity {
 
 //
             if (isValidDate(date) && isValidTime(startTime) && isValidTime(endTime)) {
-               // String username = getIntent().getExtras().getString("username");
+                // String username = getIntent().getExtras().getString("username");
                 Event event = new Event(eventName, DateTimeConversion(startTime, date), DateTimeConversion(endTime, date), zipCode, description, difficultyLevel, participantLimit, (int) registrationFees, null, null);
                 EventType eventType1 = new EventType(eventType, true);
-               // ClubAccount clubAccount =new ClubAccount(username,null,null,null);
+                // ClubAccount clubAccount =new ClubAccount(username,null,null,null);
                 //event.setOrganizer(clubAccount);
                 event.setEventType(eventType1);
                 addEvent(event, createEventButton);
@@ -259,7 +249,7 @@ public class EventCreationActivity extends AppCompatActivity {
                 .addOnCompleteListener(onCompleteListener);
     }
 
-    public void onUpdateButtonClick(View view){
+    public void onUpdateButtonClick(View view) {
         if (areFieldsEmpty()) {
             makeToast("Fill in all the fields!");
         } else {
@@ -276,15 +266,16 @@ public class EventCreationActivity extends AppCompatActivity {
             ZonedDateTime startDateTime = DateTimeConversion(startTime, date);
             ZonedDateTime endDateTime = DateTimeConversion(endTime, date);
             Event event = new Event(eventName, startDateTime, endDateTime, zipCode, null, difficultyLevel, participantLimit, (int) registrationFees, null, null);
-            EventType eventType1=new EventType(eventType,true);
+            EventType eventType1 = new EventType(eventType, true);
             event.setEventType(eventType1);
             updateEvent(event, updateEventButton);
         }
-        }
-    public void onDeleteButton(View view){
+    }
+
+    public void onDeleteButton(View view) {
         String eventName = eventNameEditText.getText().toString().trim();
 
-deleteEvent(eventName,deleteEventButton);
+        deleteEvent(eventName, deleteEventButton);
 
     }
 
@@ -331,6 +322,7 @@ deleteEvent(eventName,deleteEventButton);
                     }
                 });
     }
+
     private void onGetInfoButtonClick(View view) {
         String eventName = eventNameEditText.getText().toString().trim();
 
@@ -409,14 +401,14 @@ deleteEvent(eventName,deleteEventButton);
             // Assuming you have an endDateEditText for the end date
 
         }
-        if ((document.contains("startDate") && document.getString("startDate") != null)&&(document.contains("endDate") && document.getString("endDate") != null)) {
+        if ((document.contains("startDate") && document.getString("startDate") != null) && (document.contains("endDate") && document.getString("endDate") != null)) {
             String startTimeString = document.getString("startDate");
             String endTimeString = document.getString("endDate");
 
 
-                startTimeEditText.setText(extractTime(startTimeString));
-                //
-                endTimeEditText.setText(extractTime(endTimeString));
+            startTimeEditText.setText(extractTime(startTimeString));
+            //
+            endTimeEditText.setText(extractTime(endTimeString));
 
         }
 
@@ -439,18 +431,20 @@ deleteEvent(eventName,deleteEventButton);
             return 0;
         }
     }
-    private  String extractTime(String dateTimeString) {
-        String timeString = dateTimeString.substring(11,16);
+
+    private String extractTime(String dateTimeString) {
+        String timeString = dateTimeString.substring(11, 16);
         return timeString;
     }
-    private  String extractDate(String dateTimeString) {
+
+    private String extractDate(String dateTimeString) {
         String dateString = dateTimeString.substring(0, 10);
-        dateString =replaceDashesWithSlashes( dateString);
+        dateString = replaceDashesWithSlashes(dateString);
         return dateString;
     }
 
 
-    private  String replaceDashesWithSlashes(String dateString) {
+    private String replaceDashesWithSlashes(String dateString) {
         String newDateString = dateString.replace("-", "/");
         return newDateString;
     }
@@ -473,6 +467,7 @@ deleteEvent(eventName,deleteEventButton);
     private void makeToast(String toastText) {
         Toast.makeText(this, toastText, Toast.LENGTH_SHORT).show();
     }
+
     private void fetchEventTypes() {
         db = FirebaseFirestore.getInstance();
 
@@ -515,8 +510,9 @@ deleteEvent(eventName,deleteEventButton);
                     }
                 });
     }
+
     private boolean areFieldsEmpty() {
-        if (eventNameEditText.getText().toString().trim().isEmpty() ||
+        return eventNameEditText.getText().toString().trim().isEmpty() ||
                 eventTypeSpinner.getSelectedItem().toString().isEmpty() ||
                 difficultyLevelRadioGroup.getCheckedRadioButtonId() == -1 ||
                 registrationFeesEditText.getText().toString().trim().isEmpty() ||
@@ -525,11 +521,9 @@ deleteEvent(eventName,deleteEventButton);
                 dateEditText.getText().toString().trim().isEmpty() ||
                 startTimeEditText.getText().toString().trim().isEmpty() ||
                 endTimeEditText.getText().toString().trim().isEmpty() ||
-                descriptionEditText.getText().toString().trim().isEmpty()) {
-            return true;
-        }
-        return false;
+                descriptionEditText.getText().toString().trim().isEmpty();
     }
+
     private boolean isValidDate(String date) {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
