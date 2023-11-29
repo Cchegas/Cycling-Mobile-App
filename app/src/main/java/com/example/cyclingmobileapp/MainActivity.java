@@ -14,7 +14,10 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.cyclingmobileapp.lib.user.Account;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Objects;
@@ -54,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
                 navigationView.inflateMenu(R.menu.menu_admin);
             } else if (role != null && role.equals("club")) {
                 navigationView.inflateMenu(R.menu.menu_club);
+                ensureCompleteProfileInformation();
             } else {
                 navigationView.inflateMenu(R.menu.menu_participant);
             }
@@ -80,6 +84,19 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(MainActivity.this, LoginActivity.class));
     }
 
+    private void ensureCompleteProfileInformation(){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(Account.COLLECTION_NAME).document(username).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                DocumentSnapshot documentSnapshot = task.getResult();
+                if (documentSnapshot.get("profileInfo") == null){
+                    navigateToProfileActivity();
+                }
+            }
+        });
+
+    }
+
     private void setNavigationDrawer() {
         DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navView = findViewById(R.id.navigation_view);
@@ -103,9 +120,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             } else if (itemId == R.id.profileActivityMenuItem){
                 fragment = null;
-                Intent profileActivityIntent = new Intent(this, ProfileActivity.class);
-                profileActivityIntent.putExtra("username", username);
-                startActivity(profileActivityIntent);
+                navigateToProfileActivity();
             }
             else if (itemId == R.id.signout) {
                 fragment = null;
@@ -137,5 +152,11 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void navigateToProfileActivity(){
+        Intent profileActivityIntent = new Intent(this, ProfileActivity.class);
+        profileActivityIntent.putExtra("username", username);
+        startActivity(profileActivityIntent);
     }
 }
