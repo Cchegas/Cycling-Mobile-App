@@ -14,6 +14,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ProfileActivity extends AppCompatActivity{
     ClubAccount account ;
     EventTypeList offeredEventTypes ;
@@ -26,9 +29,10 @@ public class ProfileActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile) ;
 
-        FirebaseDatabase.getInstance().getReference() ;
+        db =  FirebaseFirestore.getInstance();
 
-        offeredEventTypes = new EventTypeList(this,list) ;
+        List<EventType> eventTypeList = new ArrayList<>();
+        offeredEventTypes = new EventTypeList(this,eventTypeList) ;
 
 
         //makes the list invisible unless the button is clicked
