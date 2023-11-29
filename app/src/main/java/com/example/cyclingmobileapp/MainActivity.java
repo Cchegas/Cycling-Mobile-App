@@ -21,7 +21,7 @@ import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
     private ActionBarDrawerToggle actionBarDrawerToggle;
-
+    private String username;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationView navigationView = findViewById(R.id.navigation_view);
         // Set the username as the header for the navigation menu
         if (getIntent().getExtras() != null) {
-            String username = getIntent().getExtras().getString("username");
+            username = getIntent().getExtras().getString("username");
             View headerView = navigationView.getHeaderView(0);
             TextView navUsername = headerView.findViewById(R.id.nav_header_username);
             navUsername.setText(username);
@@ -95,14 +95,19 @@ public class MainActivity extends AppCompatActivity {
             } else if (itemId == R.id.eventFragmentMenuItem) {
                 if (getIntent().getExtras() != null && Objects.equals(getIntent().getExtras().getString("role"), "club")) {
                     Bundle bundle = new Bundle();
-                    bundle.putString("username", getIntent().getExtras().getString("username"));
+                    bundle.putString("username", username);
                     fragment = new EventsFragment();
                     fragment.setArguments(bundle);
                 } else {
                     fragment = null;
                 }
-
-            } else if (itemId == R.id.signout) {
+            } else if (itemId == R.id.profileActivityMenuItem){
+                fragment = null;
+                Intent profileActivityIntent = new Intent(this, ProfileActivity.class);
+                profileActivityIntent.putExtra("username", username);
+                startActivity(profileActivityIntent);
+            }
+            else if (itemId == R.id.signout) {
                 fragment = null;
                 signOut();
             } else {
