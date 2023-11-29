@@ -47,7 +47,7 @@ public class EventCreationActivity extends AppCompatActivity {
     private EditText dateEditText;
     private EditText startTimeEditText;
     private EditText endTimeEditText;
-    private Button createEventButton, updateEventButton, deleteEventButton, getInfoButton;
+    private Button createEventButton, updateEventButton, deleteEventButton;
     private EditText descriptionEditText;
     private FirebaseFirestore db;
 
@@ -62,12 +62,14 @@ public class EventCreationActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        if (getIntent().getExtras() != null) {
-            clubUsername = getIntent().getExtras().getString("username");
-        }
-
         // Get the up to date list of event types and initialize the spinner
         fetchEventTypes();
+        if (getIntent().getExtras() != null) {
+            clubUsername = getIntent().getExtras().getString("username");
+            if (getIntent().getExtras().getString("title") != null) {
+                fetchEventInfo(getIntent().getExtras().getString("title"));
+            }
+        }
 
         eventNameEditText = findViewById(R.id.editTextEventName);
         eventTypeSpinner = findViewById(R.id.eventTypeSpinner);
@@ -81,7 +83,6 @@ public class EventCreationActivity extends AppCompatActivity {
         createEventButton = findViewById(R.id.createEventButton);
         updateEventButton = findViewById(R.id.updateEventButton);
         deleteEventButton = findViewById(R.id.deleteEvent);
-        getInfoButton = findViewById(R.id.getInfoButton);
         descriptionEditText = findViewById(R.id.descriptionEditText);
         //
 
@@ -107,13 +108,6 @@ public class EventCreationActivity extends AppCompatActivity {
                 onDeleteButton(view);
             }
         });
-        getInfoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onGetInfoButtonClick(view);
-            }
-        });
-
 
     }
 
@@ -339,8 +333,9 @@ public class EventCreationActivity extends AppCompatActivity {
     }
 
     private void fetchEventInfo(String eventName) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
         // Use FirebaseFirestore to fetch event information from the database
-        db.collection("Events")
+        db.collection(Event.COLLECTION_NAME)
                 .document(eventName)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -414,9 +409,6 @@ public class EventCreationActivity extends AppCompatActivity {
             endTimeEditText.setText(extractTime(endTimeString));
 
         }
-
-
-        makeToast("Event information retrieved");
     }
 
 
