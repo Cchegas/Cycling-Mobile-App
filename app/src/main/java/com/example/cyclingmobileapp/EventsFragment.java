@@ -50,6 +50,7 @@ public class EventsFragment extends Fragment {
             public void onClick(View view) {
                 // ****************** Add Event Button functionality goes here *******************
                 Intent eventCreationActivityIntent = new Intent(activity, EventCreationActivity.class);
+                eventCreationActivityIntent.putExtra("username", clubAccountUsername);
                 startActivity(eventCreationActivityIntent);
             }
         });

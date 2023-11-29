@@ -12,9 +12,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 
 import com.example.cyclingmobileapp.lib.event.Event;
 import com.example.cyclingmobileapp.lib.event.EventType;
+import com.example.cyclingmobileapp.lib.user.ClubAccount;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -34,6 +36,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class EventCreationActivity extends AppCompatActivity {
     private EditText eventNameEditText;
@@ -51,6 +54,8 @@ public class EventCreationActivity extends AppCompatActivity {
 
     private FirebaseFirestore db;
 
+    String clubUsername;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +66,10 @@ public class EventCreationActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        if (getIntent().getExtras() != null) {
+            clubUsername = getIntent().getExtras().getString("username");
+        }
 
         //
         fetchEventTypes();
@@ -158,7 +167,7 @@ public class EventCreationActivity extends AppCompatActivity {
                                 eventMap.put("fee", event.getFee());
                                 eventMap.put("startDate", event.getStartDate().toString());
                                 eventMap.put("endDate", event.getEndDate().toString());
-                                eventMap.put("organizer", event.getOrganizer());
+                                eventMap.put("organizer", clubUsername);
                                 eventMap.put("eventType", event.getEventType().getLabel());
 
                                 // Set the eventMap directly to Firestore
@@ -203,7 +212,7 @@ public class EventCreationActivity extends AppCompatActivity {
 
 //
             if (isValidDate(date) && isValidTime(startTime) && isValidTime(endTime)) {
-                // String username = getIntent().getExtras().getString("username");
+                // String username = getIntent().getExtras().getString("username")
                 Event event = new Event(eventName, DateTimeConversion(startTime, date), DateTimeConversion(endTime, date), zipCode, description, difficultyLevel, participantLimit, (int) registrationFees, null, null);
                 EventType eventType1 = new EventType(eventType, true);
                 // ClubAccount clubAccount =new ClubAccount(username,null,null,null);

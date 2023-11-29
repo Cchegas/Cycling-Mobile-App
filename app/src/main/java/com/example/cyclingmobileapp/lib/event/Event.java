@@ -51,14 +51,14 @@ public class Event {
         participantLimit = aParticipantLimit;
         fee = aFee;
         boolean didAddOrganizer = setOrganizer(aOrganizer);
-        if (!didAddOrganizer) {
-            throw new RuntimeException("Unable to create event due to organizer. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-        }
+//        if (!didAddOrganizer) {
+//            throw new RuntimeException("Unable to create event due to organizer. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+//        }
         participantAccounts = new ArrayList<ParticipantAccount>();
         boolean didAddEventType = setEventType(aEventType);
-        if (!didAddEventType) {
-            throw new RuntimeException("Unable to create event due to eventType. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-        }
+//        if (!didAddEventType) {
+//            throw new RuntimeException("Unable to create event due to eventType. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+//        }
     }
 
     public Event(String aTitle) {
