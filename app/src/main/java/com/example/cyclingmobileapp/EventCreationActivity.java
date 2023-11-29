@@ -66,10 +66,9 @@ public class EventCreationActivity extends AppCompatActivity {
             clubUsername = getIntent().getExtras().getString("username");
         }
 
-        //
+        // Get the up to date list of event types and initialize the spinner
         fetchEventTypes();
 
-        //
         eventNameEditText = findViewById(R.id.editTextEventName);
         eventTypeSpinner = findViewById(R.id.eventTypeSpinner);
         difficultyLevelRadioGroup = findViewById(R.id.difficultyLevelRadioGroup);
