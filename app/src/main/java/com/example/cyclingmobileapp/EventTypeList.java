@@ -26,7 +26,7 @@ public class EventTypeList extends ArrayAdapter<EventType> {
         LayoutInflater inflater = context.getLayoutInflater();
         View listViewItem = inflater.inflate(R.layout.layout_event_type_list, null, true);
 
-        TextView eventTypeLabel = (TextView) listViewItem.findViewById(R.id.eventTypeLabel);
+        TextView eventTypeLabel = listViewItem.findViewById(R.id.eventTypeLabel);
 
         EventType eventType = eventTypes.get(position);
         eventTypeLabel.setText(eventType.getLabel());

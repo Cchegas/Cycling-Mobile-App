@@ -12,19 +12,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.cyclingmobileapp.lib.event.Event;
-import com.example.cyclingmobileapp.lib.event.EventType;
-import com.example.cyclingmobileapp.lib.user.Account;
-import com.example.cyclingmobileapp.lib.user.ClubAccount;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class EventsFragment extends Fragment {
 
@@ -42,14 +34,16 @@ public class EventsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         FragmentActivity activity = getActivity();
-        ListView listViewEvents = (ListView) getView().findViewById(R.id.eventsListView);
-        Button addEventButton = (Button) getView().findViewById(R.id.addEventButton);
+        ListView listViewEvents = getView().findViewById(R.id.eventsListView);
+        Button addEventButton = getView().findViewById(R.id.addEventButton);
 
         addEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // ****************** Add Event Button functionality goes here *******************
-
+                Intent eventCreationActivityIntent = new Intent(activity, EventCreationActivity.class);
+                eventCreationActivityIntent.putExtra("username", clubAccountUsername);
+                startActivity(eventCreationActivityIntent);
             }
         });
 

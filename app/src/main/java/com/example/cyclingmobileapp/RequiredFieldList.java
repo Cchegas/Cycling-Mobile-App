@@ -26,8 +26,8 @@ public class RequiredFieldList extends ArrayAdapter<RequiredField> {
         LayoutInflater inflater = context.getLayoutInflater();
         View listViewItem = inflater.inflate(R.layout.layout_required_field_list, null, true);
 
-        TextView requiredFieldName = (TextView) listViewItem.findViewById(R.id.requiredFieldName);
-        TextView requiredFieldType = (TextView) listViewItem.findViewById(R.id.requiredFieldType);
+        TextView requiredFieldName = listViewItem.findViewById(R.id.requiredFieldName);
+        TextView requiredFieldType = listViewItem.findViewById(R.id.requiredFieldType);
 
         RequiredField requiredField = requiredFields.get(position);
 

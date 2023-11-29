@@ -34,8 +34,8 @@ public class EventTypeFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         FragmentActivity activity = getActivity();
-        ListView listViewEventTypes = (ListView) getView().findViewById(R.id.eventTypeListView);
-        Button addEventTypeButton = (Button) getView().findViewById(R.id.addEventTypeButton);
+        ListView listViewEventTypes = getView().findViewById(R.id.eventTypeListView);
+        Button addEventTypeButton = getView().findViewById(R.id.addEventTypeButton);
 
         addEventTypeButton.setOnClickListener(new View.OnClickListener() {
             @Override
