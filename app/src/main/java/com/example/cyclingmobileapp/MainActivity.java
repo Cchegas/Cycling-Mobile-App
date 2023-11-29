@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Objects;
 
@@ -47,10 +48,32 @@ public class MainActivity extends AppCompatActivity {
             View headerView = navigationView.getHeaderView(0);
             TextView navUsername = headerView.findViewById(R.id.nav_header_username);
             navUsername.setText(username);
+            String role = getIntent().getExtras().getString("role");
+            navigationView.getMenu().clear();
+            if (role != null && role.equals("admin")) {
+                navigationView.inflateMenu(R.menu.menu_admin);
+            } else if (role != null && role.equals("club")) {
+                navigationView.inflateMenu(R.menu.menu_club);
+            } else {
+                navigationView.inflateMenu(R.menu.menu_participant);
+            }
+
         }
         // Manually select the first item in the navigation menu, and, correspondingly, show the first fragment
-        navigationView.setCheckedItem(R.id.eventTypeFragmentMenuItem);
-        selectFragment(new EventTypeFragment());
+        if (getIntent().getExtras() != null && Objects.equals(getIntent().getExtras().getString("role"), "club")) {
+            navigationView.setCheckedItem(R.id.eventFragmentMenuItem);
+            Bundle bundle = new Bundle();
+            bundle.putString("username", getIntent().getExtras().getString("username"));
+            Fragment fragment = new EventsFragment();
+            fragment.setArguments(bundle);
+            selectFragment(fragment);
+        } else if (getIntent().getExtras() != null && Objects.equals(getIntent().getExtras().getString("role"), "admin")) {
+            navigationView.setCheckedItem(R.id.eventTypeFragmentMenuItem);
+            selectFragment(new EventTypeFragment());
+        } else {
+            navigationView.setCheckedItem(R.id.accountOverviewFragmentMenuItem);
+            selectFragment(new AccountOverviewFragment());
+        }
     }
 
     public void signOut() {
@@ -60,17 +83,30 @@ public class MainActivity extends AppCompatActivity {
     private void setNavigationDrawer() {
         DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navView = findViewById(R.id.navigation_view);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
         navView.setNavigationItemSelectedListener(menuItem -> {
-            Fragment fragment = null;
+            Fragment fragment;
             int itemId = menuItem.getItemId();
             if (itemId == R.id.eventTypeFragmentMenuItem) {
                 fragment = new EventTypeFragment();
             } else if (itemId == R.id.accountOverviewFragmentMenuItem) {
                 fragment = new AccountOverviewFragment();
-            } else if (itemId == R.id.third) {
-                fragment = new ThirdFragment();
+            } else if (itemId == R.id.eventFragmentMenuItem) {
+                if (getIntent().getExtras() != null && Objects.equals(getIntent().getExtras().getString("role"), "club")) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("username", getIntent().getExtras().getString("username"));
+                    fragment = new EventsFragment();
+                    fragment.setArguments(bundle);
+                } else {
+                    fragment = null;
+                }
+
             } else if (itemId == R.id.signout) {
+                fragment = null;
                 signOut();
+            } else {
+                fragment = null;
             }
             if (fragment != null) {
                 selectFragment(fragment);

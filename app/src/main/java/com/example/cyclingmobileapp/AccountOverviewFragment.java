@@ -37,7 +37,7 @@ public class AccountOverviewFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         FragmentActivity activity = getActivity();
-        ListView listViewAccounts = (ListView) getView().findViewById(R.id.accountListView);
+        ListView listViewAccounts = getView().findViewById(R.id.accountListView);
 
         // Setup deletion confirmation dialog
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(activity);
@@ -46,9 +46,9 @@ public class AccountOverviewFragment extends Fragment {
         dialogBuilder.setView(dialogView);
         AlertDialog deletionDialog = dialogBuilder.create();
 
-        TextView deleteDialogContent = (TextView) dialogView.findViewById(R.id.deleteDialogContent);
-        Button deleteDialogCancelButton = (Button) dialogView.findViewById(R.id.deleteDialogCancelButton);
-        Button deleteDialogDeleteButton = (Button) dialogView.findViewById(R.id.deleteDialogDeleteButton);
+        TextView deleteDialogContent = dialogView.findViewById(R.id.deleteDialogContent);
+        Button deleteDialogCancelButton = dialogView.findViewById(R.id.deleteDialogCancelButton);
+        Button deleteDialogDeleteButton = dialogView.findViewById(R.id.deleteDialogDeleteButton);
 
         deleteDialogCancelButton.setOnClickListener(view1 -> deletionDialog.dismiss());
         // Remove the account at the last selected index by the user
@@ -103,7 +103,7 @@ public class AccountOverviewFragment extends Fragment {
     }
 
     private void updateAccountListView() {
-        ListView listViewAccounts = (ListView) getView().findViewById(R.id.accountListView);
+        ListView listViewAccounts = getView().findViewById(R.id.accountListView);
         AccountList accountList = new AccountList(getActivity(), accounts);
         listViewAccounts.setAdapter(accountList);
     }
