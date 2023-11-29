@@ -36,6 +36,8 @@ import java.util.List;
 import java.util.Map;
 
 public class EventCreationActivity extends AppCompatActivity {
+    String clubUsername;
+    List<EventType> eventTypes;
     private EditText eventNameEditText;
     private Spinner eventTypeSpinner;
     private RadioGroup difficultyLevelRadioGroup;
@@ -45,13 +47,9 @@ public class EventCreationActivity extends AppCompatActivity {
     private EditText dateEditText;
     private EditText startTimeEditText;
     private EditText endTimeEditText;
-
-    private Button createEventButton, updateEventButton, deleteEventButton, getInfoButton;
+    private Button createEventButton, updateEventButton, deleteEventButton;
     private EditText descriptionEditText;
-
     private FirebaseFirestore db;
-
-    String clubUsername;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,14 +62,15 @@ public class EventCreationActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        // Get the up to date list of event types and initialize the spinner
+        fetchEventTypes();
         if (getIntent().getExtras() != null) {
             clubUsername = getIntent().getExtras().getString("username");
+            if (getIntent().getExtras().getString("title") != null) {
+                fetchEventInfo(getIntent().getExtras().getString("title"));
+            }
         }
 
-        //
-        fetchEventTypes();
-
-        //
         eventNameEditText = findViewById(R.id.editTextEventName);
         eventTypeSpinner = findViewById(R.id.eventTypeSpinner);
         difficultyLevelRadioGroup = findViewById(R.id.difficultyLevelRadioGroup);
@@ -84,7 +83,6 @@ public class EventCreationActivity extends AppCompatActivity {
         createEventButton = findViewById(R.id.createEventButton);
         updateEventButton = findViewById(R.id.updateEventButton);
         deleteEventButton = findViewById(R.id.deleteEvent);
-        getInfoButton = findViewById(R.id.getInfoButton);
         descriptionEditText = findViewById(R.id.descriptionEditText);
         //
 
@@ -110,13 +108,6 @@ public class EventCreationActivity extends AppCompatActivity {
                 onDeleteButton(view);
             }
         });
-        getInfoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onGetInfoButtonClick(view);
-            }
-        });
-
 
     }
 
@@ -342,8 +333,9 @@ public class EventCreationActivity extends AppCompatActivity {
     }
 
     private void fetchEventInfo(String eventName) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
         // Use FirebaseFirestore to fetch event information from the database
-        db.collection("Events")
+        db.collection(Event.COLLECTION_NAME)
                 .document(eventName)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -417,9 +409,6 @@ public class EventCreationActivity extends AppCompatActivity {
             endTimeEditText.setText(extractTime(endTimeString));
 
         }
-
-
-        makeToast("Event information retrieved");
     }
 
 
@@ -483,29 +472,35 @@ public class EventCreationActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            List<EventType> eventTypes = new ArrayList<>();
+                            eventTypes = new ArrayList<>();
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                String label = document.getString("label");
-                                boolean enabled = document.getBoolean("enabled");
+                                String label = (String) document.get("label");
+                                boolean enabled = (boolean) document.get("enabled");
+                                if (enabled) {
+                                    Map<String, String> requiredFields = (HashMap<String, String>) document.get("requiredFields");
+                                    // Create an EventType object
+                                    EventType eventType = new EventType(label, enabled);
+                                    for (String requiredFieldName : requiredFields.keySet()) {
+                                        eventType.addRequiredField(requiredFieldName, requiredFields.get(requiredFieldName));
+                                    }
+                                    eventTypes.add(eventType);
+                                }
 
-                                // Create an EventType object
-                                EventType eventType = new EventType(label, enabled);
-                                eventTypes.add(eventType);
                             }
 
                             // Now eventTypes list contains EventType objects
 
 
                             // For example, to populate a Spinner
-                            List<String> eventTypeLabels = new ArrayList<>();
+                            List<String> eventTypeList = new ArrayList<>();
                             for (EventType eventType : eventTypes) {
-                                eventTypeLabels.add(eventType.getLabel());
+                                eventTypeList.add(eventType.getLabel());
                             }
 
                             ArrayAdapter<String> adapter = new ArrayAdapter<>(
                                     EventCreationActivity.this,
                                     android.R.layout.simple_spinner_item,
-                                    eventTypeLabels
+                                    eventTypeList
                             );
                             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                             eventTypeSpinner.setAdapter(adapter);

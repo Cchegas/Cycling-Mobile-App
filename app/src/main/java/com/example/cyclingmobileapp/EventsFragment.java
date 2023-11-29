@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -12,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.cyclingmobileapp.lib.event.Event;
+import com.example.cyclingmobileapp.lib.event.EventType;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -46,6 +48,15 @@ public class EventsFragment extends Fragment {
                 startActivity(eventCreationActivityIntent);
             }
         });
+
+        listViewEvents.setOnItemClickListener((adapterView, view1, i, l) -> {
+            Event event = events.get(i);
+            Intent eventCreationActivityIntent = new Intent(activity, EventCreationActivity.class);
+            eventCreationActivityIntent.putExtra("username", clubAccountUsername);
+            eventCreationActivityIntent.putExtra("title", event.getTitle());
+            startActivity(eventCreationActivityIntent);
+        });
+
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         // Display the events in a ListView
