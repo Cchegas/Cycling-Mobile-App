@@ -2,9 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/eventTypeFragmentMenuItem"
-            android:title="@string/menu_event_type_title" />
-        <item
             android:id="@+id/accountOverviewFragmentMenuItem"
             android:title="@string/menu_account_overview_title" />
     </group>
@@ -19,9 +16,4 @@
             </group>
         </menu>
     </item>
-    <item
-        android:id="@+id/profileFragmentMenuItem"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:title="@string/menu_profile" />
 </menu>
