@@ -47,10 +47,10 @@ public class MainActivity extends AppCompatActivity {
         searchBar = findViewById(R.id.search_bar) ;
         itemsList = findViewById(R.id.items_list) ;
 
-        //need to get data from Database
+        //need to get data from Database________________________________________________________________________
         //1. get ALL ClubAccounts from database
         //2. put these ClubAccounts into the ClubAccount[] clubAccounts array.
-        //3. the clubAccounts array will be placed into an ArrayAdapter which is sent to the ListView
+        //3. the clubAccounts array will be placed into an ArrayAdapter which is sent to the ListView___________
         ArrayAdapter<ClubAccount> clubs = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, clubAccounts);;
         itemsList.setAdapter(clubs);
         setupSearchView() ;
