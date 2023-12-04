@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.ListView;
+import androidx.appcompat.widget.SearchView;
+import android.widget.ArrayAdapter ;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -15,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.cyclingmobileapp.lib.user.Account;
+import com.example.cyclingmobileapp.lib.user.ClubAccount;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -25,6 +29,10 @@ import java.util.Objects;
 public class MainActivity extends AppCompatActivity {
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private String username;
+    private SearchView searchBar ;
+    private ListView itemsList ;
+    private ClubAccount[] clubAccounts ;
+    private FirebaseFirestore db ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +42,19 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+
+        //initializing the Search- and ListView
+        searchBar = findViewById(R.id.search_bar) ;
+        itemsList = findViewById(R.id.items_list) ;
+
+        //need to get data from Database
+        //1. get ALL ClubAccounts from database
+        //2. put these ClubAccounts into the ClubAccount[] clubAccounts array.
+        //3. the clubAccounts array will be placed into an ArrayAdapter which is sent to the ListView
+        ArrayAdapter<ClubAccount> clubs = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, clubAccounts);;
+        itemsList.setAdapter(clubs);
+        setupSearchView() ;
+
 
         // Add the ActionBarDrawerToggle to the activity, connecting it to toggle the drawerLayout
         DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
@@ -78,6 +99,26 @@ public class MainActivity extends AppCompatActivity {
             navigationView.setCheckedItem(R.id.accountOverviewFragmentMenuItem);
             selectFragment(new AccountOverviewFragment());
         }
+    }
+
+    private void filter(String filterName) {
+        ArrayAdapter<String> adapter = (ArrayAdapter<String>) itemsList.getAdapter();
+        adapter.getFilter().filter(filterName);
+    }
+
+    private void setupSearchView() {
+        searchBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String filterText) {
+                filter(filterText);
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filter(newText);
+                return false;
+            }
+        });
     }
 
     public void signOut() {

@@ -25,6 +25,7 @@
     <string name="sign_out_btn">Sign Out</string>
     <string name="open_drawer_desc">Open Menu</string>
     <string name="close_drawer_desc">Close Menu</string>
+    <string name="search_hint">Search...</string>
 
     <!--    Event Type Fragment-->
     <string name="event_type_fragment_title">Event Types</string>
@@ -43,8 +44,6 @@
     <string name="profile_fragment_main_contact_field">Profile</string>
     <string name="profile_fragment_phone_number_field">Profile</string>
 
-    <!-- Search Activity  -->
-    <string name="search_hint">Search...</string>
 
     <!--    Event Type Activity-->
     <string name="event_type_required_fields_header">Required Fields</string>
