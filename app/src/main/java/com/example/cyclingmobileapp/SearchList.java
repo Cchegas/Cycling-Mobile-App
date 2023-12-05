@@ -14,15 +14,11 @@ import java.util.Random;
 public class SearchList extends ArrayAdapter<String> {
 
     private final String delimeter;
-    List<String> results;
-    List<String> resultTypes;
     List<String> resultsAndTypes;
     List<String> ogResultsAndTypes;
 
     public SearchList(Context context, int resource, int textViewResourceId, List<String> results, List<String> resultTypes) {
         super(context, resource, textViewResourceId, results);
-        this.results = results;
-        this.resultTypes = resultTypes;
         resultsAndTypes = new ArrayList<>();
         ogResultsAndTypes = new ArrayList<>();
         delimeter = getSaltString();
