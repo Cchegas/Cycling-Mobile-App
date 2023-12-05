@@ -39,6 +39,8 @@ import java.util.List;
 import java.util.Map;
 
 public class EventActivity extends AppCompatActivity {
+    private static final String DATE_FORMAT = "yyyy/MM/dd";
+    private static final String TIME_FORMAT = "HH:mm";
     String clubUsername, eventDocumentId;
     List<EventType> eventTypes;
     List<String> eventTypeIds;
@@ -50,7 +52,6 @@ public class EventActivity extends AppCompatActivity {
             dateEditText, startTimeEditText, endTimeEditText, descriptionEditText;
     private Button eventDoneButton, eventDeleteButton;
     private LinearLayout eventTypeDetailsLinearLayout;
-
     private TextView eventHeader;
 
     @Override
@@ -107,20 +108,65 @@ public class EventActivity extends AppCompatActivity {
             eventHeader.setText("Modify event");
             populateEventData(eventDocumentId);
             // The delete button should delete the event
-            eventDeleteButton.setOnClickListener(view -> deleteEvent(eventDocumentId));
+            eventDeleteButton.setOnClickListener(view -> {
+                deleteEvent(eventDocumentId);
+                onSupportNavigateUp();
+            });
             // The done button should update the event's information
             eventDoneButton.setOnClickListener(view -> pushEventData());
         }
     }
 
     private boolean validateEventData() {
-        return ValidationUtil.validateRegex(this, eventTitleEditText.getText().toString().trim(), "event name", "^.*[a-zA-Z]+.*$", "at least one letter")
+        // The dates should be in the future if event is being created from scratch
+        boolean requireToBeInFuture = eventDocumentId == null;
+        boolean status = ValidationUtil.validateRegex(this, eventTitleEditText.getText().toString().trim(), "event name", "^.*[a-zA-Z]+.*$", "at least one letter")
                 && ValidationUtil.validateRegex(this, postalCodeEditText.getText().toString().trim().toUpperCase(), "zip code", "[ABCEGHJKLMNPRSTVXY][0-9][ABCEGHJKLMNPRSTVWXYZ] ?[0-9][ABCEGHJKLMNPRSTVWXYZ][0-9]", "a valid Canadian postal code")
-                && ValidationUtil.validateEmpty(this, descriptionEditText.getText().toString().trim(), "event description");
+                && ValidationUtil.validateFloat(this, registrationFeesEditText.getText().toString().trim(), "registration fees")
+                && Float.parseFloat(registrationFeesEditText.getText().toString().trim()) >= 0
+                && ValidationUtil.validateInt(this, participantLimitEditText.getText().toString().trim(), "participant limit")
+                && Integer.parseInt(participantLimitEditText.getText().toString().trim()) >= 1
+                && ValidationUtil.validateEmpty(this, descriptionEditText.getText().toString().trim(), "event description")
+                && isValidDate(dateEditText.getText().toString().trim(), "event date", requireToBeInFuture)
+                && isValidTime(startTimeEditText.getText().toString().trim(), "start time")
+                && isValidTime(endTimeEditText.getText().toString().trim(), "end time");
+        if (!status) {
+            if (ValidationUtil.validateFloat(this, registrationFeesEditText.getText().toString().trim(), "registration fees")
+                    && Float.parseFloat(registrationFeesEditText.getText().toString().trim()) < 0) {
+                makeToast("The registration fees must be positive or 0!");
+                return false;
+            }
+            if (ValidationUtil.validateInt(this, participantLimitEditText.getText().toString().trim(), "participant limit")
+                    && Integer.parseInt(participantLimitEditText.getText().toString().trim()) < 1) {
+                makeToast("The participant limit must be at least 1!");
+                return false;
+            }
+        }
+        return status;
+    }
+
+    private boolean validateRequiredFields() {
+        for (EditText requiredFieldInput : requiredFieldInputMap.keySet()) {
+            boolean inputStatus = true;
+            String fieldName = requiredFieldInput.getHint().toString();
+            String completeFieldName = "event type details " + fieldName + " field";
+
+            if (requiredFieldInputMap.get(requiredFieldInput).equals(RequiredField.STRING_TYPE)) {
+                inputStatus = ValidationUtil.validateEmpty(this, requiredFieldInput.getText().toString().trim(), completeFieldName);
+            } else if (requiredFieldInputMap.get(requiredFieldInput).equals(RequiredField.INT_TYPE)) {
+                inputStatus = ValidationUtil.validateInt(this, requiredFieldInput.getText().toString().trim(), completeFieldName);
+            } else if (requiredFieldInputMap.get(requiredFieldInput).equals(RequiredField.FLOAT_TYPE)) {
+                inputStatus = ValidationUtil.validateFloat(this, requiredFieldInput.getText().toString().trim(), completeFieldName);
+            }
+            if (!inputStatus) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private void pushEventData() {
-        boolean status = validateEventData();
+        boolean status = validateEventData() && validateRequiredFields();
 
         if (status) {
             FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -131,8 +177,8 @@ public class EventActivity extends AppCompatActivity {
             }
 
             // Gather the datetime info
-            ZonedDateTime startDateTime = DateTimeConversion(startTimeEditText.getText().toString().trim(), dateEditText.getText().toString().trim());
-            ZonedDateTime endDateTime = DateTimeConversion(endTimeEditText.getText().toString().trim(), dateEditText.getText().toString().trim());
+            ZonedDateTime startDateTime = dateTimeConversion(startTimeEditText.getText().toString().trim(), dateEditText.getText().toString().trim());
+            ZonedDateTime endDateTime = dateTimeConversion(endTimeEditText.getText().toString().trim(), dateEditText.getText().toString().trim());
             if (!endDateTime.isAfter(startDateTime)) {
                 makeToast("The end datetime must be later than the start datetime!");
                 return;
@@ -195,7 +241,7 @@ public class EventActivity extends AppCompatActivity {
                             fillFieldsFromDocument(document);
                         } else {
                             // Quit the activity if something goes wrong
-                            makeToast("Event not found");
+                            makeToast("Event not found. Debug ID: " + eventDocumentId);
                             onSupportNavigateUp();
                         }
                     } else {
@@ -271,17 +317,19 @@ public class EventActivity extends AppCompatActivity {
                     eventTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override
                         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                            requiredFieldInputMap = new HashMap<>();
                             EventType selectedEventType = eventTypes.get(i);
                             // Clear the linear layout
                             eventTypeDetailsLinearLayout.removeAllViews();
                             for (RequiredField requiredField : selectedEventType.getRequiredFields()) {
                                 EditText editText = createEditTextInput(requiredField.getName());
                                 // Set the type of the editText based on how the event type defines it.
-                                // Either string or number (which handles both float and int)
                                 if (requiredField.getType().equals(RequiredField.STRING_TYPE)) {
                                     editText.setInputType(InputType.TYPE_CLASS_TEXT);
-                                } else {
-                                    editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                                } else if (requiredField.getType().equals(RequiredField.INT_TYPE)) {
+                                    editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
+                                } else if (requiredField.getType().equals(RequiredField.FLOAT_TYPE)) {
+                                    editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
                                 }
                                 // Add the editText to the linear layout ready to accept it
                                 eventTypeDetailsLinearLayout.addView(editText);
@@ -305,14 +353,19 @@ public class EventActivity extends AppCompatActivity {
                     for (RequiredField requiredField : selectedEventType.getRequiredFields()) {
                         EditText editText = createEditTextInput(requiredField.getName());
                         // Set the type of the editText based on how the event type defines it.
-                        // Either string or number (which handles both float and int)
                         if (requiredField.getType().equals(RequiredField.STRING_TYPE)) {
                             editText.setInputType(InputType.TYPE_CLASS_TEXT);
-                        } else {
-                            editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                        } else if (requiredField.getType().equals(RequiredField.INT_TYPE)) {
+                            editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
+                        } else if (requiredField.getType().equals(RequiredField.FLOAT_TYPE)) {
+                            editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
                         }
                         // Set the text to what was stored in the DB
-                        editText.setText(eventRequiredFields.get(requiredField.getName()));
+                        try {
+                            editText.setText(eventRequiredFields.get(requiredField.getName()).toString());
+                        } catch (Exception e){
+                            editText.setText(String.valueOf(eventRequiredFields.get(requiredField.getName())));
+                        }
                         // Add the editText to the linear layout ready to accept it
                         eventTypeDetailsLinearLayout.addView(editText);
                         requiredFieldInputMap.put(editText, requiredField.getType());
@@ -373,10 +426,10 @@ public class EventActivity extends AppCompatActivity {
         return dateString.replace("-", "/");
     }
 
-    private ZonedDateTime DateTimeConversion(String timeString, String dateString) {
+    private ZonedDateTime dateTimeConversion(String timeString, String dateString) {
         // Define the date and time formatters
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(TIME_FORMAT);
 
         // Parse the strings to LocalDate and LocalTime
         LocalDate localDate = LocalDate.parse(dateString, dateFormatter);
@@ -386,24 +439,29 @@ public class EventActivity extends AppCompatActivity {
         return ZonedDateTime.of(localDate, localTime, ZoneId.systemDefault());
     }
 
-    private boolean isValidDate(String date) {
+    private boolean isValidDate(String date, String fieldName, boolean requireToBeInFuture) {
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-            sdf.setLenient(false);
-            Date parsedDate = sdf.parse(date);
+            ZonedDateTime zonedDateTime = dateTimeConversion("12:00", date);
+            if (requireToBeInFuture && !zonedDateTime.isAfter(ZonedDateTime.now())) {
+                makeToast("The " + fieldName + " field is invalid! Must be in future.");
+                return false;
+            }
             return true;
-        } catch (ParseException e) {
+        } catch (Exception e) {
+            makeToast("The " + fieldName + " field is invalid!");
             return false;
         }
     }
 
-    private boolean isValidTime(String time) {
+    private boolean isValidTime(String time, String fieldName) {
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+            SimpleDateFormat sdf = new SimpleDateFormat(TIME_FORMAT);
             sdf.setLenient(false);
             Date parsedTime = sdf.parse(time);
             return true;
+
         } catch (ParseException e) {
+            makeToast("The " + fieldName + " field is invalid!");
             return false;
         }
     }
