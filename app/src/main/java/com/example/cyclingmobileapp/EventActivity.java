@@ -362,8 +362,8 @@ public class EventActivity extends AppCompatActivity {
                         }
                         // Set the text to what was stored in the DB
                         try {
-                            editText.setText(eventRequiredFields.get(requiredField.getName()).toString());
-                        } catch (Exception e){
+                            editText.setText(eventRequiredFields.get(requiredField.getName()));
+                        } catch (Exception e) {
                             editText.setText(String.valueOf(eventRequiredFields.get(requiredField.getName())));
                         }
                         // Add the editText to the linear layout ready to accept it

@@ -24,6 +24,7 @@ import java.util.Objects;
 public class MainActivity extends AppCompatActivity {
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private String username;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,12 +84,12 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(MainActivity.this, LoginActivity.class));
     }
 
-    private void ensureCompleteProfileInformation(){
+    private void ensureCompleteProfileInformation() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(Account.COLLECTION_NAME).document(username).get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()){
+            if (task.isSuccessful()) {
                 DocumentSnapshot documentSnapshot = task.getResult();
-                if (documentSnapshot.get("profileInfo") == null){
+                if (documentSnapshot.get("profileInfo") == null) {
                     navigateToProfileActivity();
                 }
             }
@@ -117,11 +118,10 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     fragment = null;
                 }
-            } else if (itemId == R.id.profileActivityMenuItem){
+            } else if (itemId == R.id.profileActivityMenuItem) {
                 fragment = null;
                 navigateToProfileActivity();
-            }
-            else if (itemId == R.id.signout) {
+            } else if (itemId == R.id.signout) {
                 fragment = null;
                 signOut();
             } else {
@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void navigateToProfileActivity(){
+    private void navigateToProfileActivity() {
         Intent profileActivityIntent = new Intent(this, ProfileActivity.class);
         profileActivityIntent.putExtra("username", username);
         startActivity(profileActivityIntent);
