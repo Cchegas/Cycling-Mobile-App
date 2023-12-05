@@ -54,12 +54,12 @@ public class ProfileActivity extends AppCompatActivity {
         attemptToPopulateFields(username);
     }
 
-    private void attemptToPopulateFields(String username){
+    private void attemptToPopulateFields(String username) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(Account.COLLECTION_NAME).document(username).get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()){
+            if (task.isSuccessful()) {
                 DocumentSnapshot documentSnapshot = task.getResult();
-                if (documentSnapshot.get("profileInfo") != null){
+                if (documentSnapshot.get("profileInfo") != null) {
                     Map<String, String> profileInfo = (HashMap) documentSnapshot.get("profileInfo");
                     profileSocialMediaInput.setText(profileInfo.get("socialMediaLink"));
                     profileMainContactInput.setText(profileInfo.get("mainContact"));
@@ -102,14 +102,14 @@ public class ProfileActivity extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
-        if (alreadyValid){
+        if (alreadyValid) {
             completeActivity();
             return true;
         }
         return onUpdateProfileButtonClick();
     }
 
-    private void completeActivity(){
+    private void completeActivity() {
         finish();
     }
 
