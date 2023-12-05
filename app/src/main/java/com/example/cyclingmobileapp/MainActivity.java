@@ -22,7 +22,6 @@ import com.example.cyclingmobileapp.lib.event.EventType;
 import com.example.cyclingmobileapp.lib.user.Account;
 import com.example.cyclingmobileapp.lib.user.ClubAccount;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -34,6 +33,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private String username;
+
     private SearchView searchBar ;
     private ListView itemsList ;
     private List<String> clubAccounts ;
@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
             navigationView.setCheckedItem(R.id.eventFragmentMenuItem);
             Bundle bundle = new Bundle();
             bundle.putString("username", getIntent().getExtras().getString("username"));
-            Fragment fragment = new EventsFragment();
+            Fragment fragment = new EventFragment();
             fragment.setArguments(bundle);
             selectFragment(fragment);
         } else if (getIntent().getExtras() != null && Objects.equals(getIntent().getExtras().getString("role"), "admin")) {
@@ -178,12 +178,12 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(MainActivity.this, LoginActivity.class));
     }
 
-    private void ensureCompleteProfileInformation(){
+    private void ensureCompleteProfileInformation() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(Account.COLLECTION_NAME).document(username).get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()){
+            if (task.isSuccessful()) {
                 DocumentSnapshot documentSnapshot = task.getResult();
-                if (documentSnapshot.get("profileInfo") == null){
+                if (documentSnapshot.get("profileInfo") == null) {
                     navigateToProfileActivity();
                 }
             }
@@ -207,16 +207,15 @@ public class MainActivity extends AppCompatActivity {
                 if (getIntent().getExtras() != null && Objects.equals(getIntent().getExtras().getString("role"), "club")) {
                     Bundle bundle = new Bundle();
                     bundle.putString("username", username);
-                    fragment = new EventsFragment();
+                    fragment = new EventFragment();
                     fragment.setArguments(bundle);
                 } else {
                     fragment = null;
                 }
-            } else if (itemId == R.id.profileActivityMenuItem){
+            } else if (itemId == R.id.profileActivityMenuItem) {
                 fragment = null;
                 navigateToProfileActivity();
-            }
-            else if (itemId == R.id.signout) {
+            } else if (itemId == R.id.signout) {
                 fragment = null;
                 signOut();
             } else {
@@ -248,7 +247,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void navigateToProfileActivity(){
+    private void navigateToProfileActivity() {
         Intent profileActivityIntent = new Intent(this, ProfileActivity.class);
         profileActivityIntent.putExtra("username", username);
         startActivity(profileActivityIntent);

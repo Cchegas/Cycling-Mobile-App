@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -13,24 +12,25 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.cyclingmobileapp.lib.event.Event;
-import com.example.cyclingmobileapp.lib.event.EventType;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class EventsFragment extends Fragment {
+public class EventFragment extends Fragment {
 
     private List<Event> events;
+    private List<String> eventDocumentIds;
     private String clubAccountUsername;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         events = new ArrayList<Event>();
+        eventDocumentIds = new ArrayList<String>();
         // Inflate the layout for this fragment
         clubAccountUsername = getArguments().getString("username");
-        return inflater.inflate(R.layout.fragment_events, container, false);
+        return inflater.inflate(R.layout.fragment_event, container, false);
     }
 
     @Override
@@ -39,22 +39,21 @@ public class EventsFragment extends Fragment {
         ListView listViewEvents = getView().findViewById(R.id.eventsListView);
         Button addEventButton = getView().findViewById(R.id.addEventButton);
 
-        addEventButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // ****************** Add Event Button functionality goes here *******************
-                Intent eventCreationActivityIntent = new Intent(activity, EventCreationActivity.class);
-                eventCreationActivityIntent.putExtra("username", clubAccountUsername);
-                startActivity(eventCreationActivityIntent);
-            }
+        addEventButton.setOnClickListener(view12 -> {
+            // ****************** Add Event Button functionality goes here *******************
+            Intent eventActivityIntent = new Intent(activity, EventActivity.class);
+            eventActivityIntent.putExtra("username", clubAccountUsername);
+            startActivity(eventActivityIntent);
         });
 
+        // Listen for clicks on an existing event
         listViewEvents.setOnItemClickListener((adapterView, view1, i, l) -> {
-            Event event = events.get(i);
-            Intent eventCreationActivityIntent = new Intent(activity, EventCreationActivity.class);
-            eventCreationActivityIntent.putExtra("username", clubAccountUsername);
-            eventCreationActivityIntent.putExtra("title", event.getTitle());
-            startActivity(eventCreationActivityIntent);
+            // Navigate to the EventActivity
+            String eventDocumentId = eventDocumentIds.get(i);
+            Intent eventActivityIntent = new Intent(activity, EventActivity.class);
+            eventActivityIntent.putExtra("username", clubAccountUsername);
+            eventActivityIntent.putExtra("eventDocumentId", eventDocumentId);
+            startActivity(eventActivityIntent);
         });
 
 
@@ -69,6 +68,7 @@ public class EventsFragment extends Fragment {
                             if (doc.get("organizer").toString().equals(clubAccountUsername)) {
                                 Event event = new Event(doc.get("title").toString());
                                 events.add(event);
+                                eventDocumentIds.add(doc.getId());
                             }
                         }
                     }

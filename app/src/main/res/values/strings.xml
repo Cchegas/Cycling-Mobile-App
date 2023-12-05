@@ -51,6 +51,16 @@
     <string name="event_type_add_field_btn">+ Add</string>
     <string name="event_type_required_field_name">Name</string>
 
+    <!--    Event Activity-->
+    <string name="event_input_type_label">Event Type</string>
+    <string name="event_difficulty_label">Difficulty</string>
+    <string name="event_date_and_time_label">Date and Time</string>
+    <string name="event_date_input_hint">Date (YYYY/MM/DD)</string>
+    <string name="event_start_time_input_hint">Start Time (HH:MM)</string>
+    <string name="event_end_time_input_hint">End Time (HH:MM)</string>
+    <string name="event_general_details_label">Event Details</string>
+    <string name="event_type_details_label">Event Type Details</string>
+
     <!--    Menu-->
     <string name="menu_event_type_title">Event Types</string>
     <string name="menu_account_overview_title">Clubs and Participants</string>
