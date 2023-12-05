@@ -17,22 +17,29 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.cyclingmobileapp.lib.event.Event;
+import com.example.cyclingmobileapp.lib.event.EventType;
 import com.example.cyclingmobileapp.lib.user.Account;
 import com.example.cyclingmobileapp.lib.user.ClubAccount;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.util.ArrayList;
 import java.util.Objects;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private String username;
     private SearchView searchBar ;
     private ListView itemsList ;
-    private ClubAccount[] clubAccounts ;
-    private FirebaseFirestore db ;
+    private List<String> clubAccounts ;
+    private List<String> events;
+    private List<String> eventTypes;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,9 +58,55 @@ public class MainActivity extends AppCompatActivity {
         //1. get ALL ClubAccounts from database
         //2. put these ClubAccounts into the ClubAccount[] clubAccounts array.
         //3. the clubAccounts array will be placed into an ArrayAdapter which is sent to the ListView___________
-        ArrayAdapter<ClubAccount> clubs = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, clubAccounts);;
-        itemsList.setAdapter(clubs);
-        setupSearchView() ;
+        List<String> results = new ArrayList<>();
+        clubAccounts = new ArrayList<>();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(Account.COLLECTION_NAME).addSnapshotListener((value, error) -> {
+            if (value != null){
+                for (QueryDocumentSnapshot doc : value) {
+                    if (doc != null) {
+                        if (doc.get("role") != null) {
+                            if (doc.get("role").toString().equals("club") && doc.get("name") != null) {
+                                String accountName = doc.get("name").toString();
+                                clubAccounts.add(accountName);
+                                results.add(accountName);
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        events = new ArrayList<>();
+        db.collection(Event.COLLECTION_NAME).addSnapshotListener((value, error) -> {
+            if (value != null){
+                for (QueryDocumentSnapshot doc : value) {
+                    if (doc != null) {
+                        if (doc.get("title") != null) {
+                            String eventName = doc.get("title").toString();
+                            events.add(eventName);
+                            results.add(eventName);
+                        }
+                    }
+                }
+            }
+        });
+        eventTypes = new ArrayList<>();
+        db.collection(EventType.COLLECTION_NAME).addSnapshotListener((value, error) -> {
+            if (value != null){
+                for (QueryDocumentSnapshot doc : value) {
+                    if (doc != null) {
+                        if (doc.get("label") != null) {
+                            String eventTypeName = doc.get("label").toString();
+                            eventTypes.add(eventTypeName);
+                            results.add(eventTypeName);
+                        }
+                    }
+                }
+            }
+        });
+        ArrayAdapter<String> searchResults = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, results);
+        itemsList.setAdapter(searchResults);
+        setupSearchView();
 
 
         // Add the ActionBarDrawerToggle to the activity, connecting it to toggle the drawerLayout
