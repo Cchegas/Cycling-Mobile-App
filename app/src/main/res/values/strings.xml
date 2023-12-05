@@ -38,6 +38,9 @@
     <!--    Account Overview Fragment-->
     <string name="account_overview_fragment_title">Active Accounts</string>
 
+    <!--    Search Fragment-->
+    <string name="search_fragment_header">Search</string>
+
     <!--    Profile Fragment-->
     <string name="profile_fragment_title">Profile</string>
     <string name="profile_fragment_social_media_field">Profile</string>
