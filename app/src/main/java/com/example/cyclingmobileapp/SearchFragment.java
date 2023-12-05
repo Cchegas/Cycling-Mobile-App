@@ -21,19 +21,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SearchFragment extends Fragment {
+    private static final String EVENT_ID = "Event";
+    private static final String EVENT_TYPE_ID = "Event Type";
+    private static final String CLUB_ACCOUNT_ID = "Club";
     private SearchView searchBar;
     private ListView itemsList;
     private List<String> clubAccounts;
     private List<String> events;
     private List<String> eventTypes;
-
     // Store the display name of each result, and the type of each result
     private List<String> results;
     private List<String> resultTypes;
-
-    private static final String EVENT_ID = "EVENT";
-    private static final String EVENT_TYPE_ID = "EVENT_TYPE";
-    private static final String CLUB_ACCOUNT_ID = "CLUB_ACCOUNT";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -105,26 +103,32 @@ public class SearchFragment extends Fragment {
                 updateResults();
             }
         });
-        ArrayAdapter<String> searchResults = new ArrayAdapter<>(activity, android.R.layout.simple_list_item_1, results);
-        itemsList.setAdapter(searchResults);
+        createAndSetAdapter();
         setupSearchView();
     }
 
-    private void updateResults(){
+    private void createAndSetAdapter() {
+        FragmentActivity activity = getActivity();
+        ArrayAdapter<String> testAdapter = new SearchList(activity, android.R.layout.simple_list_item_2, android.R.id.text1, results, resultTypes);
+        itemsList.setAdapter(testAdapter);
+    }
+
+    private void updateResults() {
         results.clear();
         resultTypes.clear();
-        for (String clubAccount: clubAccounts){
+        for (String clubAccount : clubAccounts) {
             results.add(clubAccount);
             resultTypes.add(CLUB_ACCOUNT_ID);
         }
-        for (String event: events){
+        for (String event : events) {
             results.add(event);
             resultTypes.add(EVENT_ID);
         }
-        for (String eventType: eventTypes){
+        for (String eventType : eventTypes) {
             results.add(eventType);
             resultTypes.add(EVENT_TYPE_ID);
         }
+        createAndSetAdapter();
     }
 
     private void filter(String filterName) {
