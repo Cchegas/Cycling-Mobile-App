@@ -27,6 +27,14 @@ public class SearchFragment extends Fragment {
     private List<String> events;
     private List<String> eventTypes;
 
+    // Store the display name of each result, and the type of each result
+    private List<String> results;
+    private List<String> resultTypes;
+
+    private static final String EVENT_ID = "EVENT";
+    private static final String EVENT_TYPE_ID = "EVENT_TYPE";
+    private static final String CLUB_ACCOUNT_ID = "CLUB_ACCOUNT";
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -37,63 +45,86 @@ public class SearchFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         FragmentActivity activity = getActivity();
 
-        //initializing the Search- and ListView
+        // Initializing the Search - and ListView
         searchBar = activity.findViewById(R.id.search_bar);
         itemsList = activity.findViewById(R.id.items_list);
 
-        //need to get data from Database________________________________________________________________________
-        //1. get ALL ClubAccounts from database
-        //2. put these ClubAccounts into the ClubAccount[] clubAccounts array.
-        //3. the clubAccounts array will be placed into an ArrayAdapter which is sent to the ListView___________
-        List<String> results = new ArrayList<>();
+        results = new ArrayList<>();
+        resultTypes = new ArrayList<>();
+
         clubAccounts = new ArrayList<>();
+        events = new ArrayList<>();
+        eventTypes = new ArrayList<>();
+
+        // Need to get data from Database________________________________________________________________________
+        // 1. get ALL ClubAccounts from database
+        // 2. put these ClubAccounts into the ClubAccount[] clubAccounts array.
+        // 3. the clubAccounts array will be placed into an ArrayAdapter which is sent to the ListView___________
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(Account.COLLECTION_NAME).addSnapshotListener((value, error) -> {
             if (value != null) {
+                clubAccounts.clear();
                 for (QueryDocumentSnapshot doc : value) {
                     if (doc != null) {
                         if (doc.get("role") != null) {
-                            if (doc.get("role").toString().equals("club") && doc.get("name") != null) {
-                                String accountName = doc.get("name").toString();
+                            if (doc.getString("role").equals("club") && doc.get("name") != null) {
+                                String accountName = doc.getString("name");
                                 clubAccounts.add(accountName);
-                                results.add(accountName);
                             }
                         }
                     }
                 }
+                updateResults();
             }
         });
-        events = new ArrayList<>();
         db.collection(Event.COLLECTION_NAME).addSnapshotListener((value, error) -> {
             if (value != null) {
+                events.clear();
                 for (QueryDocumentSnapshot doc : value) {
                     if (doc != null) {
                         if (doc.get("title") != null) {
                             String eventName = doc.get("title").toString();
                             events.add(eventName);
-                            results.add(eventName);
                         }
                     }
                 }
+                updateResults();
             }
         });
-        eventTypes = new ArrayList<>();
         db.collection(EventType.COLLECTION_NAME).addSnapshotListener((value, error) -> {
             if (value != null) {
+                eventTypes.clear();
                 for (QueryDocumentSnapshot doc : value) {
                     if (doc != null) {
                         if (doc.get("label") != null) {
                             String eventTypeName = doc.get("label").toString();
                             eventTypes.add(eventTypeName);
-                            results.add(eventTypeName);
                         }
                     }
                 }
+                updateResults();
             }
         });
         ArrayAdapter<String> searchResults = new ArrayAdapter<>(activity, android.R.layout.simple_list_item_1, results);
         itemsList.setAdapter(searchResults);
         setupSearchView();
+    }
+
+    private void updateResults(){
+        results.clear();
+        resultTypes.clear();
+        for (String clubAccount: clubAccounts){
+            results.add(clubAccount);
+            resultTypes.add(CLUB_ACCOUNT_ID);
+        }
+        for (String event: events){
+            results.add(event);
+            resultTypes.add(EVENT_ID);
+        }
+        for (String eventType: eventTypes){
+            results.add(eventType);
+            resultTypes.add(EVENT_TYPE_ID);
+        }
     }
 
     private void filter(String filterName) {
