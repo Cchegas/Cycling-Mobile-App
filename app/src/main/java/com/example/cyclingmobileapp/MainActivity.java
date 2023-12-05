@@ -16,7 +16,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.cyclingmobileapp.lib.user.Account;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -68,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
             navigationView.setCheckedItem(R.id.eventFragmentMenuItem);
             Bundle bundle = new Bundle();
             bundle.putString("username", getIntent().getExtras().getString("username"));
-            Fragment fragment = new EventsFragment();
+            Fragment fragment = new EventFragment();
             fragment.setArguments(bundle);
             selectFragment(fragment);
         } else if (getIntent().getExtras() != null && Objects.equals(getIntent().getExtras().getString("role"), "admin")) {
@@ -113,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
                 if (getIntent().getExtras() != null && Objects.equals(getIntent().getExtras().getString("role"), "club")) {
                     Bundle bundle = new Bundle();
                     bundle.putString("username", username);
-                    fragment = new EventsFragment();
+                    fragment = new EventFragment();
                     fragment.setArguments(bundle);
                 } else {
                     fragment = null;

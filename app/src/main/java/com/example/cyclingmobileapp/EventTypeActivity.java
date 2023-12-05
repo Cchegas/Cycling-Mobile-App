@@ -94,7 +94,7 @@ public class EventTypeActivity extends AppCompatActivity {
                     finish();
                 }
             });
-            EditText eventTypeLabelInput = findViewById(R.id.eventTypeLabel);
+            EditText eventTypeLabelInput = findViewById(R.id.eventTypeLabelInput);
             eventTypeLabelInput.setText(eventTypeLabel);
         } else {
             eventTypeHeader.setText("Add an event type");
@@ -178,7 +178,7 @@ public class EventTypeActivity extends AppCompatActivity {
     }
 
     private void onDone() {
-        String eventTypeLabel = ((EditText) findViewById(R.id.eventTypeLabel)).getText().toString().trim();
+        String eventTypeLabel = ((EditText) findViewById(R.id.eventTypeLabelInput)).getText().toString().trim();
         if (!ValidationUtil.validateRegex(this, eventTypeLabel, "event type label", ".*[a-zA-Z].*", "at least one letter")) {
             return;
         }
