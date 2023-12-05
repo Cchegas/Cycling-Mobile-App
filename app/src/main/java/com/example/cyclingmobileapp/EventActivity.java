@@ -59,7 +59,7 @@ public class EventActivity extends AppCompatActivity {
         setContentView(R.layout.activity_event);
 
         // Setup toolbar
-        Toolbar toolbar = findViewById(R.id.eventCreationToolbar);
+        Toolbar toolbar = findViewById(R.id.eventToolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -359,8 +359,7 @@ public class EventActivity extends AppCompatActivity {
     }
 
     private String extractTime(String dateTimeString) {
-        String timeString = dateTimeString.substring(11, 16);
-        return timeString;
+        return dateTimeString.substring(11, 16);
     }
 
     private String extractDate(String dateTimeString) {
@@ -371,8 +370,7 @@ public class EventActivity extends AppCompatActivity {
 
 
     private String replaceDashesWithSlashes(String dateString) {
-        String newDateString = dateString.replace("-", "/");
-        return newDateString;
+        return dateString.replace("-", "/");
     }
 
     private ZonedDateTime DateTimeConversion(String timeString, String dateString) {
@@ -385,9 +383,7 @@ public class EventActivity extends AppCompatActivity {
         LocalTime localTime = LocalTime.parse(timeString, timeFormatter);
 
         // Combine LocalDate and LocalTime to create ZonedDateTime
-        ZonedDateTime zonedDateTime = ZonedDateTime.of(localDate, localTime, ZoneId.systemDefault());
-
-        return zonedDateTime;
+        return ZonedDateTime.of(localDate, localTime, ZoneId.systemDefault());
     }
 
     private boolean isValidDate(String date) {
