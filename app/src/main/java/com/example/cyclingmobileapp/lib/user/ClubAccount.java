@@ -23,7 +23,7 @@ public class ClubAccount extends Account {
     //ClubAccount Attributes
     private String name;
 
-    private List<Integer> ratings ;
+    private List<Integer> ratings;
 
     //------------------------
     // CONSTRUCTOR

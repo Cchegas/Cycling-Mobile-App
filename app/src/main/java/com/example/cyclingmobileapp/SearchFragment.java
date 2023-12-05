@@ -1,14 +1,11 @@
 package com.example.cyclingmobileapp;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
@@ -17,8 +14,6 @@ import androidx.fragment.app.FragmentActivity;
 import com.example.cyclingmobileapp.lib.event.Event;
 import com.example.cyclingmobileapp.lib.event.EventType;
 import com.example.cyclingmobileapp.lib.user.Account;
-import com.example.cyclingmobileapp.lib.user.ClubAccount;
-import com.example.cyclingmobileapp.lib.user.ParticipantAccount;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -26,9 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SearchFragment extends Fragment {
-    private SearchView searchBar ;
-    private ListView itemsList ;
-    private List<String> clubAccounts ;
+    private SearchView searchBar;
+    private ListView itemsList;
+    private List<String> clubAccounts;
     private List<String> events;
     private List<String> eventTypes;
 
@@ -43,8 +38,8 @@ public class SearchFragment extends Fragment {
         FragmentActivity activity = getActivity();
 
         //initializing the Search- and ListView
-        searchBar = activity.findViewById(R.id.search_bar) ;
-        itemsList = activity.findViewById(R.id.items_list) ;
+        searchBar = activity.findViewById(R.id.search_bar);
+        itemsList = activity.findViewById(R.id.items_list);
 
         //need to get data from Database________________________________________________________________________
         //1. get ALL ClubAccounts from database
@@ -54,7 +49,7 @@ public class SearchFragment extends Fragment {
         clubAccounts = new ArrayList<>();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(Account.COLLECTION_NAME).addSnapshotListener((value, error) -> {
-            if (value != null){
+            if (value != null) {
                 for (QueryDocumentSnapshot doc : value) {
                     if (doc != null) {
                         if (doc.get("role") != null) {
@@ -70,7 +65,7 @@ public class SearchFragment extends Fragment {
         });
         events = new ArrayList<>();
         db.collection(Event.COLLECTION_NAME).addSnapshotListener((value, error) -> {
-            if (value != null){
+            if (value != null) {
                 for (QueryDocumentSnapshot doc : value) {
                     if (doc != null) {
                         if (doc.get("title") != null) {
@@ -84,7 +79,7 @@ public class SearchFragment extends Fragment {
         });
         eventTypes = new ArrayList<>();
         db.collection(EventType.COLLECTION_NAME).addSnapshotListener((value, error) -> {
-            if (value != null){
+            if (value != null) {
                 for (QueryDocumentSnapshot doc : value) {
                     if (doc != null) {
                         if (doc.get("label") != null) {
@@ -113,6 +108,7 @@ public class SearchFragment extends Fragment {
                 filter(filterText);
                 return false;
             }
+
             @Override
             public boolean onQueryTextChange(String newText) {
                 filter(newText);

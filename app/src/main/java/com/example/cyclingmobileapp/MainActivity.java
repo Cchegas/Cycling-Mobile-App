@@ -5,9 +5,6 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.ListView;
-import androidx.appcompat.widget.SearchView;
-import android.widget.ArrayAdapter ;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -17,18 +14,12 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.cyclingmobileapp.lib.event.Event;
-import com.example.cyclingmobileapp.lib.event.EventType;
 import com.example.cyclingmobileapp.lib.user.Account;
-import com.example.cyclingmobileapp.lib.user.ClubAccount;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
-import java.util.ArrayList;
 import java.util.Objects;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private ActionBarDrawerToggle actionBarDrawerToggle;
@@ -131,10 +122,9 @@ public class MainActivity extends AppCompatActivity {
             } else if (itemId == R.id.profileActivityMenuItem) {
                 fragment = null;
                 navigateToProfileActivity();
-            } else if (itemId == R.id.searchFragmentMenuItem){
+            } else if (itemId == R.id.searchFragmentMenuItem) {
                 fragment = new SearchFragment();
-            }
-            else if (itemId == R.id.signout) {
+            } else if (itemId == R.id.signout) {
                 fragment = null;
                 signOut();
             } else {
