@@ -21,24 +21,14 @@ public class SearchList extends ArrayAdapter<String> {
         super(context, resource, textViewResourceId, results);
         resultsAndTypes = new ArrayList<>();
         ogResultsAndTypes = new ArrayList<>();
-        delimeter = getSaltString();
+        // Create a random delimeter that's regex safe and also is unlikely to be contained within
+        // a club account's username, an event type label or an event name
+        delimeter = new String(new char[20]).replace("\0", "%~`<>");
         for (int i = 0; i < Math.min(results.size(), resultTypes.size()); i++) {
             String combined = (results.get(i) + delimeter + resultTypes.get(i));
             resultsAndTypes.add(combined);
             ogResultsAndTypes.add(combined);
         }
-    }
-
-    private String getSaltString() {
-        String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-        StringBuilder salt = new StringBuilder();
-        Random rnd = new Random();
-        while (salt.length() < 18) { // length of the random string.
-            int index = (int) (rnd.nextFloat() * SALTCHARS.length());
-            salt.append(SALTCHARS.charAt(index));
-        }
-        return salt.toString();
-
     }
 
     @Override
