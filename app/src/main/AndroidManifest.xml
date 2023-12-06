@@ -13,7 +13,13 @@
         android:theme="@style/Theme.CyclingMobileApp"
         tools:targetApi="31">
         <activity
+            android:name=".EventSignupActivity"
+            android:exported="false" />
+        <activity
             android:name=".ProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProfileInfoActivity"
             android:exported="false" />
         <activity
             android:name=".EventTypeActivity"

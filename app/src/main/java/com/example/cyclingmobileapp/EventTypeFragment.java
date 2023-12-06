@@ -37,22 +37,16 @@ public class EventTypeFragment extends Fragment {
         ListView listViewEventTypes = getView().findViewById(R.id.eventTypeListView);
         Button addEventTypeButton = getView().findViewById(R.id.addEventTypeButton);
 
-        addEventTypeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent eventTypeActivityIntent = new Intent(activity, EventTypeActivity.class);
-                startActivity(eventTypeActivityIntent);
-            }
+        addEventTypeButton.setOnClickListener(view1 -> {
+            Intent eventTypeActivityIntent = new Intent(activity, EventTypeActivity.class);
+            startActivity(eventTypeActivityIntent);
         });
 
-        listViewEventTypes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                EventType eventType = eventTypes.get(i);
-                Intent eventTypeActivityIntent = new Intent(activity, EventTypeActivity.class);
-                eventTypeActivityIntent.putExtra("label", eventType.getLabel());
-                startActivity(eventTypeActivityIntent);
-            }
+        listViewEventTypes.setOnItemClickListener((adapterView, view12, i, l) -> {
+            EventType eventType = eventTypes.get(i);
+            Intent eventTypeActivityIntent = new Intent(activity, EventTypeActivity.class);
+            eventTypeActivityIntent.putExtra("label", eventType.getLabel());
+            startActivity(eventTypeActivityIntent);
         });
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();

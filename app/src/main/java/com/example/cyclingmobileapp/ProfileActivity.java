@@ -1,29 +1,37 @@
 package com.example.cyclingmobileapp;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
-import android.widget.EditText;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.example.cyclingmobileapp.lib.event.Event;
 import com.example.cyclingmobileapp.lib.user.Account;
-import com.example.cyclingmobileapp.lib.utils.ValidationUtil;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.HashMap;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    private TextView profileUsername;
-    private EditText profileSocialMediaInput, profileMainContactInput, profilePhoneNumberInput;
-    private Button updateProfileButton;
     private String username;
-    private boolean alreadyValid = false;
+    private String clubUsername;
+    private ListView requiredFieldListView;
+    private List<Event> events;
+    private List<String> eventDocumentIds;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,86 +39,102 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
 
         // Setup toolbar
-        Toolbar toolbar = findViewById(R.id.profileToolbar);
+        Toolbar toolbar = findViewById(R.id.profileActivityToolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        profileUsername = findViewById(R.id.profileUsername);
-        profileSocialMediaInput = findViewById(R.id.profileSocialMediaInput);
-        profileMainContactInput = findViewById(R.id.profileMainContactInput);
-        profilePhoneNumberInput = findViewById(R.id.profilePhoneNumberInput);
-        updateProfileButton = findViewById(R.id.updateProfileButton);
-
-        updateProfileButton.setOnClickListener(view -> {
-            onUpdateProfileButtonClick();
-        });
-
-        username = "";
         if (getIntent().getExtras() != null) {
             username = getIntent().getExtras().getString("username");
+            clubUsername = getIntent().getExtras().getString("clubUsername").toLowerCase();
         }
-        profileUsername.setText(username);
-        attemptToPopulateFields(username);
+
+        events = new ArrayList<>();
+        eventDocumentIds = new ArrayList<>();
+
+        requiredFieldListView = findViewById(R.id.profileEventsListView);
+        requiredFieldListView.setOnItemClickListener((adapterView, view, i, l) -> {
+            Intent eventSignupActivityIntent = new Intent(this, EventSignupActivity.class);
+            eventSignupActivityIntent.putExtra("username", username);
+            eventSignupActivityIntent.putExtra("eventDocumentId", eventDocumentIds.get(i));
+            startActivity(eventSignupActivityIntent);
+        });
+
+        displayAccountInfo();
+        updateEvents();
     }
 
-    private void attemptToPopulateFields(String username) {
+    private void displayAccountInfo() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection(Account.COLLECTION_NAME).document(username).get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                DocumentSnapshot documentSnapshot = task.getResult();
+        TextView profileHeader = findViewById(R.id.profileHeader);
+        TextView profileSocialMedia = findViewById(R.id.profileSocialMedia);
+        TextView profileMainContact = findViewById(R.id.profileMainContact);
+        TextView profilePhoneNumber = findViewById(R.id.profilePhoneNumber);
+        String defaultValue = "None";
+        db.collection(Account.COLLECTION_NAME).whereEqualTo("username", clubUsername).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful() && task.getResult().getDocuments().size() > 0) {
+                DocumentSnapshot documentSnapshot = task.getResult().getDocuments().get(0);
+
+                String clubName = documentSnapshot.getString("name");
+                profileHeader.setText(clubName);
                 if (documentSnapshot.get("profileInfo") != null) {
-                    Map<String, String> profileInfo = (HashMap) documentSnapshot.get("profileInfo");
-                    profileSocialMediaInput.setText(profileInfo.get("socialMediaLink"));
-                    profileMainContactInput.setText(profileInfo.get("mainContact"));
-                    profilePhoneNumberInput.setText(profileInfo.get("phoneNumber"));
-                    alreadyValid = true;
+                    Map<String, String> profileInfo = (Map<String, String>) documentSnapshot.get("profileInfo");
+                    String mainContact = profileInfo.get("mainContact");
+                    String phoneNumber = profileInfo.get("phoneNumber");
+                    String socialMediaLink = profileInfo.get("socialMediaLink");
+
+                    mainContact = mainContact == null ? defaultValue : mainContact;
+                    phoneNumber = phoneNumber == null ? defaultValue : phoneNumber;
+                    socialMediaLink = socialMediaLink == null ? defaultValue : socialMediaLink;
+
+                    profileSocialMedia.setText(socialMediaLink);
+                    profileMainContact.setText(mainContact);
+                    profilePhoneNumber.setText(phoneNumber);
+                } else {
+                    profileSocialMedia.setText(defaultValue);
+                    profileMainContact.setText(defaultValue);
+                    profilePhoneNumber.setText(defaultValue);
                 }
             } else {
-                makeToast("Failed to retrieve profile information!");
-                completeActivity();
+                makeToast("Something went wrong! CLUB = " + clubUsername);
             }
         });
     }
 
-    private boolean onUpdateProfileButtonClick() {
-        String profileSocialMediaInputted = profileSocialMediaInput.getText().toString().trim();
-        String profileMainContactInputted = profileMainContactInput.getText().toString().trim();
-        String profilePhoneNumberInputted = profilePhoneNumberInput.getText().toString().trim();
+    private void updateEvents(){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(Event.COLLECTION_NAME).whereEqualTo("organizer", clubUsername).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    List<DocumentSnapshot> documents = task.getResult().getDocuments();
+                    events.clear();
+                    eventDocumentIds.clear();
+                    for (DocumentSnapshot document : documents) {
+                        String title = document.getString("title");
 
-        if (
-                ValidationUtil.validateRegex(this, profileSocialMediaInputted, "social media link", "instagram\\.com\\/[\\w.]{3,}$", "a valid Instagram link")
-                        && ValidationUtil.validateRegex(this, profilePhoneNumberInputted, "phone number", "^\\d{10}$", "a 10 digit phone number with no spaces")
-        ) {
-            if (!profileMainContactInputted.equals("") && !ValidationUtil.validateRegex(this, profileMainContactInputted, "main contact name", "^[a-zA-Z '-]{2,}$", "a name containing only letters apostrophe or dashes that's at least 2 characters long")) {
-                return false;
+                        Event event = new Event(title);
+                        events.add(event);
+                        eventDocumentIds.add(document.getId());
+                    }
+                    updateEventListView();
+                } else {
+                    makeToast("Something went wrong when fetching events!");
+                    onSupportNavigateUp();
+                }
             }
-            Map<String, String> profileInfo = new HashMap<>();
-            profileInfo.put("socialMediaLink", profileSocialMediaInputted);
-            profileInfo.put("mainContact", profileMainContactInputted);
-            profileInfo.put("phoneNumber", profilePhoneNumberInputted);
+        });
+    }
 
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            db.collection(Account.COLLECTION_NAME).document(username).update("profileInfo", profileInfo);
-            completeActivity();
-            return true;
-        } else {
-            makeToast("Both the social media link and phone number must be filled out!");
-            return false;
-        }
+    private void updateEventListView() {
+        EventList requiredFieldListAdapter = new EventList(this, events);
+        requiredFieldListView.setAdapter(requiredFieldListAdapter);
     }
 
     @Override
     public boolean onSupportNavigateUp() {
-        if (alreadyValid) {
-            completeActivity();
-            return true;
-        }
-        return onUpdateProfileButtonClick();
-    }
-
-    private void completeActivity() {
         finish();
+        return true;
     }
 
     private void makeToast(String text) {
