@@ -157,8 +157,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void navigateToProfileActivity() {
-        Intent profileActivityIntent = new Intent(this, ProfileActivity.class);
-        profileActivityIntent.putExtra("username", username);
-        startActivity(profileActivityIntent);
+        Intent profileInfoActivityIntent = new Intent(this, ProfileInfoActivity.class);
+        profileInfoActivityIntent.putExtra("username", username);
+        startActivity(profileInfoActivityIntent);
     }
 }

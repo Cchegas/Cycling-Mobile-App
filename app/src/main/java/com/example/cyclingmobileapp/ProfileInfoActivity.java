@@ -17,7 +17,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileInfoActivity extends AppCompatActivity {
 
     private TextView profileUsername;
     private EditText profileSocialMediaInput, profileMainContactInput, profilePhoneNumberInput;
@@ -28,7 +28,7 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        setContentView(R.layout.activity_profile_info);
 
         // Setup toolbar
         Toolbar toolbar = findViewById(R.id.profileToolbar);
