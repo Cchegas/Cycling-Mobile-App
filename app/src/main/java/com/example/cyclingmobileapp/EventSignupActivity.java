@@ -18,12 +18,19 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 
 public class EventSignupActivity extends AppCompatActivity {
 
     private String username;
     private String eventDocumentId;
     private String startDate;
+
+    boolean alreadyRegistered;
+    Button signupButton;
+
+    private final String registerText = "Sign up";
+    private final String unRegisterText = "Un-register";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,19 +48,24 @@ public class EventSignupActivity extends AppCompatActivity {
             eventDocumentId = getIntent().getExtras().getString("eventDocumentId");
         }
 
-        Button signupButton = findViewById(R.id.eventSignupButton);
+        signupButton = findViewById(R.id.eventSignupButton);
+        alreadyRegistered = false;
+        signupButton.setText(registerText);
         signupButton.setOnClickListener(view -> {
-            if (canRegisterForEvent(startDate)){
-                makeToast("Registered!");
-                onSupportNavigateUp();
-            } else {
+            if (!canRegisterForEvent(startDate)){
                 makeToast("This event is closed for signups!");
+            }
+            else {
+                if (!alreadyRegistered){
+                    setRegistration(true);
+                } else {
+                    setRegistration(false);
+                }
             }
         });
 
         fillInFields(eventDocumentId);
     }
-
     private void fillInFields(String eventDocumentId){
         TextView eventTitleField = findViewById(R.id.eventSignupEventTitleField);
         TextView eventOrganizerField = findViewById(R.id.eventSignupEventOrganizerField);
@@ -78,6 +90,14 @@ public class EventSignupActivity extends AppCompatActivity {
                 eventStartDateField.setText(startDate);
                 eventEndDateField.setText(endDate);
 
+                List<String> participantList = (List<String>) document.get("participants");
+                alreadyRegistered = participantList.contains(username);
+                if (alreadyRegistered){
+                    signupButton.setText(unRegisterText);
+                } else {
+                    signupButton.setText(registerText);
+                }
+
                 fillInEventType(document.getString("eventType"));
             } else {
                 makeToast("Something went wrong!");
@@ -96,6 +116,41 @@ public class EventSignupActivity extends AppCompatActivity {
             } else {
                 makeToast("Something went wrong!");
                 onSupportNavigateUp();
+            }
+        });
+    }
+
+    private void setRegistration(boolean register){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(Event.COLLECTION_NAME).document(eventDocumentId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()){
+                    DocumentSnapshot document = task.getResult();
+                    List<String> particpantList = (List<String>) document.get("participants");
+                    if (register){
+                        if (!particpantList.contains(username)){
+                            particpantList.add(username);
+                        }
+                    } else {
+                        if (particpantList.contains(username)){
+                            particpantList.remove(username);
+                        }
+                    }
+                    db.collection(Event.COLLECTION_NAME).document(eventDocumentId).update("participants", particpantList);
+
+                    alreadyRegistered = register;
+                    if (alreadyRegistered){
+                        signupButton.setText(unRegisterText);
+                    } else {
+                        signupButton.setText(registerText);
+                    }
+
+                    makeToast("Success!");
+                    onSupportNavigateUp();
+                } else {
+                    makeToast("Failed to change registration for event!");
+                }
             }
         });
     }
