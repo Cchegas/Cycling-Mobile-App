@@ -24,6 +24,7 @@ import java.util.Objects;
 public class MainActivity extends AppCompatActivity {
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private String username;
+    Bundle commonInfoBundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-
 
         // Add the ActionBarDrawerToggle to the activity, connecting it to toggle the drawerLayout
         DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
@@ -64,6 +64,10 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }
+
+        commonInfoBundle = new Bundle();
+        commonInfoBundle.putString("username", username);
+
         // Manually select the first item in the navigation menu, and, correspondingly, show the first fragment
         if (getIntent().getExtras() != null && Objects.equals(getIntent().getExtras().getString("role"), "club")) {
             navigationView.setCheckedItem(R.id.eventFragmentMenuItem);
@@ -77,7 +81,9 @@ public class MainActivity extends AppCompatActivity {
             selectFragment(new EventTypeFragment());
         } else {
             navigationView.setCheckedItem(R.id.searchFragmentMenuItem);
-            selectFragment(new SearchFragment());
+            Fragment searchFragment = new SearchFragment();
+            searchFragment.setArguments(commonInfoBundle);
+            selectFragment(searchFragment);
         }
     }
 
@@ -112,10 +118,8 @@ public class MainActivity extends AppCompatActivity {
                 fragment = new AccountOverviewFragment();
             } else if (itemId == R.id.eventFragmentMenuItem) {
                 if (getIntent().getExtras() != null && Objects.equals(getIntent().getExtras().getString("role"), "club")) {
-                    Bundle bundle = new Bundle();
-                    bundle.putString("username", username);
                     fragment = new EventFragment();
-                    fragment.setArguments(bundle);
+                    fragment.setArguments(commonInfoBundle);
                 } else {
                     fragment = null;
                 }
@@ -124,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
                 navigateToProfileActivity();
             } else if (itemId == R.id.searchFragmentMenuItem) {
                 fragment = new SearchFragment();
+                fragment.setArguments(commonInfoBundle);
             } else if (itemId == R.id.signout) {
                 fragment = null;
                 signOut();
