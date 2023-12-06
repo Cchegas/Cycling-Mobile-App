@@ -1,5 +1,6 @@
 package com.example.cyclingmobileapp;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
@@ -54,6 +55,14 @@ public class EventActivity extends AppCompatActivity {
     private LinearLayout eventTypeDetailsLinearLayout;
     private TextView eventHeader;
 
+    public EventActivity(){
+
+    }
+
+    //unit test case constructor
+    public EventActivity(Context context){
+
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -439,7 +448,7 @@ public class EventActivity extends AppCompatActivity {
         return ZonedDateTime.of(localDate, localTime, ZoneId.systemDefault());
     }
 
-    private boolean isValidDate(String date, String fieldName, boolean requireToBeInFuture) {
+    public boolean isValidDate(String date, String fieldName, boolean requireToBeInFuture) {
         try {
             ZonedDateTime zonedDateTime = dateTimeConversion("12:00", date);
             if (requireToBeInFuture && !zonedDateTime.isAfter(ZonedDateTime.now())) {
@@ -453,7 +462,7 @@ public class EventActivity extends AppCompatActivity {
         }
     }
 
-    private boolean isValidTime(String time, String fieldName) {
+    public boolean isValidTime(String time, String fieldName) {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat(TIME_FORMAT);
             sdf.setLenient(false);

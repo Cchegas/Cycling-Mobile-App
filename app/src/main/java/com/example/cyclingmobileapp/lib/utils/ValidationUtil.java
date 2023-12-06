@@ -4,7 +4,10 @@ import android.content.Context;
 import android.widget.Toast;
 
 public class ValidationUtil {
+    // used for test cases
+    public ValidationUtil(Context context){
 
+    }
     // fieldValue is obtained by casting context into an activity to access findViewById method to then be used
     // as an EditText datatype to access its string form.
 
