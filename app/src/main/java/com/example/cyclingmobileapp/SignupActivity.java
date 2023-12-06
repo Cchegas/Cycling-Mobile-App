@@ -27,6 +27,10 @@ import java.util.List;
 
 public class SignupActivity extends AppCompatActivity {
 
+    public SignupActivity() {
+
+    }
+
     public SignupActivity(Context context) {
 
     }
