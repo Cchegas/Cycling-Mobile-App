@@ -1,6 +1,9 @@
 package com.example.cyclingmobileapp;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,7 +31,7 @@ public class ProfileActivity extends AppCompatActivity {
     private String clubUsername;
     private ListView requiredFieldListView;
     private List<Event> events;
-    private List<String> eventsDocumentIds;
+    private List<String> eventDocumentIds;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,15 +44,22 @@ public class ProfileActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        events = new ArrayList<>();
-        eventsDocumentIds = new ArrayList<>();
-
-        requiredFieldListView = findViewById(R.id.profileEventsListView);
-
         if (getIntent().getExtras() != null) {
             username = getIntent().getExtras().getString("username");
             clubUsername = getIntent().getExtras().getString("clubUsername").toLowerCase();
         }
+
+        events = new ArrayList<>();
+        eventDocumentIds = new ArrayList<>();
+
+        requiredFieldListView = findViewById(R.id.profileEventsListView);
+        requiredFieldListView.setOnItemClickListener((adapterView, view, i, l) -> {
+            Intent eventSignupActivityIntent = new Intent(this, EventSignupActivity.class);
+            eventSignupActivityIntent.putExtra("username", username);
+            eventSignupActivityIntent.putExtra("eventDocumentId", eventDocumentIds.get(i));
+            startActivity(eventSignupActivityIntent);
+        });
+
         displayAccountInfo();
         updateEvents();
     }
@@ -99,13 +109,13 @@ public class ProfileActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     List<DocumentSnapshot> documents = task.getResult().getDocuments();
                     events.clear();
-                    eventsDocumentIds.clear();
+                    eventDocumentIds.clear();
                     for (DocumentSnapshot document : documents) {
                         String title = document.getString("title");
 
                         Event event = new Event(title);
                         events.add(event);
-                        eventsDocumentIds.add(document.getId());
+                        eventDocumentIds.add(document.getId());
                     }
                     updateEventListView();
                 } else {
@@ -114,23 +124,6 @@ public class ProfileActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    private ZonedDateTime parseDatetime(String datetime){
-        String datetimeWithoutTimezoneName = datetime.split("\\[")[0];
-        try {
-            return ZonedDateTime.parse(datetimeWithoutTimezoneName);
-        } catch (Exception e){
-            return null;
-        }
-    }
-
-    private boolean canRegisterForEvent(String datetime){
-        ZonedDateTime dateTime = parseDatetime(datetime);
-        if (dateTime == null){
-            return  false;
-        }
-        return !ZonedDateTime.now().isAfter(dateTime);
     }
 
     private void updateEventListView() {
