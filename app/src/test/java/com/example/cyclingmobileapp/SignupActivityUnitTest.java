@@ -32,14 +32,24 @@ public class SignupActivityUnitTest {
     @Test
     public void testInvalidFirstNameReturnsFalse() {
         SignupActivity signupActivity = new SignupActivity(mMockContext);
-        boolean yes = signupActivity.validateSignupInfo("John_123", "Doe", "johndoe", "john.doe@example.com", "password");
-        assertFalse(yes);
+        assertFalse(signupActivity.validateSignupInfo("John_123", "Doe", "johndoe", "john.doe@example.com", "password"));
+    }
+
+    @Test
+    public void testInValidLastNameReturnsFalse() {
+        SignupActivity signupActivity = new SignupActivity(mMockContext);
+        assertFalse(signupActivity.validateSignupInfo("John", "Doe_421", "johndoe", "john.doe@example.com", "password"));
     }
 
     @Test
     public void testInvalidEmailReturnsFalse() {
         SignupActivity signupActivity = new SignupActivity(mMockContext);
-        assertFalse(signupActivity.validateSignupInfo("John", "Doe", "johndoe", "invalid_email", "password"));
+        assertFalse(signupActivity.validateSignupInfo("John", "Doe", "johndoe", "invalid_email!?", "password"));
     }
 
+    @Test
+    public void testInValidPasswordReturnsFalse() {
+        SignupActivity signupActivity = new SignupActivity(mMockContext);
+        assertFalse(signupActivity.validateSignupInfo("John", "Doe", "johndoe", "john.doe@example.com", "joh"));
+    }
 }
