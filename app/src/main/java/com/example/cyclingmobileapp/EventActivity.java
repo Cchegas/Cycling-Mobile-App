@@ -55,6 +55,10 @@ public class EventActivity extends AppCompatActivity {
     private LinearLayout eventTypeDetailsLinearLayout;
     private TextView eventHeader;
 
+    public EventActivity(){
+
+    }
+
     //unit test case constructor
     public EventActivity(Context context){
 
