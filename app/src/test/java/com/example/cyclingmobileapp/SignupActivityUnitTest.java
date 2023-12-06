@@ -1,23 +1,18 @@
 package com.example.cyclingmobileapp;
 
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import android.content.Context;
-import static org.junit.Assert.*;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runner.Runner;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.CoreMatchers.*;
-
 
 @RunWith(MockitoJUnitRunner.class)
- public class SignupActivityUnitTest {
+public class SignupActivityUnitTest {
 
     @Mock
     Context mMockContext;
