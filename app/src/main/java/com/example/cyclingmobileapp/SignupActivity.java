@@ -1,5 +1,6 @@
 package com.example.cyclingmobileapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -25,6 +26,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.List;
 
 public class SignupActivity extends AppCompatActivity {
+
+    public SignupActivity(Context context) {
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,7 +124,7 @@ public class SignupActivity extends AppCompatActivity {
         Toast.makeText(this, toastText, Toast.LENGTH_SHORT).show();
     }
 
-    private boolean validateSignupInfo(String fName, String lName, String username, String email, String password) {
+    public boolean validateSignupInfo(String fName, String lName, String username, String email, String password) {
         if (fName.isEmpty() || fName.contains(" ") || !fName.matches("^[a-zA-Z]*$")) {
             return false;
         }
@@ -137,7 +142,7 @@ public class SignupActivity extends AppCompatActivity {
         return password.length() >= 4 && !password.isEmpty();
     }
 
-    private boolean validateSignupInfo(String clubName, String username, String email, String password) {
+    public boolean validateSignupInfo(String clubName, String username, String email, String password) {
         if (clubName.isEmpty() || clubName.contains(" ") || !clubName.matches("^[a-zA-Z]*$")) {
             return false;
         }
