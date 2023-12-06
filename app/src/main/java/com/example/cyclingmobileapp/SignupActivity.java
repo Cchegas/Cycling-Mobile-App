@@ -37,7 +37,7 @@ public class SignupActivity extends AppCompatActivity {
         RadioGroup radioGroup = findViewById(R.id.signupAccountTypeRadioGroup);
         int checkedButtonId = radioGroup.getCheckedRadioButtonId();
         String email = ((EditText) findViewById(R.id.signupEmailInput)).getText().toString();
-        String username = ((EditText) findViewById(R.id.signupUsernameInput)).getText().toString();
+        String username = ((EditText) findViewById(R.id.signupUsernameInput)).getText().toString().trim().toLowerCase();
         String password = ((EditText) findViewById(R.id.signupPasswordInput)).getText().toString();
         Button signupButton = findViewById(R.id.signupButton);
 

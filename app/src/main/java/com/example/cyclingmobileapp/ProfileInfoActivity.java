@@ -31,16 +31,16 @@ public class ProfileInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile_info);
 
         // Setup toolbar
-        Toolbar toolbar = findViewById(R.id.profileToolbar);
+        Toolbar toolbar = findViewById(R.id.profileInfoToolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         profileUsername = findViewById(R.id.profileUsername);
-        profileSocialMediaInput = findViewById(R.id.profileSocialMediaInput);
-        profileMainContactInput = findViewById(R.id.profileMainContactInput);
-        profilePhoneNumberInput = findViewById(R.id.profilePhoneNumberInput);
-        updateProfileButton = findViewById(R.id.updateProfileButton);
+        profileSocialMediaInput = findViewById(R.id.profileInfoSocialMediaInput);
+        profileMainContactInput = findViewById(R.id.profileInfoMainContactInput);
+        profilePhoneNumberInput = findViewById(R.id.profileInfoPhoneNumberInput);
+        updateProfileButton = findViewById(R.id.updateProfileInfoButton);
 
         updateProfileButton.setOnClickListener(view -> {
             onUpdateProfileButtonClick();

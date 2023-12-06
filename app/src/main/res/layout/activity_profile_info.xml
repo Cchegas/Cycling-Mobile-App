@@ -6,7 +6,7 @@
     tools:context=".ProfileInfoActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/profileToolbar"
+        android:id="@+id/profileInfoToolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
@@ -37,7 +37,7 @@
             android:textSize="24sp" />
 
         <EditText
-            android:id="@+id/profileSocialMediaInput"
+            android:id="@+id/profileInfoSocialMediaInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
@@ -55,7 +55,7 @@
             android:textSize="24sp" />
 
         <EditText
-            android:id="@+id/profileMainContactInput"
+            android:id="@+id/profileInfoMainContactInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
@@ -73,7 +73,7 @@
             android:textSize="24sp" />
 
         <EditText
-            android:id="@+id/profilePhoneNumberInput"
+            android:id="@+id/profileInfoPhoneNumberInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
@@ -83,7 +83,7 @@
             android:text="" />
 
         <Button
-            android:id="@+id/updateProfileButton"
+            android:id="@+id/updateProfileInfoButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/update_btn" />

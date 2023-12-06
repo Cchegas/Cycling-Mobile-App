@@ -32,7 +32,8 @@ public class SearchFragment extends Fragment {
     private static final String CLUB_ACCOUNT_ID = "Club";
     private SearchView searchBar;
     private ListView itemsList;
-    private List<String> clubAccounts;
+    private List<Pair<String, String>> clubAccounts;
+    private Map<Integer, String> clubAccountUsernames;
     private List<Pair<String, String>> events;
     private Map<Integer, String> eventOrganizers;
     private List<String> eventTypes;
@@ -66,6 +67,7 @@ public class SearchFragment extends Fragment {
         events = new ArrayList<>();
         eventTypes = new ArrayList<>();
         eventOrganizers = new HashMap<>();
+        clubAccountUsernames = new HashMap<>();
 
         // Need to get data from Database________________________________________________________________________
         // 1. get ALL ClubAccounts from database
@@ -80,7 +82,9 @@ public class SearchFragment extends Fragment {
                         if (doc.get("role") != null) {
                             if (doc.getString("role").equals("club") && doc.get("name") != null) {
                                 String accountName = doc.getString("name");
-                                clubAccounts.add(accountName);
+                                String accountUsername = doc.getString("username");
+                                Pair<String, String> pair = new Pair<>(accountName, accountUsername);
+                                clubAccounts.add(pair);
                             }
                         }
                     }
@@ -125,7 +129,7 @@ public class SearchFragment extends Fragment {
             if (clickedType.equals(EVENT_ID) || clickedType.equals(CLUB_ACCOUNT_ID)){
                 String clubUsername = "";
                 if (clickedType.equals(CLUB_ACCOUNT_ID)){
-                    clubUsername = results.get(i);
+                    clubUsername = clubAccountUsernames.get(i);
                 } else {
                     clubUsername = eventOrganizers.get(i);
                 }
@@ -150,9 +154,11 @@ public class SearchFragment extends Fragment {
         results.clear();
         resultTypes.clear();
         eventOrganizers.clear();
-        for (String clubAccount : clubAccounts) {
-            results.add(clubAccount);
+        clubAccountUsernames.clear();
+        for (Pair<String, String> pair : clubAccounts) {
+            results.add(pair.first);
             resultTypes.add(CLUB_ACCOUNT_ID);
+            clubAccountUsernames.put(results.size() - 1, pair.second);
         }
         for (Pair<String, String> pair : events) {
             results.add(pair.first);
