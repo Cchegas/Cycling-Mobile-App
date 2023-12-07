@@ -1,5 +1,6 @@
 package com.example.cyclingmobileapp;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Pair;
@@ -11,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -18,8 +20,13 @@ import androidx.fragment.app.FragmentActivity;
 import com.example.cyclingmobileapp.lib.event.Event;
 import com.example.cyclingmobileapp.lib.event.EventType;
 import com.example.cyclingmobileapp.lib.user.Account;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.Source;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,15 +40,17 @@ public class SearchFragment extends Fragment {
     private SearchView searchBar;
     private ListView itemsList;
     private List<Pair<String, String>> clubAccounts;
+
+    private Map<String, String> clubAccountUsernameMap;
     private Map<Integer, String> clubAccountUsernames;
     private List<Pair<String, String>> events;
     private Map<Integer, String> eventOrganizers;
-    private List<String> eventTypes;
+    private List<Pair<String, String>> eventTypes;
+    private Map<Integer, String> eventTypeDocumentIds;
     // Store the display name of each result, and the type of each result
     private List<String> results;
     private List<String> resultTypes;
 
-    private List<String> resultClubUsernames;
     private String username;
 
     @Override
@@ -61,13 +70,14 @@ public class SearchFragment extends Fragment {
 
         results = new ArrayList<>();
         resultTypes = new ArrayList<>();
-        resultClubUsernames = new ArrayList<>();
 
         clubAccounts = new ArrayList<>();
         events = new ArrayList<>();
         eventTypes = new ArrayList<>();
         eventOrganizers = new HashMap<>();
         clubAccountUsernames = new HashMap<>();
+        eventTypeDocumentIds = new HashMap<>();
+        clubAccountUsernameMap = new HashMap<>();
 
         // Need to get data from Database________________________________________________________________________
         // 1. get ALL ClubAccounts from database
@@ -77,6 +87,7 @@ public class SearchFragment extends Fragment {
         db.collection(Account.COLLECTION_NAME).addSnapshotListener((value, error) -> {
             if (value != null) {
                 clubAccounts.clear();
+                clubAccountUsernameMap.clear();
                 for (QueryDocumentSnapshot doc : value) {
                     if (doc != null) {
                         if (doc.get("role") != null) {
@@ -85,6 +96,7 @@ public class SearchFragment extends Fragment {
                                 String accountUsername = doc.getString("username");
                                 Pair<String, String> pair = new Pair<>(accountName, accountUsername);
                                 clubAccounts.add(pair);
+                                clubAccountUsernameMap.put(doc.getString("username"), doc.getString("name"));
                             }
                         }
                     }
@@ -115,7 +127,8 @@ public class SearchFragment extends Fragment {
                     if (doc != null) {
                         if (doc.get("label") != null) {
                             String eventTypeName = doc.get("label").toString();
-                            eventTypes.add(eventTypeName);
+                            Pair<String, String> pair = new Pair<>(eventTypeName, doc.getId());
+                            eventTypes.add(pair);
                         }
                     }
                 }
@@ -139,7 +152,38 @@ public class SearchFragment extends Fragment {
                 profileActivityIntent.putExtra("clubUsername", clubUsername);
                 startActivity(profileActivityIntent);
             } else if (clickedType.equals(EVENT_TYPE_ID)) {
-                Toast.makeText(activity, "CLICKED ON EVENT TYPE", Toast.LENGTH_SHORT).show();
+                List<String> relevantClubAccountNames = new ArrayList<>();
+                List<String> relevantClubAccountUsernames = new ArrayList<>();
+
+                String eventTypeDocumentId = eventTypeDocumentIds.get(i);
+                db.collection(Event.COLLECTION_NAME).whereEqualTo("eventType", eventTypeDocumentId).get().addOnCompleteListener(task -> {
+                    if (task.isSuccessful()){
+                        List<DocumentSnapshot> documentSnapshots = task.getResult().getDocuments();
+                        for (DocumentSnapshot document : documentSnapshots){
+                            String clubUsername  = document.getString("organizer");
+                            String clubName = clubAccountUsernameMap.get(clubUsername);
+                            relevantClubAccountUsernames.add(clubUsername);
+                            relevantClubAccountNames.add(clubName);
+                        }
+                        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(activity);
+                        LayoutInflater inflater = getLayoutInflater();
+                        View dialogView = inflater.inflate(R.layout.layout_club_list_dialog, null);
+                        dialogBuilder.setView(dialogView);
+                        ListView eventTypeClubList = dialogView.findViewById(R.id.eventTypeClubList);
+                        ArrayAdapter<String> eventTypeClubListAdapter = new ArrayAdapter<String>(activity, android.R.layout.simple_list_item_1, relevantClubAccountNames);
+                        eventTypeClubList.setAdapter(eventTypeClubListAdapter);
+                        eventTypeClubList.setOnItemClickListener((adapterView1, view2, i1, l1) -> {
+                            Intent profileActivityIntent = new Intent(activity, ProfileActivity.class);
+                            profileActivityIntent.putExtra("username", username);
+                            profileActivityIntent.putExtra("clubUsername", relevantClubAccountUsernames.get(i1));
+                            startActivity(profileActivityIntent);
+                        });
+                        AlertDialog dialog = dialogBuilder.create();
+                        dialog.show();
+                    } else {
+                        makeToast("Failed to fetch clubs matching this event type");
+                    }
+                });
             }
         });
     }
@@ -155,6 +199,7 @@ public class SearchFragment extends Fragment {
         resultTypes.clear();
         eventOrganizers.clear();
         clubAccountUsernames.clear();
+        eventTypeDocumentIds.clear();
         for (Pair<String, String> pair : clubAccounts) {
             results.add(pair.first);
             resultTypes.add(CLUB_ACCOUNT_ID);
@@ -165,9 +210,10 @@ public class SearchFragment extends Fragment {
             resultTypes.add(EVENT_ID);
             eventOrganizers.put(results.size() - 1, pair.second);
         }
-        for (String eventType : eventTypes) {
-            results.add(eventType);
+        for (Pair<String, String> pair : eventTypes) {
+            results.add(pair.first);
             resultTypes.add(EVENT_TYPE_ID);
+            eventTypeDocumentIds.put(results.size() - 1, pair.second);
         }
         createAndSetAdapter();
     }
@@ -191,6 +237,10 @@ public class SearchFragment extends Fragment {
                 return false;
             }
         });
+    }
+
+    private void makeToast(String text){
+        Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
     }
 
 }
