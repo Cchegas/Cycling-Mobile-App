@@ -55,6 +55,8 @@ public class EventActivity extends AppCompatActivity {
     private LinearLayout eventTypeDetailsLinearLayout;
     private TextView eventHeader;
 
+    private List<String> eventParticipants;
+
     public EventActivity(){
 
     }
@@ -98,6 +100,7 @@ public class EventActivity extends AppCompatActivity {
         descriptionEditText = findViewById(R.id.descriptionEditText);
         eventTypeDetailsLinearLayout = findViewById(R.id.eventTypeDetailsLinearLayout);
         eventHeader = findViewById(R.id.eventHeader);
+        eventParticipants = new ArrayList<>();
 
         // Check to see if the event is being modified or being created from scratch
         if (eventDocumentId == null) {
@@ -220,6 +223,7 @@ public class EventActivity extends AppCompatActivity {
             int eventTypeIndex = eventTypeSpinner.getSelectedItemPosition();
             eventDataMap.put("eventType", eventTypeIds.get(eventTypeIndex));
             eventDataMap.put("eventTypeRequiredFields", eventTypeRequiredFieldsMap);
+            eventDataMap.put("participants", eventParticipants == null ? new ArrayList<>() : eventParticipants);
 
             db.collection(Event.COLLECTION_NAME)
                     .document(eventDocumentId).set(eventDataMap);
@@ -273,6 +277,7 @@ public class EventActivity extends AppCompatActivity {
             dateEditText.setText(extractDate(eventDocument.getString("startDate")));
             startTimeEditText.setText(extractTime(eventDocument.getString("startDate")));
             endTimeEditText.setText(extractTime(eventDocument.getString("endDate")));
+            eventParticipants = (List<String>) eventDocument.get("participants");
         }
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(EventType.COLLECTION_NAME).get().addOnCompleteListener(task -> {
