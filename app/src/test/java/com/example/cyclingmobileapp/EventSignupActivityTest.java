@@ -26,13 +26,13 @@ public class EventSignupActivityTest {
     @Test
     public void testcanRegisterForEventInValid() {
         EventSignupActivity validator = new EventSignupActivity(mMockContext);
-        assertFalse(validator.canRegisterForEvent("2023-12-06T12:00:00Z"));
+        assertFalse(validator.canRegisterForEvent("2023-11-06T12:00:00Z"));
     }
 
     @Test
     public void testcanRegisterForEventValid() {
         EventSignupActivity validator = new EventSignupActivity(mMockContext);
-        assertTrue(validator.canRegisterForEvent("2023-12-09T12:00:00Z"));
+        assertTrue(validator.canRegisterForEvent("2024-12-09T12:00:00Z"));
     }
 
 
