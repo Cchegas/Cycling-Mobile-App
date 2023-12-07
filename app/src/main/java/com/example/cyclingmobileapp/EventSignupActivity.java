@@ -41,6 +41,10 @@ public class EventSignupActivity extends AppCompatActivity {
     private String eventDocumentId;
     private String startDate;
 
+    public EventSignupActivity(){
+
+    }
+
     public EventSignupActivity(Context context){
 
     }
