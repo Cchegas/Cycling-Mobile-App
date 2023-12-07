@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -25,6 +26,9 @@ public class EventSignupActivity extends AppCompatActivity {
     private String eventDocumentId;
     private String startDate;
 
+    public EventSignupActivity(Context context){
+
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,7 +113,7 @@ public class EventSignupActivity extends AppCompatActivity {
         }
     }
 
-    private boolean canRegisterForEvent(String startDatetime){
+    public boolean canRegisterForEvent(String startDatetime){
         ZonedDateTime dateTime = parseDatetime(startDatetime);
         if (dateTime == null){
             return  false;
